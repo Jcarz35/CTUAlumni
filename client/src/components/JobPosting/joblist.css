@@ -1,0 +1,52 @@
+:root {
+    --light-blue: #019ff8;
+    --gray-icons: #494343;
+    --light-gray-icons: rgb(212, 209, 209);
+    --green: green;
+    --active: #e3fcf7;
+
+    --blue-link: rgb(41, 41, 211);
+    --background: #eff2f4;
+    --white: #fff;
+    --dark-main-background: #191d33;
+    --dark-background: #293146;
+    --dark-Username: #212744;
+    --light-violet: #8790c4;
+}
+.jobposting_containers {
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+
+    flex-direction: column;
+}
+#dark .jobposting_containers {
+    background-color: var(--dark-main-background);
+}
+.header_jobs {
+    width: 100%;
+    margin-left: 40px;
+    margin-bottom: 30px;
+}
+.jobBodys {
+    display: flex;
+    flex: 1;
+    margin: 0 40px auto;
+    overflow-y: hidden;
+}
+.leftss {
+    display: flex;
+    /* flex: 1; */
+    justify-content: start;
+    flex-wrap: wrap;
+    overflow-y: hidden;
+    gap: 25px;
+}
+.lefts_cards {
+    /* flex: 1; */
+    border-radius: 5px;
+    min-width: 330px;
+    min-height: 310px;
+    background-color: var(--background);
+}
