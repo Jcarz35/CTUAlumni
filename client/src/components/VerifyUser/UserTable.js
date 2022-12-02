@@ -1,10 +1,9 @@
 import React from "react";
 import DataTable from "./DataTable";
-import "./userlist.css";
+import "./verifyuser.css";
 
 import Axios, { AxiosError } from "axios";
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 
 //para dialog
 import Button from "@mui/material/Button";
@@ -13,8 +12,8 @@ import DialogTitle from "@mui/material/DialogTitle";
 
 // icons
 import { RiDeleteBin5Line } from "react-icons/ri";
-import { BiEdit } from "react-icons/bi";
 import { GrFormClose } from "react-icons/gr";
+import { AiOutlineCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
 
 //loading spinner
 import FadeLoader from "react-spinners/FadeLoader";
@@ -49,55 +48,74 @@ const UserTable = ({ userBuang }) => {
             });
     }, [userInfo]);
 
-    // fetch all Alumni
+    // fetch all not active account
     useEffect(() => {
-        Axios.get("http://localhost:8080/api/users/all").then((response) => {
-            setUser(response.data);
-            setLoading(false);
-        });
+        Axios.get("http://localhost:8080/api/users/allNotActive").then(
+            (response) => {
+                setUser(response.data);
+                setLoading(false);
+            }
+        );
     }, [user]);
 
-    // deleteUser
-    // const deleteUser = (id) => {
-    //     Axios.delete(`http://localhost:8080/api/users/deleteUser/${id}`);
-    //     setUser(user.filter((item) => item._id !== id));
-    //     console.log("user ids", id);
-    //     handleClose();
-    // };
+    // activate a single account
+    const activateUser = (id) => {
+        console.log(id);
+        Axios.put("http://localhost:8080/api/users/activateAlumni", {
+            id: id,
+        }).then(() => {
+            setUser(user.filter((item) => item._id !== id));
+            handleClose();
+        });
+        console.log("gipislit na");
+    };
+    // Reject User or delete
+    const deleteUser = (id) => {
+        Axios.delete(`http://localhost:8080/api/users/deleteUser/${id}`);
+        setUser(user.filter((item) => item._id !== id));
+
+        console.log("user ids", id);
+        handleClose();
+    };
 
     // para header sa table
     const columns = [
         { field: "lastName", headerName: "Last Name", width: 180 },
         { field: "firstName", headerName: "First Name", width: 180 },
         { field: "email", headerName: "Email", width: 260 },
-        { field: "schoolYear", headerName: "Batch", width: 120 },
-        { field: "course", headerName: "Course", width: 180 },
+        { field: "isActive", headerName: "Active", width: 150 },
+
         {
             field: "action",
             headerName: "Action",
-            width: 120,
+            width: 150,
             renderCell: (params) => {
                 return (
                     <>
                         {userInfo.isAdmin && (
-                            <Link to={"/user/" + params.row._id}>
-                                <button className="userListEdit">
-                                    <BiEdit title="Edit" className="editBi" />
-                                </button>
-                            </Link>
+                            <button
+                                className="approve_button"
+                                onClick={() => {
+                                    activateUser(params.row._id);
+                                }}
+                            >
+                                <AiOutlineCheckCircle className="icon" />
+                                <p>Approve</p>
+                            </button>
                         )}
 
-                        {/* {userInfo.isAdmin && (
+                        {userInfo.isAdmin && (
                             <button
-                                className="delete_button"
+                                className="disapprove_button"
                                 onClick={handleClickOpen}
                             >
-                                <RiDeleteBin5Line className="deleteBi" />
+                                <AiOutlineCloseCircle className="icon" />
+                                <p>Reject</p>
                             </button>
-                        )} */}
+                        )}
 
                         {/* Dialog para confirmation to delete */}
-                        {/* <Dialog
+                        <Dialog
                             // width={400}
                             // height={500}
                             open={open}
@@ -106,7 +124,7 @@ const UserTable = ({ userBuang }) => {
                         >
                             <div className="header_close">
                                 <DialogTitle>
-                                    <h5>Delete Confirmation</h5>
+                                    <h5>Reject Confirmation</h5>
                                 </DialogTitle>
                                 <div>
                                     {" "}
@@ -117,7 +135,10 @@ const UserTable = ({ userBuang }) => {
                                 </div>
                             </div>
                             <div className="body_close">
-                                <h1>Are you sure you want to delete?</h1>
+                                <h1>
+                                    Are you sure you want to reject the request?
+                                </h1>
+                                <h1>It will be deleted from the database</h1>
                             </div>
                             <div className="footer_close">
                                 <Button onClick={handleClose}>Cancel</Button>
@@ -127,10 +148,10 @@ const UserTable = ({ userBuang }) => {
                                     }}
                                     className="button_delete"
                                 >
-                                    Delete
+                                    Yes
                                 </button>
                             </div>
-                        </Dialog> */}
+                        </Dialog>
                     </>
                 );
             },

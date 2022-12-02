@@ -3,7 +3,7 @@
     --light-blue: #019ff8;
     --gray-icons: #494343;
     --light-gray-icons: rgb(212, 209, 209);
-    --green: green;
+    --green: #00684a;
     --active: #e3fcf7;
 
     --blue-link: rgb(41, 41, 211);
@@ -31,7 +31,7 @@
     width: 30rem;
     height: 18rem;
     border-radius: 50%;
-    background: rgb(146, 253, 146);
+    background: rgb(126, 126, 126);
     filter: blur(160px);
     z-index: 2;
 }
@@ -65,7 +65,7 @@
 }
 
 .icon {
-    font-size: 16px;
+    font-size: 17px;
     margin-left: 10px;
     margin-top: 5px;
     margin-bottom: 10px;
@@ -92,7 +92,7 @@
 }
 
 .sidebar_active {
-    color: #287539;
+    color: #00684a;
     font-size: 18px;
     margin-top: 2px;
     margin-left: 2px;
@@ -120,7 +120,7 @@
     margin-left: 38px;
     margin-top: -5px;
     width: 170px;
-    height: 1000px;
+    height: 1050px;
     background-color: var(--white);
     border-right: 1px solid rgb(222, 223, 222);
     transition: background-color 0.7s ease-in;
@@ -150,7 +150,7 @@
 .logo {
     margin-top: 7px;
     margin-left: 4px;
-    color: green;
+    color: #00684a;
     font-size: 24px;
     letter-spacing: 1px;
     font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
@@ -210,7 +210,7 @@
 .active {
     display: flex;
     flex: 1;
-    color: rgb(18, 41, 17);
+    color: var(--green);
     font-weight: 600;
     padding: 4px 0px;
     background-color: var(--active);
@@ -331,10 +331,11 @@
 }
 .navbar {
     width: 100%;
-    background-color: #f6f9fb;
-    box-shadow: 15px -13px 6px 18px rgba(210, 213, 214, 1);
-    -webkit-box-shadow: 15px -13px 6px 18px rgba(210, 213, 214, 1);
-    -moz-box-shadow: 15px -13px 6px 18px rgba(210, 213, 214, 1);
+    background-color: #2e637e;
+    box-shadow: 3px 6px 14px -2px rgba(212, 197, 197, 0.45);
+    -webkit-box-shadow: 3px 6px 14px -2px rgba(212, 197, 197, 0.45);
+    -moz-box-shadow: 3px 6px 14px -2px rgba(212, 197, 197, 0.45);
+
     transition: background-color 0.7s ease-in;
 }
 #dark .navbar {
@@ -371,6 +372,44 @@
     font-size: 22px;
     color: var(--active);
     cursor: pointer;
+}
+.topBarIconContainer {
+    position: fixed;
+    background-color: var(--background);
+    border-radius: 50%;
+    right: 35px;
+    top: 14px;
+    margin: 0;
+    padding: 0;
+    height: 23px;
+    width: 23px;
+    cursor: pointer;
+}
+.topBarIconContainer:hover {
+    background-color: #c0bebe;
+}
+.topBarIconContainer .icon {
+    position: relative;
+    top: -5px;
+    right: 10px;
+    font-size: 20.5px;
+    color: #707070;
+}
+
+.topIconBadge {
+    position: absolute;
+    color: white;
+    height: 16px;
+    width: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: red;
+    border-radius: 50%;
+    font-size: 12px;
+    top: -7px;
+    right: -1px;
+    font-weight: 600;
 }
 
 /* snackbar /toast notification */
@@ -412,6 +451,19 @@
 .navbar h5 {
     margin-right: 30px;
 }
+
+.notificationContainer {
+    position: fixed;
+    right: 20px;
+    top: 40px;
+    display: flex;
+    border-radius: 3px;
+    justify-content: flex-start;
+    width: 220px;
+    background-color: var(--background);
+    transition: background-color 0.7s ease-in;
+}
+
 .Username {
     right: 0;
     top: 0;
@@ -531,6 +583,7 @@ p {
     margin: 0px;
     font-size: 12px;
 }
+
 #dark .side_profile h5 {
     font-weight: 500;
     color: var(--active);
@@ -540,7 +593,7 @@ p {
     color: var(--green);
 }
 .side_profile p {
-    font-size: 11px;
+    font-size: 12px;
 }
 
 .bars {
@@ -630,5 +683,5 @@ p {
     margin-top: 50px;
 
     height: 100%;
-    background-color: #f5f8fa;
+    background-color: var(--white);
 }

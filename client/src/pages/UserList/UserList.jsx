@@ -2,15 +2,17 @@ import React, { useState } from "react";
 import "./userlist.css";
 import UserTable from "./UserTable";
 
-const UserList = () => {
+// loading page
+
+const UserList = ({ user }) => {
     return (
         <div className="userlist_container">
             <div className="userlist_header">
                 <div className="header_content">
-                    <h5 className="userlist_title">UserList</h5>
+                    <h5 className="userlist_title">List of Alumni</h5>
                 </div>
                 <div className="table">
-                    <UserTable />
+                    <UserTable userBuang={user} />
                 </div>
             </div>
         </div>

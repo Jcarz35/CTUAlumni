@@ -3,13 +3,20 @@ import React from "react";
 
 import { motion } from "framer-motion";
 
+import axios from "axios";
+
 //icons
 import { FaBars, FaHome, FaUser } from "react-icons/fa";
 import { FaRegWindowClose } from "react-icons/fa";
-import { AiOutlineLogout } from "react-icons/ai";
-import { MdOutlineKeyboardArrowRight } from "react-icons/md";
+import { AiOutlineLogout, AiOutlineHome } from "react-icons/ai";
+import {
+    MdOutlineKeyboardArrowRight,
+    MdOutlineVerifiedUser,
+} from "react-icons/md";
+import { IoMdNotificationsOutline, IoMdNotifications } from "react-icons/io";
 import { BsMoonFill } from "react-icons/bs";
 import { BsSun } from "react-icons/bs";
+import { BiUser, BiFile } from "react-icons/bi";
 
 import { NavLink, Route, Routes, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -19,23 +26,25 @@ import ctu from "../../images/ctu.png";
 import profile from "../../images/profile.png";
 // import Snackbar from "../Snackbar/Snackbar";
 
-const Main = ({ children, theme, toggleTheme }) => {
+const Main = ({ children, theme, toggleTheme, user }) => {
     const handleLogout = () => {
         localStorage.removeItem("token");
         window.location = "/login";
     };
 
-    // const [userInfo, setUserInfo] = useState([]);
-    // useEffect(() => {
-    //     Axios.get("http://localhost:8080/api/users/all")
-    //         .then((res) => {
-    //             setUserInfo(res.data); // ibutang sa user na variable ang data gikan DB
-    //             console.log("res", res.data);
-    //         })
-    //         .catch((err) => {
-    //             console.log("buang", err);
-    //         });
-    // }, []);
+    // para kuha sa usa ka data sa user
+    const [userInfo, setUserInfo] = useState([]);
+    useEffect(() => {
+        axios
+            .get("http://localhost:8080/api/users/user/" + user)
+            .then((res) => {
+                setUserInfo(res.data);
+                // ibutang sa user na variable ang data gikan DB
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, [userInfo]);
 
     // para funtionalities sa button
     const [isOpen, setIsOpen] = useState(false);
@@ -50,7 +59,12 @@ const Main = ({ children, theme, toggleTheme }) => {
     const toggle_arrows = () => setOpens(!opens);
 
     const [openRightBar, setOpenRightBar] = useState(false);
-    const toggleRightBar = () => setOpenRightBar(!openRightBar);
+    const toggleRightBar = () => {
+        setOpenRightBar(!openRightBar);
+        setNotification(false);
+    };
+    const [openNotification, setNotification] = useState(false);
+    const toggleNotification = () => setNotification(!openNotification);
 
     //para snackbar/toast notification
     // const [showSnackbar, setShowSnackbar] = useState(false);
@@ -83,18 +97,41 @@ const Main = ({ children, theme, toggleTheme }) => {
                         isActive ? "sidebar_active" : "sidebar_icon"
                     }
                 >
-                    <div className="icon">{<FaHome />}</div>
+                    <div className="icon">{<AiOutlineHome />}</div>
                 </NavLink>
                 <NavLink
                     exact={true}
-                    to={"/alumni"}
-                    key={"Alumni"}
+                    to={"/userlist"}
+                    key={"UserList"}
                     className={({ isActive }) =>
                         isActive ? "sidebar_active" : "sidebar_icon"
                     }
                 >
-                    <div className="icon">{<FaUser />}</div>
+                    <div className="icon">{<BiUser />}</div>
                 </NavLink>
+                <NavLink
+                    exact={true}
+                    to={"/jobposting"}
+                    key={"JobPosting"}
+                    className={({ isActive }) =>
+                        isActive ? "sidebar_active" : "sidebar_icon"
+                    }
+                >
+                    <div className="icon">{<BiFile />}</div>
+                </NavLink>
+                {/* para verify na icon */}
+                {userInfo.isAdmin && (
+                    <NavLink
+                        exact={true}
+                        to={"/verifyuser"}
+                        key={"VerifyUser"}
+                        className={({ isActive }) =>
+                            isActive ? "sidebar_active" : "sidebar_icon"
+                        }
+                    >
+                        <div className="icon">{<MdOutlineVerifiedUser />}</div>
+                    </NavLink>
+                )}
             </div>
             {/*SideBar Links */}
             <motion.div
@@ -149,7 +186,7 @@ const Main = ({ children, theme, toggleTheme }) => {
 
                                     {/* Arrow Button*/}
                                 </NavLink>
-                                <div className="arrow_icon_holder">
+                                {/* <div className="arrow_icon_holder">
                                     <div className="arrow_icon">
                                         {
                                             <MdOutlineKeyboardArrowRight
@@ -161,11 +198,11 @@ const Main = ({ children, theme, toggleTheme }) => {
                                             />
                                         }
                                     </div>
-                                </div>
+                                </div> */}
                             </div>
 
                             {/* Submenu*/}
-                            <div
+                            {/* <div
                                 className={({ open }) =>
                                     open ? "submenu_open" : "submenu"
                                 }
@@ -186,7 +223,7 @@ const Main = ({ children, theme, toggleTheme }) => {
                                         </div>
                                     )}
                                 </NavLink>
-                            </div>
+                            </div> */}
                         </div>
 
                         {/* Job  */}
@@ -247,6 +284,30 @@ const Main = ({ children, theme, toggleTheme }) => {
                                 </NavLink>
                             </div>
                         </div>
+
+                        {/* Verify alumni Button Menu*/}
+                        {userInfo.isAdmin && (
+                            <div className="link_holder">
+                                <div className="link_container">
+                                    <NavLink
+                                        exact={true}
+                                        to={"/verifyuser"}
+                                        key={"VerifyUser"}
+                                        className={({ isActive }) =>
+                                            isActive ? "active" : "link"
+                                        }
+                                    >
+                                        {isOpen && (
+                                            <div className="link_text">
+                                                {"Verify"}
+                                            </div>
+                                        )}
+
+                                        {/* Arrow Button*/}
+                                    </NavLink>
+                                </div>
+                            </div>
+                        )}
                     </section>
                 )}
             </motion.div>
@@ -260,12 +321,31 @@ const Main = ({ children, theme, toggleTheme }) => {
 
                         <div className="right_theme" onClick={toggleTheme}>
                             {theme === "light" ? (
-                                <BsMoonFill className="moon" />
+                                <BsMoonFill
+                                    className="moon"
+                                    title="Dark Mode"
+                                />
                             ) : (
-                                <BsSun className="sun" />
+                                <BsSun className="sun" title="Light Mode" />
                             )}
                         </div>
 
+                        {/* notifications */}
+                        <div
+                            className="topBarIconContainer"
+                            onClick={toggleNotification}
+                        >
+                            <IoMdNotifications className="icon" />
+                            <span className="topIconBadge">2</span>
+                        </div>
+                        <motion.div
+                            animate={{
+                                height: openNotification ? "400px" : "0",
+                            }}
+                            className="notificationContainer"
+                        ></motion.div>
+
+                        {/* dropdown para profile */}
                         <motion.div
                             animate={{
                                 height: openRightBar ? "400px" : "0",
@@ -294,13 +374,20 @@ const Main = ({ children, theme, toggleTheme }) => {
                                     <div className="profile_pics">
                                         <img
                                             id="profile_img_main"
-                                            src={profile}
+                                            src={`http://localhost:8080/uploads/${userInfo.profilePic}`}
                                             alt=""
                                         />
                                     </div>
                                     <div className="side_profile">
-                                        <h5>Jason Carzano</h5>
-                                        <p>Admin</p>
+                                        <h5>
+                                            {userInfo.firstName}{" "}
+                                            {userInfo.lastName}
+                                        </h5>
+                                        {!userInfo.isAdmin ? (
+                                            <p>Alumni</p>
+                                        ) : (
+                                            <p>Administrator</p>
+                                        )}
                                     </div>
                                 </div>
                                 <hr className="horizontal_line" />

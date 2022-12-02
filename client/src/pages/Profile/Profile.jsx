@@ -21,6 +21,7 @@ const Profile = ({ user }) => {
     const [newlastName, setLastName] = useState(userInfo.lastName);
     const [newmiddleName, setMiddleName] = useState(userInfo.middleName);
     const [newbio, setBio] = useState(userInfo.bio);
+    const [newaddress, setAddress] = useState(userInfo.address);
     const [newphone, setPhone] = useState(userInfo.phone);
     const [newgender, setGender] = useState(userInfo.gender);
     const [newage, setAge] = useState(userInfo.age);
@@ -76,6 +77,7 @@ const Profile = ({ user }) => {
         fail: "fail",
     };
 
+    // para kuha sa usa ka data sa user
     useEffect(() => {
         axios
             .get("http://localhost:8080/api/users/user/" + user)
@@ -100,6 +102,7 @@ const Profile = ({ user }) => {
                 newlastName: newlastName,
                 newmiddleName: newmiddleName,
                 newbio: newbio,
+                newaddress: newaddress,
                 newphone: newphone,
                 newgender: newgender,
                 newage: newage,
@@ -223,8 +226,12 @@ const Profile = ({ user }) => {
                         <div className="fullname">
                             <h1>FullName : </h1>{" "}
                             <p>
-                                {userInfo.firstName} {userInfo.lastName}
+                                {userInfo.firstName} {userInfo.middleName}{" "}
+                                {userInfo.lastName}
                             </p>
+                        </div>
+                        <div className="fullname">
+                            <h1>Address : </h1> <p>{userInfo.address}</p>
                         </div>
                         <div className="fullname">
                             <h1>Mobile : </h1> <p>{userInfo.phone}</p>
@@ -299,7 +306,16 @@ const Profile = ({ user }) => {
                                 onChange={(e) => setBio(e.target.value)}
                             ></textarea>
                         </div>
-
+                        {/* address */}
+                        <div className="phone_holder">
+                            <p>Address</p>
+                            <input
+                                type="text"
+                                className="input_fname"
+                                defaultValue={userInfo.address}
+                                onChange={(e) => setAddress(e.target.value)}
+                            />
+                        </div>
                         <div className="phone_holder">
                             <p>Phone</p>
                             <input
@@ -312,12 +328,15 @@ const Profile = ({ user }) => {
 
                         <div className="gender_holder">
                             <p>Gender</p>
-                            <input
-                                type="text"
-                                className="input_fname"
-                                defaultValue={userInfo.gender}
+                            <select
+                                defaultValue={user.gender}
                                 onChange={(e) => setGender(e.target.value)}
-                            />
+                                className="selectGender"
+                            >
+                                <option value="">--Select--</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
                         </div>
 
                         <div className="age_holder">
@@ -337,12 +356,63 @@ const Profile = ({ user }) => {
 
                         <div className="course_holder">
                             <p>Course</p>
-                            <input
-                                type="text"
-                                className="input_fname"
-                                defaultValue={userInfo.course}
+                            <select
+                                defaultValue={user.course}
                                 onChange={(e) => setCourse(e.target.value)}
-                            />
+                                className="selectCourse"
+                            >
+                                <option value="">--Select--</option>
+                                <option value="BAL">
+                                    Bachelor of Arts In Literature
+                                </option>
+                                <option value="BAEL">
+                                    Bachelor of Arts in English Languange
+                                </option>
+                                <option value="BTLED">
+                                    Bachelor of Techology and Livelihood
+                                    Education
+                                </option>
+                                <option value="BSED">
+                                    Bachelor of Secondary Education
+                                </option>
+                                <option value="BEED">
+                                    Bachelor of Elementary Education
+                                </option>
+                                <option value="BSIE">
+                                    Bachelor of Science in Industrial
+                                    Engineering
+                                </option>
+                                <option value="BSIT">
+                                    Bachelor of Science in Information
+                                    Technology
+                                </option>
+                                <option value="BIT-Garments">
+                                    BIT Garments
+                                </option>
+                                <option value="BIT-Drafting">
+                                    BIT Drafting
+                                </option>
+                                <option value="BIT-Computer-Technology">
+                                    BIT Computer Technology
+                                </option>
+                                <option value="BIT-Automotive">
+                                    BIT Automotive
+                                </option>
+                                <option value="BIT-Electronics">
+                                    BIT Electronics
+                                </option>
+                                <option value="BSHM">
+                                    Bachelor of Science in Hospitality
+                                    Management
+                                </option>
+                                <option value="BSA">
+                                    Bachelor of Science in Agriculture
+                                </option>
+                                <option value="BSHM">
+                                    Bachelor of Science in Hospitality
+                                    Management
+                                </option>
+                            </select>
                         </div>
 
                         <div className="year_holder">
@@ -361,7 +431,7 @@ const Profile = ({ user }) => {
                                 defaultValue={userInfo.empStat}
                                 onChange={(e) => setEmpStat(e.target.value)}
                             >
-                                <option value=""></option>
+                                <option value="">--Select--</option>
                                 <option value="Unemployed">Unemployed</option>
                                 <option value="Employed">Employed</option>
                                 <option value="UnderEmployed">

@@ -17,6 +17,7 @@ import EditUser from "./components/EditUser/EditUser";
 import JobPosting from "./components/JobPosting/JobPosting";
 import Job from "./components/Forms/Job";
 import NotFound from "./pages/NotFound/NotFound";
+import VerifyUser from "./components/VerifyUser/VerifyUser";
 
 export const ThemeContext = createContext(null);
 
@@ -31,11 +32,11 @@ function App() {
     return (
         <ThemeContext.Provider value={{ theme, toggleTheme }}>
             <div className="App" id={theme}>
-                <div className="blur" style={{ top: "-18%", right: "0" }}></div>
+                {/* <div className="blur" style={{ top: "-18%", right: "0" }}></div>
                 <div
                     className="blur"
                     style={{ top: "36%", left: "-8rem" }}
-                ></div>
+                ></div> */}
                 <Routes>
                     <Route path="/signup" exact element={<Signup />} />
                     <Route path="/login" exact element={<Login />} />
@@ -45,9 +46,13 @@ function App() {
                     />
                 </Routes>
                 {user && (
-                    <Main theme={theme} toggleTheme={toggleTheme}>
+                    <Main theme={theme} toggleTheme={toggleTheme} user={user}>
                         <Routes>
-                            <Route path="/home" exact element={<Home />} />
+                            <Route
+                                path="/home"
+                                exact
+                                element={<Home theme={theme} />}
+                            />
                             <Route path="/alumni" exact element={<Alumni />} />
                             <Route
                                 path="/analytics"
@@ -62,7 +67,7 @@ function App() {
                             <Route
                                 path="/userlist"
                                 exact
-                                element={<UserList />}
+                                element={<UserList user={user} />}
                             ></Route>
                             <Route
                                 path="/user/:id"
@@ -72,12 +77,17 @@ function App() {
                             <Route
                                 path="/jobposting"
                                 exact
-                                element={<JobPosting />}
+                                element={<JobPosting user={user} />}
                             ></Route>
                             <Route
                                 path="/job/:id"
                                 exact
-                                element={<Job />}
+                                element={<Job user={user} />}
+                            ></Route>
+                            <Route
+                                path="/verifyuser"
+                                exact
+                                element={<VerifyUser user={user} />}
                             ></Route>
                             <Route
                                 path="/*"

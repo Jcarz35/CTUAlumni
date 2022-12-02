@@ -59,6 +59,7 @@
     flex-direction: column;
     margin-top: 30px;
     width: 100%;
+    object-position: center;
 }
 .update_img {
     margin-top: -20px;
@@ -129,8 +130,12 @@ p {
     letter-spacing: 0.5px;
     margin-bottom: 10px;
 }
-.about_info p {
+.about_info .p {
+    font-size: 12px;
     margin-bottom: 10px;
+}
+#dark .about_info .p {
+    font-weight: 200;
 }
 .fullname {
     margin-top: 2px;
@@ -216,6 +221,11 @@ p {
     background-color: var(--input-background);
     transition: background-color 0.7s ease-in;
 }
+#dark .input_fname,
+#dark .bio_area {
+    font-weight: 300;
+    letter-spacing: 0.7px;
+}
 
 .bio {
     width: 100%;
@@ -277,8 +287,21 @@ textarea {
 select {
     padding: 10px;
     border: none;
-    background-color: white;
+    background-color: var(--input-background);
     transition: background-color 0.7s ease-in;
+}
+.selectCourse {
+    padding: 5px;
+    height: 30px;
+    min-width: 250px;
+    max-width: 250px;
+    background-color: var(--input-background);
+}
+.selectGender {
+    padding: 5px;
+    height: 30px;
+    min-width: 220px;
+    max-width: 250px;
 }
 
 .button_holder {

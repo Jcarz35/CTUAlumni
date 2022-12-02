@@ -2,7 +2,7 @@
     --light-blue: #019ff8;
     --gray-icons: #494343;
     --light-gray-icons: rgb(212, 209, 209);
-    --green: green;
+    --green: #007352;
     --active: #e3fcf7;
 
     --blue-link: rgb(41, 41, 211);
@@ -18,35 +18,278 @@
     justify-content: center;
     margin: 0;
     padding: 0;
-
+    width: 100%;
     flex-direction: column;
+    transition: background-color 0.7s ease-in;
 }
 #dark .jobposting_containers {
     background-color: var(--dark-main-background);
 }
 .header_jobs {
-    width: 100%;
-    margin-left: 40px;
     margin-bottom: 30px;
+    transition: background-color 0.7s ease-in;
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 40px;
+}
+.header_jobs .header_right {
+    margin-top: 20px;
+    margin-right: 30px;
+}
+.header_jobs .header_right button {
+    padding: 5px 10px;
+    border: 1px solid green;
+    border-radius: 5px;
+    background-color: #007352;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in;
+}
+.header_jobs .header_right button:hover {
+    background-color: green;
+    box-shadow: 1px 13px 26px 1px rgba(143, 137, 137, 0.75);
+    -webkit-box-shadow: 1px 13px 26px 1px rgba(143, 137, 137, 0.75);
+    -moz-box-shadow: 1px 13px 26px 1px rgba(143, 137, 137, 0.75);
+}
+
+#dark .header_jobs h1 {
+    color: var(--active);
 }
 .jobBodys {
     display: flex;
     flex: 1;
     margin: 0 40px auto;
     overflow-y: hidden;
+    transition: background-color 0.7s ease-in;
 }
+/* button */
+.lefts_cards .button {
+    outline: none;
+    border: none;
+    cursor: pointer;
+    color: green;
+    background-color: rgb(192, 238, 192);
+    padding: 7px;
+    width: 130px;
+}
+.lefts_cards .button:hover {
+    background-color: white;
+}
+
 .leftss {
     display: flex;
+    height: 100%;
     /* flex: 1; */
     justify-content: start;
     flex-wrap: wrap;
     overflow-y: hidden;
-    gap: 25px;
+    gap: 22px;
+    transition: background-color 0.7s ease-in;
 }
 .lefts_cards {
     /* flex: 1; */
-    border-radius: 5px;
+    border-radius: 7px;
     min-width: 330px;
-    min-height: 310px;
+    max-width: 330px;
+    height: 350px;
     background-color: var(--background);
+    padding: 15px;
+    text-decoration: none;
+    color: var(--green);
+    transition: background-color 0.7s ease-in;
+    cursor: pointer;
+}
+.lefts_cards:hover {
+    box-shadow: 1px 13px 26px 1px rgba(143, 137, 137, 0.75);
+    -webkit-box-shadow: 1px 13px 26px 1px rgba(143, 137, 137, 0.75);
+    -moz-box-shadow: 1px 13px 26px 1px rgba(143, 137, 137, 0.75);
+}
+#dark .lefts_cards {
+    background-color: var(--dark-background);
+}
+
+/* image */
+.lefts_cards img {
+    width: 60px;
+    height: 60px;
+    border-radius: 3px;
+}
+
+.lefts_cards_title {
+    transition: background-color 0.7s ease-in;
+    margin: 0;
+    margin-bottom: 2px;
+    height: 20px;
+}
+.lefts_cards_title h1 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: rgb(1, 65, 1);
+}
+#dark .lefts_cards_title h1 {
+    font-weight: normal;
+    color: #e3fcf7;
+}
+
+.lefts_cards_p {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 2px;
+    height: 110px;
+    transition: background-color 0.7s ease-in;
+}
+/* #dark .lefts_cards_companyname h4 {
+    font-weight: 300;
+} */
+#dark .lefts_cards_companyname h4 {
+    font-weight: 500;
+    color: #2faaf1;
+}
+#dark .lefts_cards_location h5 {
+    font-weight: 200;
+}
+.lefts_cards_p p {
+    font-size: 12.5px;
+}
+#dark .lefts_cards_p p {
+    color: rgb(199, 197, 197);
+    font-weight: 300;
+}
+
+#dark .lefts_cards .button {
+    background-color: #019ff8;
+    color: rgb(58, 56, 56);
+}
+
+/* dialog for adding jobs post*/
+.job_dialog {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    width: 600px;
+    height: 100%;
+}
+.header_job {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.input_job_div {
+    display: flex;
+    flex-direction: column;
+    width: 550px;
+    justify-content: center;
+    align-items: center;
+}
+.input_job_div .job_input_holder {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+}
+.job_dialog input,
+.job_dialog textarea {
+    height: 30px;
+    background-color: var(--input-background);
+    width: 100%;
+    font-size: 14px;
+    border: none;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    padding: 5px;
+}
+.job_dialog textarea {
+    height: 200px;
+}
+.input_job_div h5 {
+    margin-left: 2px;
+    font-size: 14px;
+}
+
+.job_dialog .button_save {
+    width: 450px;
+    margin: 10px 50px;
+    display: flex;
+    justify-content: flex-end;
+}
+.job_dialog .button_save button {
+    outline: none;
+    border: none;
+    cursor: pointer;
+    color: green;
+    border-radius: 4px;
+    background-color: rgb(192, 238, 192);
+    padding: 5px;
+    width: 110px;
+}
+
+.lefts_cards_companyname h4 {
+    color: rgb(60, 77, 122);
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.lefts_cards_location,
+.lefts_cards_entrylevel {
+    display: flex;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+}
+.lefts_cards_location h5,
+.lefts_cards_entrylevel h5 {
+    color: var(--gray-icons);
+    font-size: 14px;
+    font-weight: 500;
+    margin: 1px 0;
+}
+
+.lefts_cards .icon {
+    margin: 3px 0;
+    color: var(--gray-icons);
+    font-size: 15px;
+}
+.header_left .search_input {
+    border-radius: 4px;
+    border: 1px solid rgb(175, 172, 172);
+}
+#dark .header_left .search_input {
+    background-color: #191d33;
+    color: white;
+}
+
+#dark .lefts_cards_location .icon,
+#dark .lefts_cards_entrylevel .icon {
+    color: #b1b1b1;
+}
+
+.job_card_footer {
+    display: flex;
+    justify-content: space-between;
+}
+.job_card_footer p {
+    margin-top: 6px;
+    color: #5c5050;
+    font-size: 12px;
+}
+#dark .job_card_footer p {
+    color: white;
+    font-weight: 300;
+}
+.loading_page {
+    display: flex;
+    align-items: center;
+    position: fixed;
+    gap: 5px;
+    left: 50%;
+    height: 500px;
+    width: 100%;
+}
+
+.close_icon {
+    font-size: 22px;
+    color: rgb(48, 46, 46);
 }

@@ -7,10 +7,10 @@
 .login_container {
     width: 100%;
     min-height: 100vh;
-    background-image: url(../../images/green1.jpg);
+    background-image: url(../../images/4873152.jpg);
     background-repeat: no-repeat;
     background-size: cover;
-    background-color: #f4f7f5;
+    background-color: #f3f7f3;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -101,7 +101,8 @@ form div label {
 }
 
 form div input:focus ~ label,
-form div input:valid ~ label {
+form div input:valid ~ label,
+.form div input:not(:placeholder-shown) ~ label {
     color: green;
     font-size: 14px;
     font-weight: 700;
@@ -138,14 +139,15 @@ input:focus {
     margin-right: 20px;
 }
 .login_container .green_btn {
-    margin-left: 210px;
+    margin-left: 230px;
     border: none;
-    background-color: rgb(2, 75, 2);
+    background-color: rgb(10, 143, 10);
+    /* background-color: #b9b6b6; */
     border: 2px solid white;
     color: white;
     margin-top: 8px;
-    width: 120px;
-    padding: 12px 0;
+    width: 100px;
+    padding: 10px 0;
     border-radius: 5px;
     font-weight: bold;
     font-size: 14px;
@@ -154,8 +156,10 @@ input:focus {
 }
 
 .green_btn h5 {
-    font-size: 12px;
-    margin: 3px;
+    font-size: 13px;
+
+    letter-spacing: 1.5px;
+    font-weight: normal;
 }
 
 .green_btn:hover {

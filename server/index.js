@@ -22,6 +22,7 @@ app.use("/api/jobs", jobRoutes);
 
 //para maka access image nga naa gawas sa SRC folder
 app.use("/uploads", express.static("uploads"));
+app.use("/companyLogo", express.static("companyLogo"));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

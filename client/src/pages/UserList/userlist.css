@@ -24,8 +24,9 @@ p {
     flex: 1;
     margin: 5;
     padding: 0;
-    height: 100%;
-    background-image: linear-gradient(rgb(250, 255, 248), rgb(208, 250, 215));
+    height: 1000px;
+    /* background-image: linear-gradient(rgb(250, 255, 248), rgb(208, 250, 215)); */
+    background-color: var(--white);
     flex-direction: column;
     transition: background-color 0.7s ease-in;
 }
@@ -152,12 +153,12 @@ p {
 }
 
 .body_close {
-    background-color: rgb(248, 182, 182);
+    background-color: rgb(253, 239, 239);
 
     margin-left: 25px;
     margin-right: 25px;
     border-radius: 4px;
-    border: 1px solid rgb(191, 191, 248);
+    border: 1px solid rgb(230, 230, 250);
 }
 
 .body_close h1 {

@@ -24,6 +24,11 @@ router.post("/", async (req, res) => {
                 .status(401)
                 .send({ message: "Invalid Email or Password" });
 
+        if (!user.isActive)
+            return res
+                .status(401)
+                .send({ message: "Your Account is not active." });
+
         //const token = user.generateAuthToken();
         const token = user._id;
         res.status(200).send({

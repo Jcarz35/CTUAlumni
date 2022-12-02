@@ -13,9 +13,11 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { FaUserCircle } from "react-icons/fa";
 import { FaSave } from "react-icons/fa";
 import { BsFillCameraFill } from "react-icons/bs";
+import { IoCloseSharp } from "react-icons/io5";
 
 // notification
 import Snackbar from "../../components/Snackbar/Snackbar";
+
 const EditUser = () => {
     const { id } = useParams(); // get the id from the URL
     const [user, setUser] = useState([]);
@@ -24,6 +26,7 @@ const EditUser = () => {
     const [newlastName, setLastName] = useState(user.lastName);
     const [newmiddleName, setMiddleName] = useState(user.middleName);
     const [newbio, setBio] = useState(user.bio);
+    const [newaddress, setAddress] = useState(user.address);
     const [newemail, setEmail] = useState("");
     const [newphone, setPhone] = useState(user.phone);
     const [newgender, setGender] = useState(user.gender);
@@ -103,6 +106,7 @@ const EditUser = () => {
                 newlastName: newlastName,
                 newmiddleName: newmiddleName,
                 newbio: newbio,
+                newaddress: newaddress,
                 newphone: newphone,
                 newgender: newgender,
                 newage: newage,
@@ -170,7 +174,7 @@ const EditUser = () => {
                                         className="btn_close"
                                         onClick={handleClose}
                                     >
-                                        x
+                                        <IoCloseSharp className="close_icon" />
                                     </Button>
                                 </div>
 
@@ -218,12 +222,16 @@ const EditUser = () => {
 
                     <div className="about_info">
                         <h1>About Me :</h1>
-                        <p>{user.bio}</p>
+                        <p className="p">{user.bio}</p>
                         <div className="fullname">
                             <h1>FullName : </h1>{" "}
                             <p>
-                                {user.firstName} {user.lastName}
+                                {user.firstName} {user.middleName}{" "}
+                                {user.lastName}
                             </p>
+                        </div>
+                        <div className="fullname">
+                            <h1>Address : </h1> <p>{user.address}</p>
                         </div>
                         <div className="fullname">
                             <h1>Mobile : </h1> <p>{user.phone}</p>
@@ -298,8 +306,16 @@ const EditUser = () => {
                                 onChange={(e) => setBio(e.target.value)}
                             ></textarea>
                         </div>
-
-                        <div className="email_holder">
+                        <div className="phone_holder">
+                            <p>Address</p>
+                            <input
+                                type="text"
+                                className="input_fname"
+                                defaultValue={user.address}
+                                onChange={(e) => setAddress(e.target.value)}
+                            />
+                        </div>
+                        {/* <div className="email_holder">
                             <p>Email </p>
                             <input
                                 type="text"
@@ -307,7 +323,7 @@ const EditUser = () => {
                                 defaultValue={user.email}
                                 onChange={(e) => setEmail(e.target.value)}
                             />
-                        </div>
+                        </div> */}
                         <div className="phone_holder">
                             <p>Phone</p>
                             <input
@@ -320,12 +336,15 @@ const EditUser = () => {
 
                         <div className="gender_holder">
                             <p>Gender</p>
-                            <input
-                                type="text"
-                                className="input_fname"
+                            <select
                                 defaultValue={user.gender}
                                 onChange={(e) => setGender(e.target.value)}
-                            />
+                                className="selectGender"
+                            >
+                                <option value="">--Select--</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
                         </div>
 
                         <div className="age_holder">
@@ -345,12 +364,63 @@ const EditUser = () => {
 
                         <div className="course_holder">
                             <p>Course</p>
-                            <input
-                                type="text"
-                                className="input_fname"
+                            <select
                                 defaultValue={user.course}
                                 onChange={(e) => setCourse(e.target.value)}
-                            />
+                                className="selectCourse"
+                            >
+                                <option value="">--Select--</option>
+                                <option value="BAL">
+                                    Bachelor of Arts In Literature
+                                </option>
+                                <option value="BAEL">
+                                    Bachelor of Arts in English Languange
+                                </option>
+                                <option value="BTLED">
+                                    Bachelor of Techology and Livelihood
+                                    Education
+                                </option>
+                                <option value="BSED">
+                                    Bachelor of Secondary Education
+                                </option>
+                                <option value="BEED">
+                                    Bachelor of Elementary Education
+                                </option>
+                                <option value="BSIE">
+                                    Bachelor of Science in Industrial
+                                    Engineering
+                                </option>
+                                <option value="BSIT">
+                                    Bachelor of Science in Information
+                                    Technology
+                                </option>
+                                <option value="BIT-Garments">
+                                    BIT Garments
+                                </option>
+                                <option value="BIT-Drafting">
+                                    BIT Drafting
+                                </option>
+                                <option value="BIT-Computer-Technology">
+                                    BIT Computer Technology
+                                </option>
+                                <option value="BIT-Automotive">
+                                    BIT Automotive
+                                </option>
+                                <option value="BIT-Electronics">
+                                    BIT Electronics
+                                </option>
+                                <option value="BSHM">
+                                    Bachelor of Science in Hospitality
+                                    Management
+                                </option>
+                                <option value="BSA">
+                                    Bachelor of Science in Agriculture
+                                </option>
+                                <option value="BSHM">
+                                    Bachelor of Science in Hospitality
+                                    Management
+                                </option>
+                            </select>
                         </div>
 
                         <div className="year_holder">
@@ -369,6 +439,7 @@ const EditUser = () => {
                                 defaultValue={user.empStat}
                                 onChange={(e) => setEmpStat(e.target.value)}
                             >
+                                <option value="">--Select--</option>
                                 <option value="Unemployed">Unemployed</option>
                                 <option value="Employed">Employed</option>
                                 <option value="UnderEmployed">

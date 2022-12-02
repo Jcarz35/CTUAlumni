@@ -84,6 +84,9 @@
 .first_div_title p {
     color: var(--white);
 }
+.first_div_title p {
+    font-size: 15px;
+}
 .first_div_title h2 {
     margin-bottom: 15px;
 }
@@ -99,8 +102,20 @@
     position: relative;
     transition: background-color 0.7s ease-in;
 }
+.first_div_right::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 100px;
+    height: 32px;
+    background-color: var(--white);
+}
 #dark .first_div_right {
     background-color: var(--light-dark-background);
+}
+#dark .first_div_right::after {
+    background-color: #293146;
 }
 .first_div_right_title {
     margin-left: 25px;
@@ -121,11 +136,17 @@
     margin: 5px 25px;
     justify-content: space-between;
 }
+.courseChart {
+    width: 100%;
+    height: 300px;
+    border: none;
+}
 .employment_content {
     margin-top: 35px;
     display: flex;
     flex-direction: column;
 }
+
 #dark .employment_content p {
     color: var(--white);
 }
@@ -326,8 +347,16 @@
 .alumniChart {
     /* width: 400px;
     height: 300px; */
-    width: 100%;
+    position: relative;
+    width: 99%;
+    height: 99%;
+    border: none;
+}
+
+.genderChart {
     height: 100%;
+    width: 100%;
+    border: none;
 }
 
 #dark iframe {
@@ -339,10 +368,12 @@
     flex: 1.5;
     height: 290px;
     border-radius: 3px;
+    position: relative;
     min-width: 250px;
     background-color: var(--white);
     transition: background-color 0.7s ease-in;
 }
+
 #dark .third_div_content {
     background-color: var(--dark-background);
 }
