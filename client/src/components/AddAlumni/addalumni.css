@@ -1,0 +1,153 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+:root {
+    --light-blue: #019ff8;
+    --gray-icons: #494343;
+    --light-gray-icons: rgb(212, 209, 209);
+    --green: rgb(1, 53, 1);
+    --active: #e3fcf7;
+
+    --blue-link: rgb(41, 41, 211);
+    --background: #f6f9fb;
+    --white: #fff;
+    --dark-main-background: #191d33;
+    --dark-background: #293146;
+    --dark-Username: #212744;
+    --light-violet: #8790c4;
+}
+
+.verify_container {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--background);
+    transition: background-color 0.7s ease-in;
+}
+#dark .verify_container {
+    background-color: var(--dark-main-background);
+}
+.header_verify {
+    margin-left: 30px;
+    margin-top: 15px;
+}
+.header_verify h5 {
+    font-size: 18px;
+    font-weight: normal;
+}
+#dark .header_verify h5 {
+    color: rgb(144, 144, 144);
+}
+
+.verify_body {
+    margin: 10px 30px;
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 22px;
+    height: 650px;
+    transition: background-color 0.7s ease-in;
+}
+
+/* left */
+.verify_body .left_body {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    padding: 5px;
+    border-radius: 3px;
+    flex: 1;
+    box-shadow: 0px 3px 3px -2px rgb(0 0 0 / 20%),
+        0px 3px 4px 0px rgb(0 0 0 / 14%), 0px 1px 8px 0px rgb(0 0 0 / 12%);
+    backdrop-filter: blur(2px);
+    transition: background-color 0.7s ease-in;
+    height: 420px;
+}
+#dark .verify_body .left_body {
+    background-color: var(--dark-background);
+}
+
+.verify_body .left_body h5 {
+    font-size: 20px;
+    margin-left: 35px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    color: var(--green);
+    font-weight: 600;
+}
+#dark .verify_body .left_body h5 {
+    color: var(--active);
+    font-weight: normal;
+}
+
+.formAdd_container {
+    width: 300px;
+    padding: 0;
+    margin: 0;
+}
+.fname_holderss {
+    margin: 12px 35px;
+    width: 225px;
+}
+.fname_holderss .input_fname {
+    background-color: var(--background);
+    padding: 5px;
+    font-size: 13px;
+    font-weight: normal;
+}
+#dark .fname_holderss .input_fname {
+    background-color: var(--dark-main-background);
+    color: white;
+}
+
+.fname_holderss p {
+    margin: 0;
+}
+#dark .fname_holderss p {
+    color: rgb(205, 205, 205);
+    font-weight: normal;
+}
+
+/* button */
+.button_holders {
+    margin: 15px -50px;
+    padding: 0;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.button_holders .button {
+    display: flex;
+    gap: 4px;
+    padding: 0;
+    border-radius: 5px;
+}
+.button_holders .button .icon {
+    font-size: 15px;
+    margin-top: 6px;
+    color: white;
+}
+.button_holders .button p {
+    padding: 0;
+    margin-top: 6.5px;
+    color: white;
+}
+
+.styles_error {
+    width: 225px;
+    padding: 7px;
+    margin: 0 35px;
+    font-size: 12px;
+    background-color: #fa0101;
+    color: white;
+    border-radius: 5px;
+    text-align: center;
+    animation: fadeIn 0.3s, fadeOut 0.5s 2.5s;
+}
+/* right division */
+.verify_body .AddUser_table {
+    background-color: white;
+    flex: 3;
+    box-shadow: 0px 3px 3px -2px rgb(0 0 0 / 20%),
+        0px 3px 4px 0px rgb(0 0 0 / 14%), 0px 1px 8px 0px rgb(0 0 0 / 12%);
+    backdrop-filter: blur(2px);
+}

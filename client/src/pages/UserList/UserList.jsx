@@ -9,7 +9,7 @@ const UserList = ({ user }) => {
         <div className="userlist_container">
             <div className="userlist_header">
                 <div className="header_content">
-                    <h5 className="userlist_title">List of Alumni</h5>
+                    <h5 className="userlist_title">List of Active Alumni</h5>
                 </div>
                 <div className="table">
                     <UserTable userBuang={user} />

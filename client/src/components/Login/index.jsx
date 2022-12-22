@@ -3,8 +3,10 @@ import { useState } from "react";
 import axios from "axios";
 import styles from "./styles.module.css";
 import { Link, Route } from "react-router-dom";
+import { motion } from "framer-motion";
 
 import ctu from "../../images/ctu.png";
+import ctuLogo from "../../images/ctuLogo.svg";
 
 const Login = () => {
     const [data, setData] = useState({ email: "", password: "" });
@@ -72,9 +74,14 @@ const Login = () => {
 
                     {error && <div className={styles.error_msg}>{error}</div>}
 
-                    <button type="submit" className={styles.green_btn}>
+                    <motion.button
+                        type="submit"
+                        className={styles.green_btn}
+                        whileTap={{ scale: 0.9 }}
+                        whileHover={{ scale: 1 }}
+                    >
                         <h5>LOGIN</h5>
-                    </button>
+                    </motion.button>
                 </form>
                 <div className={styles.signup_container}>
                     <p>Dont have and account?</p>

@@ -16,8 +16,9 @@
     flex: 1;
     margin: 5;
     padding: 0;
-    height: 100%;
-    background-image: linear-gradient(#f5f5f5, #d1fad8);
+    height: 1000px;
+    background-color: var(--background);
+    /* background-image: linear-gradient(#f5f5f5, #d1fad8); */
     flex-direction: column;
     overflow: hidden;
     transition: background-color 0.7s ease-in;
@@ -349,8 +350,19 @@ textarea:focus {
     min-width: 270px;
     margin: 10px;
 }
+
+.status_holders {
+    display: flex;
+    flex-direction: column;
+    min-width: 270px;
+    margin: 0 10px;
+}
+.status_holders .input_fname {
+    max-width: 270px;
+}
+
 .status_holder select {
-    padding: 6px;
+    padding: 5px;
     border-radius: 3px;
     background-color: #f1f1ef;
 }

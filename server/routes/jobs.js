@@ -36,7 +36,7 @@ router.get("/all", async (req, res) => {
     });
 });
 
-//get single user
+//get single Job
 router.get("/job/:id", async (req, res) => {
     const job = await Jobs.findById(req.params.id);
 
@@ -65,41 +65,16 @@ router.post("/add", upload.single("companyLogo"), async (req, res, next) => {
     }
 });
 
-//find and update
-router.put("/updateJob", upload.single("companyLogo"), async (req, res) => {
+//find and update single job
+router.put("/updateJob", async (req, res) => {
     const id = req.body.id;
-    const companyLogod = await Jobs.findById(id);
-    const newFileName = req.file.originalname;
-    //  companyLogod.companyLogo || req.file.originalname;
-    // if (typeof req.file.originalname !== "undefined") {
-    //     newFileName = req.file.originalname;
-    // } else {
-    //     newFileName = companyLogod.companyLogo;
-    // }
 
-    console.log(companyLogod.companyLogo);
-    const newTitle = req.body.title;
-    const newCompanyName = req.body.companyName;
-    const newLocation = req.body.location;
-    const newEntryLevel = req.body.entryLevel;
-    const newDescription = req.body.description;
+    const newTitle = req.body.newTitle;
+    const newCompanyName = req.body.newCompanyName;
+    const newLocation = req.body.newLocation;
+    const newEntryLevel = req.body.newEntryLevel;
+    const newDescription = req.body.newDescription;
 
-    // await Jobs.findById(id)
-    //     .then((job) => {
-    //         job.title = newTitle;
-    //         job.companyName = newCompanyName;
-    //         job.location = newLocation;
-    //         job.entryLevel = newEntryLevel;
-    //         job.description = newDescription;
-    //         job.companyLogo = newFileName;
-
-    //         job.save().then(() => {
-    //             res.json("job updated");
-    //         });
-    //     })
-    //     .catch((err) => {
-    //         res.status(400).send(err.message);
-    //     });
     try {
         await Jobs.updateOne(
             { _id: id },
@@ -110,6 +85,27 @@ router.put("/updateJob", upload.single("companyLogo"), async (req, res) => {
                     location: newLocation,
                     entryLevel: newEntryLevel,
                     description: newDescription,
+                    postDate: Date.now(),
+                },
+            }
+        );
+    } catch (err) {
+        console.log("Error " + err);
+    }
+
+    res.send("Updated");
+});
+
+//find and update companyLogo of a single job
+router.put("/updateJobLogo", upload.single("companyLogo"), async (req, res) => {
+    const id = req.body.id;
+    const newFileName = req.file.originalname;
+
+    try {
+        await Jobs.updateOne(
+            { _id: id },
+            {
+                $set: {
                     companyLogo: newFileName,
                     postDate: Date.now(),
                 },

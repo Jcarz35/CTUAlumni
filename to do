@@ -9,9 +9,13 @@
 -   delete confirmation modal
 -   image upload and retrieve
 -   Jobs
+-   Verify the user who register if their ID is match in database
 
-Verify the user who register if their ID is match in database
-maghimog laing database para sa ID sa mga alumni para trap sa mag register
+dashboard
+\*number of jobs posted
+
+events organization
+notification
 
 Job posting
 Maka post ang alumni og Job pero i verify sa sa Admin usa makita sa Jobs List
@@ -23,7 +27,6 @@ Request ID
 Id release
 
 pagination sa job post
-All courses sa CTU Argao
 image viewer
 
 add admin
@@ -31,3 +34,40 @@ charts
 
 download CV
 multiple query count
+
+svg logo
+
+3 steps para ma update sa github
+git add
+git commit -m "second commit"
+git push
+
+{/_ Verify alumni Button Menu_/}
+{userInfo.isAdmin && (
+
+<div className="link_holder">
+<div className="link_container">
+<NavLink
+exact={true}
+to={"/verifyuser"}
+key={"VerifyUser"}
+className={({ isActive }) =>
+isActive ? "active" : "link"
+} >
+{isOpen && (
+<div className="link_text">
+{"Verify"}
+</div>
+)}
+
+                                        {/* Arrow Button*/}
+                                    </NavLink>
+                                </div>
+                            </div>
+                        )}
+
+#DBE7F2 = lightblue
+#DBE7F2 = blue
+
+transition: transform 0.3s ease-in-out;
+::hover scale: 1.02 ease-in;

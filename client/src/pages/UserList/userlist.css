@@ -1,5 +1,5 @@
 :root {
-    --background: #eff2f4;
+    --background: #f6f9fb;
     --white: #fff;
     --active: #e3fcf7;
     --dark-main-background: #191d33;
@@ -26,7 +26,7 @@ p {
     padding: 0;
     height: 1000px;
     /* background-image: linear-gradient(rgb(250, 255, 248), rgb(208, 250, 215)); */
-    background-color: var(--white);
+    background-color: var(--background);
     flex-direction: column;
     transition: background-color 0.7s ease-in;
 }

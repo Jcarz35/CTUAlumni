@@ -42,7 +42,7 @@
     display: flex;
     margin: 5px 24px;
     background-color: var(--background);
-    gap: 23px;
+    gap: 21px;
     justify-content: space-around;
     flex-wrap: wrap;
     transition: background-color 0.7s ease-in;
@@ -53,7 +53,7 @@
 
 .first_div_left {
     flex: 2;
-    background-image: linear-gradient(to right, #58baab, #acdefc);
+    background-image: linear-gradient(to right, #b1d3ce, #acdefc);
     min-width: 400px;
     height: 300px;
     border-radius: 3px;
@@ -61,7 +61,7 @@
     transition: background-color 0.7s ease-in;
 }
 #dark .first_div_left {
-    background-image: linear-gradient(to right, rgb(28, 28, 102), #5a79b0);
+    background-image: linear-gradient(to right, rgb(62, 62, 148), #5a79b0);
 }
 /* image */
 .first_div_left img {
@@ -70,22 +70,29 @@
     right: 12px;
     height: 100%;
     background-size: contain;
-    opacity: 0.5;
+    opacity: 0.3;
 }
 .first_div_title {
     position: absolute;
     left: 40px;
     top: 40px;
-    width: 300px;
+    width: 490px;
     z-index: 2;
 }
 .first_div_title h1,
 .first_div_title h2,
 .first_div_title p {
-    color: var(--white);
+    color: rgb(85, 79, 79);
+}
+
+#dark .first_div_title h1,
+#dark .first_div_title p {
+    color: var(--active);
+    font-weight: normal;
 }
 .first_div_title p {
-    font-size: 15px;
+    margin-top: 10px;
+    font-size: 18px;
 }
 .first_div_title h2 {
     margin-bottom: 15px;
@@ -98,9 +105,10 @@
     background-color: var(--white);
     min-width: 300px;
     border-radius: 3px;
-    transition: transform 0.3s;
+
     position: relative;
     transition: background-color 0.7s ease-in;
+    transition: transform 0.3s ease-in-out;
 }
 .first_div_right::after {
     content: "";
@@ -116,19 +124,6 @@
 }
 #dark .first_div_right::after {
     background-color: #293146;
-}
-.first_div_right_title {
-    margin-left: 25px;
-    margin-top: 15px;
-}
-.first_div_right_title h1 {
-    font-size: 20px;
-}
-#dark .first_div_right_title h1 {
-    color: var(--light-violet);
-}
-#dark .first_div_right_title span {
-    color: var(--gray-h1-p);
 }
 
 .employment {
@@ -174,23 +169,10 @@
     font-size: 13px;
 }
 
-.employment_content_total {
-    display: flex;
-    gap: 5px;
-    margin-top: 12px;
-}
-.employment_content_total h1 {
-    font-size: 15px;
-}
-.employment_content_total span {
-    font-size: 15px;
-}
-.employment_content p {
-    font-size: 13px;
-    margin-top: 2.5px;
-}
 .first_div_right:hover {
-    transform: translate3d(0px, -5px, 10px);
+    transform: translateY(-5px);
+    /* transform: translate3d(0px, -5px, 10px); */
+    scale: 1.02 ease-in;
     box-shadow: 1px 13px 26px 1px rgba(143, 137, 137, 0.75);
     -webkit-box-shadow: 1px 13px 26px 1px rgba(143, 137, 137, 0.75);
     -moz-box-shadow: 1px 13px 26px 1px rgba(143, 137, 137, 0.75);
@@ -204,9 +186,9 @@
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 24px;
+    gap: 20px;
     background-color: var(--background);
-    margin: 19px 24px;
+    margin: 17px 24px;
     transition: background-color 0.7s ease-in;
 }
 #dark .second_div {
@@ -334,9 +316,9 @@
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 24px;
+    gap: 22px;
     background-color: var(--background);
-    margin: 15px 24px;
+    margin: 9px 24px;
     transition: background-color 0.7s ease-in;
 }
 
@@ -378,7 +360,7 @@
     background-color: var(--dark-background);
 }
 .third_div_content:nth-child(2) {
-    margin-top: 20px;
+    /* margin-top: 20px; */
     flex: 1;
     background-color: var(--white);
     height: 270px;

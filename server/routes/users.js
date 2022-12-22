@@ -16,41 +16,132 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-// para register
-router.post("/", async (req, res) => {
+router.post("/addAlumni", async (req, res) => {
+    const id = req.body.userId;
+    console.log(id);
     try {
-        const { error } = validate(req.body);
-        if (error)
-            return res.status(400).send({ message: error.details[0].message });
+        const user = await User.findOne({ userId: id });
+
+        // const userID = await User.findOne({ userId: req.body.userId });
+
+        // try {
+        //     if (userID.isActive) {
+        //         return res.status(409).send({
+        //             message: "User with given Alumni ID  already Exist!",
+        //         });
+        //     }
+        // } catch (error) {
+        //     throw new Error(error.message);
+        //     //  res.status(400).send({ message: error.message });
+        // }
+
+        if (user) {
+            return res.status(409).send({
+                message: "Alumni ID  already Exist!",
+            });
+
+            // res.status(409).send({ message: "Id Already exists" });
+        } else {
+            try {
+                // const salt = await bcrypt.genSalt(Number(process.env.SALT));
+                // const hashPassword = await bcrypt.hash(req.body.password, salt);
+
+                await new User({
+                    userId: req.body.userId,
+                    birthday: req.body.birthday,
+                    isAdmin: false,
+                    isActive: false,
+                    firstName: req.body.firstName,
+                    lastName: req.body.lastName,
+                    email: "",
+                    password: "",
+                    middleName: "",
+                    profilePic: "profile.png",
+                }).save();
+                res.status(201).send({ message: "User created successfully" });
+                console.log("alumni ADDed successfully");
+            } catch (err) {
+                console.error(err);
+            }
+        }
+    } catch (error) {
+        res.status(409).send({ message: "User Id already existed" });
+    }
+    // const { error } = validate(req.body);
+    // if (error)
+    //     return res.status(400).send({ message: error.details[0].message });
+    // pangitaon ang Id sa alumni na database
+});
+
+// para register
+router.put("/register", async (req, res) => {
+    try {
+        // const { error } = validate(req.body);
+        // if (error)
+        //     return res.status(400).send({ message: error.details[0].message });
+        // pangitaon ang Id sa alumni na database
 
         const user = await User.findOne({ email: req.body.email });
-        if (user)
+        try {
+            if (user)
+                return res
+                    .status(409)
+                    .send({ message: "User with given email already Exist!" });
+        } catch (error) {
+            throw new Error(error.message);
+        }
+
+        const userID = await User.findOne({ userId: req.body.userId });
+
+        try {
+            if (userID.isActive) {
+                return res.status(409).send({
+                    message: "Alumni Id Already taken!",
+                });
+            }
+        } catch (error) {
+            throw new Error(error.message);
+            //  res.status(400).send({ message: error.message });
+        }
+
+        if (userID) {
+            const salt = await bcrypt.genSalt(Number(process.env.SALT));
+            const hashPassword = await bcrypt.hash(req.body.password, salt);
+
+            try {
+                await User.updateOne(
+                    { _id: userID._id },
+
+                    {
+                        $set: {
+                            // firstName: userID.firstName,
+                            // lastName: userID.lastName,
+                            middleName: "",
+                            email: req.body.email,
+                            password: hashPassword,
+                            isActive: true,
+                            isAdmin: false,
+                            profilePic: "profile.png",
+                            address: "",
+                            phone: "",
+                            age: null,
+                            course: null,
+                            postDate: Date.now(),
+                        },
+                    }
+                );
+            } catch (err) {
+                console.log("Error " + err);
+            }
+        } else {
             return res
                 .status(409)
-                .send({ message: "User with given email already Exist!" });
+                .send({ message: "Wala sa Database imong Alumni ID" });
+        }
 
-        const salt = await bcrypt.genSalt(Number(process.env.SALT));
-        const hashPassword = await bcrypt.hash(req.body.password, salt);
-
-        await new User({
-            ...req.body,
-            password: hashPassword,
-            isAdmin: false,
-            isActive: false,
-            middleName: "",
-            bio: "",
-            address: "",
-            phone: "",
-            gender: "",
-            age: null,
-            course: "",
-            schoolYear: "",
-            empStat: "",
-            profilePic: "profile.png",
-        }).save();
         res.status(201).send({ message: "User created successfully" });
     } catch (error) {
-        res.status(500).send({ message: "Internal Server Error" });
+        res.status(500).send({ message: "Wala sa Database imong Alumni ID" });
     }
 });
 

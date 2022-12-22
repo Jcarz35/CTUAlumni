@@ -29,8 +29,12 @@ const Profile = ({ user }) => {
     const [newschoolYear, setSchoolYear] = useState(userInfo.schoolYear);
     const [newempstat, setEmpStat] = useState(userInfo.empStat);
     const [fileName, setFileName] = useState(userInfo.profilePic);
+    const [birthday, setBirthday] = useState();
 
     const [message, setMessage] = useState("");
+
+    //para enable sa companyName if empolyed ang alumni
+    const [disable, setDisable] = useState(true);
 
     // para Dialog sa Image upload
     const [open, setOpen] = useState(false);
@@ -299,7 +303,7 @@ const Profile = ({ user }) => {
                         </div>
                         {/**Bio */}
                         <div className="bio">
-                            <p>Bio</p>
+                            <p>About Me</p>
                             <textarea
                                 className="bio_area"
                                 defaultValue={userInfo.bio}
@@ -349,10 +353,15 @@ const Profile = ({ user }) => {
                             />
                         </div>
 
-                        {/** <div className="birthdate_holder}>
+                        {/* birthday */}
+                        <div className="birthdate_holder">
                             <p>Birthdate</p>
-                        <input type="date" className="input_fname} />
-                        </div> */}
+                            <input
+                                type="date"
+                                className="input_fname"
+                                onChange={(e) => setBirthday(e.target.value)}
+                            />
+                        </div>
 
                         <div className="course_holder">
                             <p>Course</p>
@@ -442,6 +451,48 @@ const Profile = ({ user }) => {
                                 </option>
                             </select>
                         </div>
+
+                        {/* company name */}
+                        {newempstat === "Employed" && (
+                            <div className="status_holders">
+                                <p>CompanyName</p>
+                                <input
+                                    type="text"
+                                    className="input_fname"
+                                    disabled={
+                                        newempstat === "Employed" ? false : true
+                                    }
+                                />
+                            </div>
+                        )}
+
+                        {/* company Address */}
+                        {newempstat === "Employed" && (
+                            <div className="status_holders">
+                                <p>Company Address</p>
+                                <input
+                                    type="text"
+                                    className="input_fname"
+                                    disabled={
+                                        newempstat === "Employed" ? false : true
+                                    }
+                                />
+                            </div>
+                        )}
+
+                        {/* company ID */}
+                        {newempstat === "Employed" && (
+                            <div className="status_holders">
+                                <p>Company ID</p>
+                                <input
+                                    type="file"
+                                    className="input_fname"
+                                    disabled={
+                                        newempstat === "Employed" ? false : true
+                                    }
+                                />
+                            </div>
+                        )}
                     </div>
                     {/* save button */}
                     <div className="button_holder">

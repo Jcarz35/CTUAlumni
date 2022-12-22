@@ -56,7 +56,7 @@ const Home = ({ theme }) => {
                     <img src={dash} alt="" />
                     <div className="first_div_title">
                         <h1>Welcome Back !</h1>
-                        <h2>Admin</h2>
+
                         <p>{quotes}</p>
                     </div>
                 </div>

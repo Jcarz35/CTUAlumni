@@ -8,11 +8,14 @@ import Snackbar from "../../components/Snackbar/Snackbar";
 
 const Signup = () => {
     const [data, setData] = useState({
-        firstName: "",
-        lastName: "",
+        // firstName: "",
+        // lastName: "",
+        userId: "",
+        birthday: "",
         email: "",
         password: "",
     });
+
     const [error, setError] = useState("");
     const navigate = useNavigate();
 
@@ -31,16 +34,14 @@ const Signup = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const url = "http://localhost:8080/api/users";
-            const { data: res } = await axios.post(url, data);
+            const url = "http://localhost:8080/api/users/register";
+            const { data: res } = await axios.put(url, data);
 
             setShowSnackbar(true);
             setTimeout(() => {
-                navigate("/login");
                 setShowSnackbar(false);
+                navigate("/login");
             }, 3000);
-
-            console.log(res.message);
         } catch (error) {
             if (
                 error.response &&
@@ -76,7 +77,7 @@ const Signup = () => {
                 </div>
 
                 <form className={styles.form_container} onSubmit={handleSubmit}>
-                    <input
+                    {/* <input
                         type="text"
                         placeholder="First Name"
                         name="firstName"
@@ -84,8 +85,8 @@ const Signup = () => {
                         value={data.firstName}
                         required
                         className={styles.input}
-                    />
-                    <input
+                    /> */}
+                    {/* <input
                         type="text"
                         placeholder="Last Name"
                         name="lastName"
@@ -93,7 +94,26 @@ const Signup = () => {
                         value={data.lastName}
                         required
                         className={styles.input}
+                    /> */}
+                    <input
+                        type="text"
+                        placeholder="Alumni Id"
+                        name="userId"
+                        onChange={handleChange}
+                        value={data.userId}
+                        required
+                        className={styles.input}
                     />
+                    <input
+                        type="date"
+                        placeholder="Birthdate"
+                        name="birthday"
+                        onChange={handleChange}
+                        value={data.birthday}
+                        required
+                        className={styles.input}
+                    />
+
                     <input
                         type="email"
                         placeholder="Email"

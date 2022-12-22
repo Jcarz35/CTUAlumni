@@ -147,6 +147,9 @@
     margin-bottom: 8px;
     transition: background-color 0.7s ease-in;
 }
+.top_section h1 {
+    letter-spacing: normal;
+}
 .logo {
     margin-top: 7px;
     margin-left: 4px;
@@ -211,7 +214,7 @@
     display: flex;
     flex: 1;
     color: var(--green);
-    font-weight: 600;
+    font-weight: normal;
     padding: 4px 0px;
     background-color: var(--active);
     width: 168px;
@@ -223,7 +226,7 @@
     background-color: var(--dark-main-background);
 }
 .active .link_text {
-    font-weight: 600;
+    font-weight: normal;
 }
 .active .link_text {
     color: green;
@@ -364,51 +367,74 @@
 /* icons para light and dark theme */
 
 .moon {
-    font-size: 19px;
-    color: var(--gray-icons);
+    position: absolute;
+    top: 6px;
+    left: 8px;
+    font-size: 20px;
+    color: gray;
     cursor: pointer;
 }
 .sun {
+    position: absolute;
+    top: 5px;
+    left: 6px;
     font-size: 22px;
     color: var(--active);
     cursor: pointer;
 }
 .topBarIconContainer {
+    border-radius: 10px;
     position: fixed;
-    background-color: var(--background);
-    border-radius: 50%;
-    right: 35px;
-    top: 14px;
+    background-color: #e2f3fc;
+    right: 48px;
+    top: 8px;
     margin: 0;
     padding: 0;
-    height: 23px;
-    width: 23px;
+    height: 34px;
+    width: 34px;
     cursor: pointer;
 }
 .topBarIconContainer:hover {
-    background-color: #c0bebe;
+    background-color: #d7fdf2;
 }
+#dark .topBarIconContainer {
+    color: white;
+    background-color: var(--dark-main-background);
+}
+
 .topBarIconContainer .icon {
     position: relative;
-    top: -5px;
-    right: 10px;
+    top: 1px;
+    left: -5px;
     font-size: 20.5px;
     color: #707070;
+}
+
+#dark .topBarIconContainer .icon {
+    color: var(--active);
+    font-weight: 700;
+}
+.topBarIconContainer .iconBlue {
+    position: relative;
+    top: 5px;
+    left: 4.5px;
+    font-size: 21px;
+    color: #3992e5;
 }
 
 .topIconBadge {
     position: absolute;
     color: white;
-    height: 16px;
-    width: 16px;
+    height: 15px;
+    width: 15px;
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: red;
     border-radius: 50%;
     font-size: 12px;
-    top: -7px;
-    right: -1px;
+    top: 3px;
+    right: 3px;
     font-weight: 600;
 }
 
@@ -454,16 +480,58 @@
 
 .notificationContainer {
     position: fixed;
-    right: 20px;
-    top: 40px;
+    right: 40px;
+    top: 44px;
     display: flex;
+    flex-direction: column;
     border-radius: 3px;
     justify-content: flex-start;
-    width: 220px;
-    background-color: var(--background);
+    width: 300px;
+    background-color: white;
     transition: background-color 0.7s ease-in;
+    border-radius: 5px;
+    box-shadow: 0px 3px 3px -2px rgb(0 0 0 / 20%),
+        0px 3px 4px 0px rgb(0 0 0 / 14%), 0px 1px 8px 0px rgb(0 0 0 / 12%);
+    backdrop-filter: blur(10px);
 }
 
+#dark .notificationContainer {
+    background-color: rgb(222, 224, 222);
+}
+.notificationContainer .h1 {
+    font-size: 18px;
+    margin-top: 15px;
+    margin-left: 20px;
+    margin-bottom: 5px;
+}
+/* notifications list */
+.event_cards_notif {
+    text-decoration: none;
+    padding: 5px 15px;
+    width: 96%;
+    margin: 0 auto;
+    height: auto;
+    border-radius: 5px;
+}
+.event_cards_notif:hover {
+    background-color: var(--background);
+}
+.event_cards_notif h5 {
+    font-weight: 600;
+    font-size: 12.5px;
+    letter-spacing: 0.5px;
+    color: rgb(5, 5, 5);
+}
+.event_cards_notif p {
+    margin: 0;
+    font-size: 11.5px;
+    color: rgb(43, 41, 41);
+}
+.event_cards_notif .para_time {
+    font-size: 11px;
+    font-weight: 600;
+    color: rgb(77, 157, 248);
+}
 .Username {
     right: 0;
     top: 0;
@@ -510,9 +578,19 @@
 }
 
 .right_theme {
+    width: 34px;
+    height: 34px;
+    background-color: #e2f3fc;
     position: absolute;
-    top: 14px;
-    left: 400px;
+    border-radius: 10px;
+    top: 7.5px;
+    right: 298px;
+}
+.right_theme:hover {
+    background-color: #d7fdf2;
+}
+#dark .right_theme {
+    background-color: var(--dark-main-background);
 }
 .right_bars {
     display: flex;
@@ -528,17 +606,21 @@
     margin-top: 5px;
 }
 
+.profile_pics {
+    position: absolute;
+    top: -8.5px;
+    right: 1px;
+}
+#dark .profile_pics img {
+    border: 2px solid #c3c6c7;
+}
 #dark .right_bars {
     color: white;
 }
 .right_bars:hover {
     color: black;
-    background-color: rgb(236, 235, 235);
+    /* background-color: rgb(236, 235, 235); */
     border-radius: 2px;
-}
-#dark .right_bars:hover {
-    color: var(--white);
-    background-color: var(--light-blue);
 }
 
 #dark .side_profile p {

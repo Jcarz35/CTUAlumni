@@ -6,6 +6,7 @@ const connection = require("./db");
 const userRoutes = require("./routes/users");
 const authRoutes = require("./routes/auth");
 const jobRoutes = require("./routes/jobs");
+const eventsRoutes = require("./routes/events");
 const bodyParser = require("body-parser");
 
 // database connectionn
@@ -19,10 +20,12 @@ app.use(cors());
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/jobs", jobRoutes);
+app.use("/api/events", eventsRoutes);
 
 //para maka access image nga naa gawas sa SRC folder
 app.use("/uploads", express.static("uploads"));
 app.use("/companyLogo", express.static("companyLogo"));
+app.use("/eventPic", express.static("eventPic"));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

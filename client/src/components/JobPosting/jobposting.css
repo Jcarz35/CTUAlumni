@@ -198,7 +198,16 @@
 .input_job_div .job_input_holder {
     display: flex;
     flex-direction: column;
+    margin: 10px 0;
     width: 400px;
+}
+.job_input_holders {
+    margin: 0 auto;
+    width: 400px;
+}
+.job_input_holders:nth-child(1) {
+    margin: 0 auto;
+    width: 432px;
 }
 .job_dialog input,
 .job_dialog textarea {

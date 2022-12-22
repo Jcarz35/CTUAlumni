@@ -4,12 +4,14 @@ const Joi = require("joi");
 const passwordComplexity = require("joi-password-complexity");
 
 const userSchema = new mongoose.Schema({
+    userId: { type: String, unique: true },
+    birthday: { type: String },
     isAdmin: { type: Boolean, default: false },
     isActive: { type: Boolean, default: false },
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
+    firstName: { type: String },
+    lastName: { type: String },
+    email: { type: String },
+    password: { type: String },
     profilePic: { type: String },
     middleName: { type: String },
     bio: { type: String },
@@ -20,6 +22,7 @@ const userSchema = new mongoose.Schema({
     course: { type: String },
     schoolYear: { type: Number },
     empStat: { type: String },
+    notification: [String],
     postDate: { type: Date, default: Date.now },
 });
 
@@ -34,10 +37,13 @@ const User = mongoose.model("user", userSchema);
 
 const validate = (data) => {
     const schema = Joi.object({
-        firstName: Joi.string().required().label("First Name"),
-        lastName: Joi.string().required().label("Last Name"),
+        // firstName: Joi.string().required().label("First Name"),
+        // lastName: Joi.string().required().label("Last Name"),
+        // userId: Joi.string().required().label("User ID"),
         email: Joi.string().email().required().label("Email"),
         password: passwordComplexity().required().label("Password"),
+
+        // birthday: Joi.string().required().label("Birthday"),
     });
     return schema.validate(data);
 };

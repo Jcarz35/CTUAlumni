@@ -4,7 +4,7 @@ import "./../JobPosting/jobposting.css";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { NavLink } from "react-router-dom";
-import naruto from "../../images/naruto.jpg";
+import { motion } from "framer-motion";
 // import { useHistory } from "react-router-dom";
 
 //para dialog
@@ -31,16 +31,17 @@ const ArticlesPage = ({ user }) => {
     const [open, setOpen] = useState(false);
 
     // state para update
-    const [newTitle, setNewTitle] = useState();
-    const [newCompanyName, setNewCompanyName] = useState();
-    const [newLocation, setNewLocation] = useState();
-    const [newEntryLevel, setNewEntryLevel] = useState();
-    const [newDescription, setNewDescription] = useState();
+    const [newTitle, setNewTitle] = useState(rightData.title);
+    const [newCompanyName, setNewCompanyName] = useState(rightData.companyName);
+    const [newLocation, setNewLocation] = useState(rightData.location);
+    const [newEntryLevel, setNewEntryLevel] = useState(rightData.entryLevel);
+    const [newDescription, setNewDescription] = useState(rightData.description);
 
     const [newFileName, setNewFileName] = useState();
     // para state sa file
     const onChangeFile = (e) => {
         setNewFileName(e.target.files[0]);
+        handleClickOpenSave(true);
     };
     const toggle_arrow = (e) => {
         setOpen(true);
@@ -62,16 +63,11 @@ const ArticlesPage = ({ user }) => {
             .get("http://localhost:8080/api/jobs/job/" + id)
             .then((res) => {
                 setRightData(res.data);
-                setNewTitle(res.data.title);
-                setNewCompanyName(res.data.companyName);
-                setNewLocation(res.data.location);
-                setNewEntryLevel(res.data.entryLevel);
-                setNewDescription(res.data.description);
 
-                // console.log(rightData);
-                // console.log("title:" + res.data.title);
-                // console.log("CompanyName:" + res.data.companyName);
-                // console.log("Location:" + res.data.location);
+                console.log(rightData);
+                console.log("title:" + res.data.title);
+                console.log("CompanyName:" + res.data.companyName);
+                console.log("Location:" + res.data.location);
             })
             .catch((err) => {
                 console.log("error ni" + err);
@@ -80,17 +76,54 @@ const ArticlesPage = ({ user }) => {
 
     // update job
     const updateJob = (id) => {
-        const formData = new FormData();
-        formData.append("id", id);
-        formData.append("companyLogo", newFileName || rightData.companyLogo);
-        formData.append("title", newTitle);
-        formData.append("companyName", newCompanyName);
-        formData.append("location", newLocation);
-        formData.append("entryLevel", newEntryLevel);
-        formData.append("description", newDescription);
+        // const formData = new FormData();
+        // formData.append("id", id);
+        // formData.append("title", newTitle);
+        // formData.append("companyName", newCompanyName);
+        // formData.append("location", newLocation);
+        // formData.append("entryLevel", newEntryLevel);
+        // formData.append("description", newDescription);
 
         axios
-            .put("http://localhost:8080/api/jobs/updateJob", formData)
+            .put("http://localhost:8080/api/jobs/updateJob", {
+                id: id,
+                newTitle: newTitle,
+                newCompanyName: newCompanyName,
+                newLocation: newLocation,
+                newEntryLevel: newEntryLevel,
+                newDescription: newDescription,
+            })
+            .then(() => {
+                handleClose();
+                setShowSnackbar(true);
+                setTimeout(() => {
+                    window.location = `/job/${id}`;
+                    // window.location = "/jobposting";
+                    setShowSnackbar(false);
+                }, 1000);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+
+    // para Dialog sa Image upload
+    const [openSave, setOpenSave] = useState(false);
+    const handleClickOpenSave = () => {
+        setOpenSave(true);
+    };
+    const handleCloseSave = () => {
+        setOpenSave(false);
+    };
+    // update job Logo
+    const changeOnClick = (e) => {
+        e.preventDefault();
+        const formData = new FormData();
+        formData.append("id", id);
+        formData.append("companyLogo", newFileName);
+
+        axios
+            .put("http://localhost:8080/api/jobs/updateJobLogo", formData)
             .then(() => {
                 handleClose();
                 setShowSnackbar(true);
@@ -119,7 +152,7 @@ const ArticlesPage = ({ user }) => {
             });
     }, [data]);
 
-    // deleteUser
+    // delete Job
     const deleteJob = (id) => {
         axios
             .delete(`http://localhost:8080/api/jobs/deleteJob/${id}`)
@@ -286,112 +319,178 @@ const ArticlesPage = ({ user }) => {
                                 onClose={handleClose}
                                 className="job_dialog"
                             >
-                                <div className="header_job">
-                                    <DialogTitle>
-                                        <h5>Add Job List</h5>
-                                    </DialogTitle>
-                                    <Button
-                                        className="btn_close"
-                                        onClick={handleClose}
+                                <motion.div
+                                    animate={{
+                                        height: openDialog ? "520px" : "0px",
+                                        width: "550px",
+                                    }}
+                                    // transition={{
+                                    //     type: "spring",
+                                    //     stiffness: 300,
+                                    // }}
+                                    className="sidebar_dialog"
+                                >
+                                    <div className="header_job">
+                                        <DialogTitle>
+                                            <h5>Add Job List</h5>
+                                        </DialogTitle>
+                                        <Button
+                                            className="btn_close"
+                                            onClick={handleClose}
+                                        >
+                                            <IoCloseSharp className="close_icon" />
+                                        </Button>
+                                    </div>
+
+                                    {/* para update sa companyLogo sa job posting */}
+                                    <form
+                                        encType="multipart/form-data"
+                                        method="post"
                                     >
-                                        <IoCloseSharp className="close_icon" />
-                                    </Button>
-                                </div>
-                                {/* title companyName location entryLevel description */}
-                                {/* <form
+                                        <div className="job_input_holders">
+                                            <h5>CompanyLogo</h5>
+                                            <input
+                                                type="file"
+                                                filename="companyLogo"
+                                                onChange={onChangeFile}
+                                                required
+                                            ></input>
+                                        </div>
+                                        {/* save dialog */}
+                                        <Dialog
+                                            open={openSave}
+                                            onClose={handleClose}
+                                            className="dialog_pic"
+                                        >
+                                            <div className="header_update_pic">
+                                                <DialogTitle className="dialog_title">
+                                                    <h5>Upload Company Logo</h5>
+                                                </DialogTitle>
+                                                <Button
+                                                    className="btn_close"
+                                                    onClick={handleClose}
+                                                >
+                                                    x
+                                                </Button>
+                                            </div>
+
+                                            <div className="button_holder_pic">
+                                                <button
+                                                    className="btn_cancel_pic"
+                                                    onClick={handleClose}
+                                                >
+                                                    Cancel
+                                                </button>
+                                                <button
+                                                    type="submit"
+                                                    className="btn_save_pic"
+                                                    onClick={changeOnClick}
+                                                >
+                                                    Save
+                                                </button>
+                                            </div>
+                                        </Dialog>
+                                    </form>
+
+                                    {/* title companyName location entryLevel description */}
+
+                                    {/* <form
                                     encType="multipart/form-data"
                                     method="post"
                                 > */}
-                                <div className="input_job_div">
-                                    <div className="job_input_holder">
-                                        <h5>CompanyLogo</h5>
-                                        <input
-                                            type="file"
-                                            filename="companyLogo"
-                                            onChange={onChangeFile}
-                                            required
-                                        ></input>
-                                    </div>
-                                    <div className="job_input_holder">
-                                        <h5>Job Title</h5>
-                                        <input
-                                            name="job_title"
-                                            type="text"
-                                            className="job_title"
-                                            defaultValue={rightData.title}
-                                            onChange={(e) =>
-                                                setNewTitle(e.target.value)
-                                            }
-                                        ></input>
-                                    </div>
+                                    <div className="input_job_div">
+                                        <div className="job_input_holder">
+                                            <h5>Job Title</h5>
+                                            <input
+                                                name="job_title"
+                                                type="text"
+                                                className="job_title"
+                                                defaultValue={rightData.title}
+                                                onChange={(e) =>
+                                                    setNewTitle(e.target.value)
+                                                }
+                                            ></input>
+                                        </div>
 
-                                    <div className="job_input_holder">
-                                        <h5>Company Name</h5>
-                                        <input
-                                            name="job_company"
-                                            type="text"
-                                            className="job_company"
-                                            defaultValue={rightData.companyName}
-                                            onChange={(e) =>
-                                                setNewCompanyName(
-                                                    e.target.value
-                                                )
-                                            }
-                                        ></input>
-                                    </div>
+                                        <div className="job_input_holder">
+                                            <h5>Company Name</h5>
+                                            <input
+                                                name="job_company"
+                                                type="text"
+                                                className="job_company"
+                                                defaultValue={
+                                                    rightData.companyName
+                                                }
+                                                onChange={(e) =>
+                                                    setNewCompanyName(
+                                                        e.target.value
+                                                    )
+                                                }
+                                            ></input>
+                                        </div>
 
-                                    <div className="job_input_holder">
-                                        <h5>Location</h5>
-                                        <input
-                                            name="job_location"
-                                            type="text"
-                                            className="job_location"
-                                            defaultValue={rightData.location}
-                                            onChange={(e) =>
-                                                setNewLocation(e.target.value)
-                                            }
-                                        ></input>
-                                    </div>
-                                    <div className="job_input_holder">
-                                        <h5>Entry Level</h5>
-                                        <input
-                                            name="job_entry"
-                                            type="text"
-                                            className="job_entry"
-                                            defaultValue={rightData.entryLevel}
-                                            onChange={(e) =>
-                                                setNewEntryLevel(e.target.value)
-                                            }
-                                        ></input>
-                                    </div>
+                                        <div className="job_input_holder">
+                                            <h5>Location</h5>
+                                            <input
+                                                name="job_location"
+                                                type="text"
+                                                className="job_location"
+                                                defaultValue={
+                                                    rightData.location
+                                                }
+                                                onChange={(e) =>
+                                                    setNewLocation(
+                                                        e.target.value
+                                                    )
+                                                }
+                                            ></input>
+                                        </div>
+                                        <div className="job_input_holder">
+                                            <h5>Entry Level</h5>
+                                            <input
+                                                name="job_entry"
+                                                type="text"
+                                                className="job_entry"
+                                                defaultValue={
+                                                    rightData.entryLevel
+                                                }
+                                                onChange={(e) =>
+                                                    setNewEntryLevel(
+                                                        e.target.value
+                                                    )
+                                                }
+                                            ></input>
+                                        </div>
 
-                                    <div className="job_input_holder">
-                                        <h5>Job Description</h5>
-                                        <textarea
-                                            name="job_description"
-                                            type="text"
-                                            className="job_description"
-                                            defaultValue={rightData.description}
-                                            onChange={(e) =>
-                                                setNewDescription(
-                                                    e.target.value
-                                                )
-                                            }
-                                        ></textarea>
+                                        <div className="job_input_holder">
+                                            <h5>Job Description</h5>
+                                            <textarea
+                                                name="job_description"
+                                                type="text"
+                                                className="job_description"
+                                                defaultValue={
+                                                    rightData.description
+                                                }
+                                                onChange={(e) =>
+                                                    setNewDescription(
+                                                        e.target.value
+                                                    )
+                                                }
+                                            ></textarea>
+                                        </div>
                                     </div>
-                                </div>
+                                    {/* </form> */}
 
-                                {/* </form> */}
-
-                                <div className="button_save">
-                                    <button
-                                        onClick={() => {
-                                            updateJob(rightData._id);
-                                        }}
-                                    >
-                                        Post Job
-                                    </button>
-                                </div>
+                                    <div className="button_save">
+                                        <button
+                                            onClick={() => {
+                                                updateJob(rightData._id);
+                                            }}
+                                        >
+                                            Post Job
+                                        </button>
+                                    </div>
+                                </motion.div>
                             </Dialog>
                         </div>
                     )}

@@ -4,32 +4,41 @@ import React from "react";
 import { motion } from "framer-motion";
 
 import axios from "axios";
+import { format } from "timeago.js";
 
 //icons
-import { FaBars, FaHome, FaUser } from "react-icons/fa";
+import { FaBars, FaUser } from "react-icons/fa";
 import { FaRegWindowClose } from "react-icons/fa";
-import { AiOutlineLogout, AiOutlineHome } from "react-icons/ai";
 import {
-    MdOutlineKeyboardArrowRight,
-    MdOutlineVerifiedUser,
-} from "react-icons/md";
-import { IoMdNotificationsOutline, IoMdNotifications } from "react-icons/io";
-import { BsMoonFill } from "react-icons/bs";
+    AiOutlineLogout,
+    AiOutlineHome,
+    AiOutlineUserAdd,
+    AiOutlineUsergroupAdd,
+} from "react-icons/ai";
+import { VscCalendar } from "react-icons/vsc";
+import { MdOutlineKeyboardArrowRight } from "react-icons/md";
+import { IoMdNotifications, IoMdNotificationsOutline } from "react-icons/io";
+import { FiMoon } from "react-icons/fi";
 import { BsSun } from "react-icons/bs";
 import { BiUser, BiFile } from "react-icons/bi";
 
-import { NavLink, Route, Routes, Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 //images
 import ctu from "../../images/ctu.png";
-import profile from "../../images/profile.png";
+import ctuLogo from "../../images/ctuLogo.svg";
 // import Snackbar from "../Snackbar/Snackbar";
 
 const Main = ({ children, theme, toggleTheme, user }) => {
+    //para events
+    const [data, setData] = useState([]);
+
     const handleLogout = () => {
         localStorage.removeItem("token");
-        window.location = "/login";
+        setTimeout(() => {
+            window.location = "/login";
+        }, 1000);
     };
 
     // para kuha sa usa ka data sa user
@@ -46,8 +55,22 @@ const Main = ({ children, theme, toggleTheme, user }) => {
             });
     }, [userInfo]);
 
+    //fetch all events
+    useEffect(() => {
+        axios
+            .get(`http://localhost:8080/api/events/all/${user}`)
+            .then((res) => {
+                setData(res.data);
+
+                // ibutang sa user na variable ang data gikan DB
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, [data]);
+
     // para funtionalities sa button
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(true);
     const toggle = () => setIsOpen(!isOpen);
 
     // para sa alumni navigations
@@ -66,23 +89,11 @@ const Main = ({ children, theme, toggleTheme, user }) => {
     const [openNotification, setNotification] = useState(false);
     const toggleNotification = () => setNotification(!openNotification);
 
-    //para snackbar/toast notification
-    // const [showSnackbar, setShowSnackbar] = useState(false);
-    // const SnackbarType = {
-    //     success: "success",
-    //     fail: "fail",
-    // };
-    // const toggleSnackbar = () => {
-    //     setShowSnackbar(true);
-    //     setTimeout(() => {
-    //         setShowSnackbar(false);
-    //     }, 3000);
-    // };
-
     return (
         <div className="main_container">
             <div className="blur" style={{ top: "-18%", right: "0" }}></div>
             <div className="blur" style={{ top: "36%", left: "-8rem" }}></div>
+
             {/*Icons sa left side */}
             <div className="left_icons">
                 <div className="bars">
@@ -119,20 +130,30 @@ const Main = ({ children, theme, toggleTheme, user }) => {
                 >
                     <div className="icon">{<BiFile />}</div>
                 </NavLink>
-                {/* para verify na icon */}
-                {userInfo.isAdmin && (
-                    <NavLink
-                        exact={true}
-                        to={"/verifyuser"}
-                        key={"VerifyUser"}
-                        className={({ isActive }) =>
-                            isActive ? "sidebar_active" : "sidebar_icon"
-                        }
-                    >
-                        <div className="icon">{<MdOutlineVerifiedUser />}</div>
-                    </NavLink>
-                )}
+                <NavLink
+                    exact={true}
+                    to={"/addalumni"}
+                    key={"AddAlumni"}
+                    className={({ isActive }) =>
+                        isActive ? "sidebar_active" : "sidebar_icon"
+                    }
+                >
+                    <div className="icon">{<AiOutlineUsergroupAdd />}</div>
+                </NavLink>
+
+                {/* events nav button */}
+                <NavLink
+                    exact={true}
+                    to={"/events"}
+                    key={"Events"}
+                    className={({ isActive }) =>
+                        isActive ? "sidebar_active" : "sidebar_icon"
+                    }
+                >
+                    <div className="icon">{<VscCalendar />}</div>
+                </NavLink>
             </div>
+
             {/*SideBar Links */}
             <motion.div
                 animate={{ width: isOpen ? "170px" : "0px" }}
@@ -162,7 +183,9 @@ const Main = ({ children, theme, toggleTheme, user }) => {
                                 }
                             >
                                 {isOpen && (
-                                    <div className="link_text">{"Home"}</div>
+                                    <div className="link_text">
+                                        {"Dashboard"}
+                                    </div>
                                 )}
                             </NavLink>
                         </div>
@@ -200,30 +223,6 @@ const Main = ({ children, theme, toggleTheme, user }) => {
                                     </div>
                                 </div> */}
                             </div>
-
-                            {/* Submenu*/}
-                            {/* <div
-                                className={({ open }) =>
-                                    open ? "submenu_open" : "submenu"
-                                }
-                            >
-                                <NavLink
-                                    exact={true}
-                                    to={"/userlist"}
-                                    key={"UserList"}
-                                    className={({ isActive }) =>
-                                        isActive
-                                            ? "active_sub_link"
-                                            : "sub_link"
-                                    }
-                                >
-                                    {open && (
-                                        <div className="link_text_submenu">
-                                            {"User List"}
-                                        </div>
-                                    )}
-                                </NavLink>
-                            </div> */}
                         </div>
 
                         {/* Job  */}
@@ -285,29 +284,73 @@ const Main = ({ children, theme, toggleTheme, user }) => {
                             </div>
                         </div>
 
-                        {/* Verify alumni Button Menu*/}
-                        {userInfo.isAdmin && (
-                            <div className="link_holder">
-                                <div className="link_container">
-                                    <NavLink
-                                        exact={true}
-                                        to={"/verifyuser"}
-                                        key={"VerifyUser"}
-                                        className={({ isActive }) =>
-                                            isActive ? "active" : "link"
-                                        }
-                                    >
-                                        {isOpen && (
-                                            <div className="link_text">
-                                                {"Verify"}
-                                            </div>
-                                        )}
+                        {/* Alumni Button Menu*/}
+                        <div className="link_holder">
+                            <div className="link_container">
+                                <NavLink
+                                    exact={true}
+                                    to={"/addalumni"}
+                                    key={"AddAlumni"}
+                                    className={({ isActive }) =>
+                                        isActive ? "active" : "link"
+                                    }
+                                >
+                                    {isOpen && (
+                                        <div className="link_text">
+                                            {"Add Alumni"}
+                                        </div>
+                                    )}
 
-                                        {/* Arrow Button*/}
-                                    </NavLink>
-                                </div>
+                                    {/* Arrow Button*/}
+                                </NavLink>
                             </div>
-                        )}
+                        </div>
+
+                        {/* Events Button Menu*/}
+                        <div className="link_holder">
+                            <div className="link_container">
+                                <NavLink
+                                    exact={true}
+                                    to={"/events"}
+                                    key={"Events"}
+                                    className={({ isActive }) =>
+                                        isActive ? "active" : "link"
+                                    }
+                                >
+                                    {isOpen && (
+                                        <div className="link_text">
+                                            {"Events"}
+                                        </div>
+                                    )}
+
+                                    {/* Arrow Button*/}
+                                </NavLink>
+                            </div>
+
+                            {/* Submenu*/}
+                            {/* <div
+                                className={({ open }) =>
+                                    open ? "submenu_open" : "submenu"
+                                }
+                            >
+                                <NavLink
+                                    exact={true}
+                                    to={"/userlist"}
+                                    key={"UserList"}
+                                    className={({ isActive }) =>
+                                        isActive
+                                            ? "active_sub_link"
+                                            : "sub_link"
+                                    }
+                                >
+                                    {open && (
+                                        <div className="link_text_submenu">
+                                            {"User List"}
+                                        </div>
+                                    )}
+                                </NavLink>
+                            </div> */}
+                        </div>
                     </section>
                 )}
             </motion.div>
@@ -321,10 +364,7 @@ const Main = ({ children, theme, toggleTheme, user }) => {
 
                         <div className="right_theme" onClick={toggleTheme}>
                             {theme === "light" ? (
-                                <BsMoonFill
-                                    className="moon"
-                                    title="Dark Mode"
-                                />
+                                <FiMoon className="moon" title="Dark Mode" />
                             ) : (
                                 <BsSun className="sun" title="Light Mode" />
                             )}
@@ -335,15 +375,49 @@ const Main = ({ children, theme, toggleTheme, user }) => {
                             className="topBarIconContainer"
                             onClick={toggleNotification}
                         >
-                            <IoMdNotifications className="icon" />
+                            {openNotification ? (
+                                <IoMdNotificationsOutline className="iconBlue" />
+                            ) : (
+                                <IoMdNotificationsOutline className="icon" />
+                            )}
                             <span className="topIconBadge">2</span>
                         </div>
                         <motion.div
                             animate={{
-                                height: openNotification ? "400px" : "0",
+                                height: openNotification ? "600px" : "0",
                             }}
                             className="notificationContainer"
-                        ></motion.div>
+                        >
+                            {openNotification && (
+                                <h1 className="h1">Notifications</h1>
+                            )}
+                            {openNotification &&
+                                data
+                                    .map((val, key) => {
+                                        return (
+                                            <Link
+                                                key={val._id}
+                                                to={"/event/" + val._id}
+                                                className="event_cards_notif"
+                                                title="Click me"
+                                            >
+                                                <h5>{val.title}</h5>
+                                                <p>
+                                                    {val.description.substring(
+                                                        0,
+                                                        60
+                                                    )}
+                                                    {"..."}
+                                                </p>
+                                                <p className="para_time">
+                                                    {format(val.date)}
+                                                </p>
+                                            </Link>
+                                        );
+                                    })
+                                    .sort()
+                                    .reverse()}
+                        </motion.div>
 
                         {/* dropdown para profile */}
                         <motion.div
@@ -361,7 +435,14 @@ const Main = ({ children, theme, toggleTheme, user }) => {
                                         {openRightBar ? (
                                             <FaRegWindowClose className="right_bars" />
                                         ) : (
-                                            <FaBars className="right_bars" />
+                                            // <FaBars className="right_bars" />
+                                            <div className="profile_pics">
+                                                <img
+                                                    id="profile_img_main"
+                                                    src={`http://localhost:8080/uploads/${userInfo.profilePic}`}
+                                                    alt=""
+                                                />
+                                            </div>
                                         )}
                                     </div>
 
@@ -371,7 +452,7 @@ const Main = ({ children, theme, toggleTheme, user }) => {
                                     /> */}
                                 </div>
                                 <div className="right_Menu">
-                                    <div className="profile_pics">
+                                    <div className="profile_picss">
                                         <img
                                             id="profile_img_main"
                                             src={`http://localhost:8080/uploads/${userInfo.profilePic}`}

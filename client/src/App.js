@@ -17,7 +17,9 @@ import EditUser from "./components/EditUser/EditUser";
 import JobPosting from "./components/JobPosting/JobPosting";
 import Job from "./components/Forms/Job";
 import NotFound from "./pages/NotFound/NotFound";
-import VerifyUser from "./components/VerifyUser/VerifyUser";
+import AddAlumni from "./components/AddAlumni/AddAlumni";
+import Events from "./components/Events/Events";
+import Event from "./components/Event/Event";
 
 export const ThemeContext = createContext(null);
 
@@ -85,9 +87,19 @@ function App() {
                                 element={<Job user={user} />}
                             ></Route>
                             <Route
-                                path="/verifyuser"
+                                path="/addalumni"
                                 exact
-                                element={<VerifyUser user={user} />}
+                                element={<AddAlumni user={user} />}
+                            ></Route>
+                            <Route
+                                path="/events"
+                                exact
+                                element={<Events user={user} />}
+                            ></Route>
+                            <Route
+                                path="/event/:id"
+                                exact
+                                element={<Event user={user} />}
                             ></Route>
                             <Route
                                 path="/*"

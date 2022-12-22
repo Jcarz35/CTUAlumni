@@ -9,21 +9,26 @@ router.post("/", async (req, res) => {
         if (error)
             return res.status(400).send({ message: error.details[0].message });
 
+        //pangitaon ang email sa database
         const user = await User.findOne({ email: req.body.email });
         if (!user)
             return res
                 .status(401)
                 .send({ message: "Invalid Email or Password" });
 
-        const validPassword = await bcrypt.compare(
-            req.body.password,
-            user.password
-        );
-        if (!validPassword)
-            return res
-                .status(401)
-                .send({ message: "Invalid Email or Password" });
+        // i dcyrpt sa ang password gikan mongodb nya i compare sa  gi input na password if sakto ba
+        // const validPassword = await bcrypt.compare(
+        //     req.body.password,
+        //     user.password
+        // );
 
+        // // para invalid password
+        // if (!validPassword)
+        //     return res
+        //         .status(401)
+        //         .send({ message: "Invalid Email or Password" });
+
+        // if notActive dili ka log in
         if (!user.isActive)
             return res
                 .status(401)
@@ -40,6 +45,7 @@ router.post("/", async (req, res) => {
     }
 });
 
+//validate : para required sa input if dili inputag value
 const validate = (data) => {
     const schema = Joi.object({
         email: Joi.string().email().required().label("Email"),
