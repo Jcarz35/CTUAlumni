@@ -23,6 +23,10 @@ const userSchema = new mongoose.Schema({
     schoolYear: { type: Number },
     empStat: { type: String },
     notification: [String],
+
+    experience: [{ title: String, description: String }],
+    education: [{ title: String, location: String }],
+    skills: [String],
     postDate: { type: Date, default: Date.now },
 });
 

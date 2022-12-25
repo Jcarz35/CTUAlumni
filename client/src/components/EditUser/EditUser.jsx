@@ -243,6 +243,9 @@ const EditUser = () => {
                             <h1>Gender : </h1> <p>{user.gender}</p>
                         </div>
                         <div className="fullname">
+                            <h1>Age : </h1> <p>{user.age}</p>
+                        </div>
+                        <div className="fullname">
                             <h1>Course : </h1> <p>{user.course}</p>
                         </div>
                         <div className="fullname">

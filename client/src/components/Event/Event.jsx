@@ -39,6 +39,10 @@ const Event = () => {
                             {"When:  "}
                             {data.postDate}
                         </h5>
+                        <h5>
+                            {"Where:  "}
+                            {data.where}
+                        </h5>
                         <p>{data.description}</p>
                     </div>
                     <div className="event_body_pic">

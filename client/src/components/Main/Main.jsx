@@ -21,13 +21,13 @@ import { IoMdNotifications, IoMdNotificationsOutline } from "react-icons/io";
 import { FiMoon } from "react-icons/fi";
 import { BsSun } from "react-icons/bs";
 import { BiUser, BiFile } from "react-icons/bi";
+import { TbListDetails } from "react-icons/tb";
 
 import { Link, NavLink } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 //images
 import ctu from "../../images/ctu.png";
-import ctuLogo from "../../images/ctuLogo.svg";
 // import Snackbar from "../Snackbar/Snackbar";
 
 const Main = ({ children, theme, toggleTheme, user }) => {
@@ -384,39 +384,41 @@ const Main = ({ children, theme, toggleTheme, user }) => {
                         </div>
                         <motion.div
                             animate={{
-                                height: openNotification ? "600px" : "0",
+                                height: openNotification ? "570px" : "0",
                             }}
                             className="notificationContainer"
                         >
-                            {openNotification && (
-                                <h1 className="h1">Notifications</h1>
-                            )}
-                            {openNotification &&
-                                data
-                                    .map((val, key) => {
-                                        return (
-                                            <Link
-                                                key={val._id}
-                                                to={"/event/" + val._id}
-                                                className="event_cards_notif"
-                                                title="Click me"
-                                            >
-                                                <h5>{val.title}</h5>
-                                                <p>
-                                                    {val.description.substring(
-                                                        0,
-                                                        60
-                                                    )}
-                                                    {"..."}
-                                                </p>
-                                                <p className="para_time">
-                                                    {format(val.date)}
-                                                </p>
-                                            </Link>
-                                        );
-                                    })
-                                    .sort()
-                                    .reverse()}
+                            <div className="inner_notif_dialog">
+                                {openNotification && (
+                                    <h1 className="h1">Notifications</h1>
+                                )}
+                                {openNotification &&
+                                    data
+                                        .map((val, key) => {
+                                            return (
+                                                <Link
+                                                    key={val._id}
+                                                    to={"/event/" + val._id}
+                                                    className="event_cards_notif"
+                                                    title="Click me"
+                                                >
+                                                    <h5>{val.title}</h5>
+                                                    <p>
+                                                        {val.description.substring(
+                                                            0,
+                                                            60
+                                                        )}
+                                                        {"..."}
+                                                    </p>
+                                                    <p className="para_time">
+                                                        {format(val.date)}
+                                                    </p>
+                                                </Link>
+                                            );
+                                        })
+                                        .sort()
+                                        .reverse()}
+                            </div>
                         </motion.div>
 
                         {/* dropdown para profile */}
@@ -494,6 +496,29 @@ const Main = ({ children, theme, toggleTheme, user }) => {
                                     </NavLink>
                                 </div>
 
+                                {/* resume builder */}
+                                <div className="right_link_holder">
+                                    <NavLink
+                                        exact={true}
+                                        to={"/resumeBuilder"}
+                                        key={"ResumeBuilder"}
+                                        className={({ isActive }) =>
+                                            isActive
+                                                ? "right_link_active"
+                                                : "right_link"
+                                        }
+                                    >
+                                        <div className="icons">
+                                            {<TbListDetails />}
+                                        </div>
+
+                                        <div className="right_link_text">
+                                            {"Resume/Cv"}
+                                        </div>
+                                    </NavLink>
+                                </div>
+
+                                {/* logout */}
                                 <div className="right_link_holder">
                                     <NavLink
                                         exact={true}

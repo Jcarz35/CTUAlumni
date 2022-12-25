@@ -20,6 +20,8 @@ import NotFound from "./pages/NotFound/NotFound";
 import AddAlumni from "./components/AddAlumni/AddAlumni";
 import Events from "./components/Events/Events";
 import Event from "./components/Event/Event";
+import Resume from "./components/Resume/Resume";
+import ResumeBuilder from "./components/ResumeBuilder/ResumeBuilder";
 
 export const ThemeContext = createContext(null);
 
@@ -100,6 +102,16 @@ function App() {
                                 path="/event/:id"
                                 exact
                                 element={<Event user={user} />}
+                            ></Route>
+                            <Route
+                                path="/resume"
+                                exact
+                                element={<Resume />}
+                            ></Route>
+                            <Route
+                                path="/resumeBuilder"
+                                exact
+                                element={<ResumeBuilder />}
                             ></Route>
                             <Route
                                 path="/*"

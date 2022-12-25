@@ -120,7 +120,7 @@
     margin-left: 38px;
     margin-top: -5px;
     width: 170px;
-    height: 1050px;
+    height: 2250px;
     background-color: var(--white);
     border-right: 1px solid rgb(222, 223, 222);
     transition: background-color 0.7s ease-in;
@@ -494,15 +494,35 @@
         0px 3px 4px 0px rgb(0 0 0 / 14%), 0px 1px 8px 0px rgb(0 0 0 / 12%);
     backdrop-filter: blur(10px);
 }
+.inner_notif_dialog {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    width: 99%;
+    margin: 0 auto;
+    height: auto;
+    border-radius: 5px;
+    gap: 5px;
+}
 
 #dark .notificationContainer {
-    background-color: rgb(222, 224, 222);
+    /* background-color: rgb(79, 80, 79); */
+    background-color: #373b42;
+    box-shadow: 1px 13px 26px 1px rgba(68, 64, 64, 0.75);
+    -webkit-box-shadow: 1px 13px 26px 1px rgba(31, 26, 26, 0.75);
+    -moz-box-shadow: 1px 13px 26px 1px rgba(82, 77, 77, 0.75);
 }
 .notificationContainer .h1 {
     font-size: 18px;
     margin-top: 15px;
     margin-left: 20px;
-    margin-bottom: 5px;
+    margin-bottom: 15px;
+}
+#dark .notificationContainer h1 {
+    color: white;
+    letter-spacing: 1px;
 }
 /* notifications list */
 .event_cards_notif {
@@ -516,21 +536,37 @@
 .event_cards_notif:hover {
     background-color: var(--background);
 }
+#dark .event_cards_notif:hover {
+    background-color: rgb(121, 118, 118);
+}
 .event_cards_notif h5 {
     font-weight: 600;
     font-size: 12.5px;
     letter-spacing: 0.5px;
     color: rgb(5, 5, 5);
 }
+#dark .event_cards_notif h5 {
+    color: white;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+}
 .event_cards_notif p {
     margin: 0;
     font-size: 11.5px;
     color: rgb(43, 41, 41);
 }
+#dark .event_cards_notif p {
+    font-weight: normal;
+    color: rgb(218, 216, 216);
+}
 .event_cards_notif .para_time {
     font-size: 11px;
     font-weight: 600;
     color: rgb(77, 157, 248);
+}
+#dark .event_cards_notif .para_time {
+    color: rgb(146, 224, 255);
+    font-weight: normal;
 }
 .Username {
     right: 0;

@@ -24,6 +24,7 @@ router.post("/addEvent", upload.single("eventPic"), async (req, res) => {
             description: req.body.description,
             eventPic: pic,
             postDate: req.body.date,
+            where: req.body.where,
             course: req.body.course,
             year: req.body.year,
         });

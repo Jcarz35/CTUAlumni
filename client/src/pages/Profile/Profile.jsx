@@ -410,10 +410,7 @@ const Profile = ({ user }) => {
                                 <option value="BIT-Electronics">
                                     BIT Electronics
                                 </option>
-                                <option value="BSHM">
-                                    Bachelor of Science in Hospitality
-                                    Management
-                                </option>
+
                                 <option value="BSA">
                                     Bachelor of Science in Agriculture
                                 </option>

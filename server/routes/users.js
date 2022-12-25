@@ -76,11 +76,6 @@ router.post("/addAlumni", async (req, res) => {
 // para register
 router.put("/register", async (req, res) => {
     try {
-        // const { error } = validate(req.body);
-        // if (error)
-        //     return res.status(400).send({ message: error.details[0].message });
-        // pangitaon ang Id sa alumni na database
-
         const user = await User.findOne({ email: req.body.email });
         try {
             if (user)
@@ -91,7 +86,14 @@ router.put("/register", async (req, res) => {
             throw new Error(error.message);
         }
 
-        const userID = await User.findOne({ userId: req.body.userId });
+        const userID = await User.findOne({
+            $and: [
+                {
+                    userId: req.body.userId,
+                    birthday: req.body.birthday,
+                },
+            ],
+        });
 
         try {
             if (userID.isActive) {
@@ -124,8 +126,6 @@ router.put("/register", async (req, res) => {
                             profilePic: "profile.png",
                             address: "",
                             phone: "",
-                            age: null,
-                            course: null,
                             postDate: Date.now(),
                         },
                     }
@@ -141,7 +141,9 @@ router.put("/register", async (req, res) => {
 
         res.status(201).send({ message: "User created successfully" });
     } catch (error) {
-        res.status(500).send({ message: "Wala sa Database imong Alumni ID" });
+        res.status(500).send({
+            message: "Alumni ID and Birthday does not match",
+        });
     }
 });
 

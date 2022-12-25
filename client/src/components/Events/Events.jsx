@@ -32,6 +32,7 @@ const Events = ({ user }) => {
     const [course, setCourse] = useState("");
     const [year, setYear] = useState("");
     const [date, setDate] = useState("");
+    const [where, setWhere] = useState("");
 
     //fetch all job
     useEffect(() => {
@@ -85,6 +86,7 @@ const Events = ({ user }) => {
         formData.append("title", title);
         formData.append("description", description);
         formData.append("date", date);
+        formData.append("where", where);
         if (category === "Reunion") {
             formData.append("course", course);
             formData.append("year", year);
@@ -317,6 +319,7 @@ const Events = ({ user }) => {
                                             ></textarea>
                                         </div>
 
+                                        {/* input para date */}
                                         <div className="job_input_holder">
                                             <h5>Date</h5>
                                             <input
@@ -325,6 +328,19 @@ const Events = ({ user }) => {
                                                 className="job_title"
                                                 onChange={(e) =>
                                                     setDate(e.target.value)
+                                                }
+                                            ></input>
+                                        </div>
+
+                                        {/* location sa event */}
+                                        <div className="job_input_holder">
+                                            <h5>Location</h5>
+                                            <input
+                                                name="job_description"
+                                                type="text"
+                                                className="job_title"
+                                                onChange={(e) =>
+                                                    setWhere(e.target.value)
                                                 }
                                             ></input>
                                         </div>
@@ -418,7 +434,9 @@ const Events = ({ user }) => {
                                                 </Card>
                                             </NavLink>
                                         );
-                                    })}
+                                    })
+                                    .sort()
+                                    .reverse()}
                             </div>
                         </div>
                     </div>

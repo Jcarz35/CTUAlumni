@@ -38,7 +38,7 @@ multiple query count
 svg logo
 
 3 steps para ma update sa github
-git add
+git add .
 git commit -m "second commit"
 git push
 

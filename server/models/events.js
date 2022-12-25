@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const eventSchema = new mongoose.Schema({
     title: { type: String },
     postDate: { type: String },
+    where: { type: String },
     description: { type: String },
     eventPic: { type: String },
     course: { type: String },

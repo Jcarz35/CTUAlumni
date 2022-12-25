@@ -86,8 +86,7 @@
 
 .leftss {
     display: flex;
-    height: 100%;
-    /* flex: 1; */
+    height: 740px;
     justify-content: start;
     flex-wrap: wrap;
     overflow-y: hidden;
@@ -101,7 +100,7 @@
     border-radius: 7px;
     min-width: 330px;
     max-width: 330px;
-    height: 350px;
+    max-height: 350px;
     background-color: rgb(253, 252, 252);
     padding: 15px;
     border: 0.5px solid rgb(230, 225, 225);
