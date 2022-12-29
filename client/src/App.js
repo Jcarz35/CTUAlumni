@@ -22,6 +22,7 @@ import Events from "./components/Events/Events";
 import Event from "./components/Event/Event";
 import Resume from "./components/Resume/Resume";
 import ResumeBuilder from "./components/ResumeBuilder/ResumeBuilder";
+import JobList from "./components/JobPosting/JobList/JobList"; //acceptjob ni
 
 export const ThemeContext = createContext(null);
 
@@ -36,11 +37,6 @@ function App() {
     return (
         <ThemeContext.Provider value={{ theme, toggleTheme }}>
             <div className="App" id={theme}>
-                {/* <div className="blur" style={{ top: "-18%", right: "0" }}></div>
-                <div
-                    className="blur"
-                    style={{ top: "36%", left: "-8rem" }}
-                ></div> */}
                 <Routes>
                     <Route path="/signup" exact element={<Signup />} />
                     <Route path="/login" exact element={<Login />} />
@@ -84,6 +80,11 @@ function App() {
                                 element={<JobPosting user={user} />}
                             ></Route>
                             <Route
+                                path="/jobposting/acceptjobs"
+                                exact
+                                element={<JobList user={user} />}
+                            ></Route>
+                            <Route
                                 path="/job/:id"
                                 exact
                                 element={<Job user={user} />}
@@ -106,12 +107,12 @@ function App() {
                             <Route
                                 path="/resume"
                                 exact
-                                element={<Resume />}
+                                element={<Resume user={user} />}
                             ></Route>
                             <Route
                                 path="/resumeBuilder"
                                 exact
-                                element={<ResumeBuilder />}
+                                element={<ResumeBuilder user={user} />}
                             ></Route>
                             <Route
                                 path="/*"

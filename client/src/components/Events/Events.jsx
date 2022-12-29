@@ -21,6 +21,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 
 import madara from "../../images/madara.jpg";
+import ScrollToTop from "../ScrollToTop/ScrollToTop";
 
 const Events = ({ user }) => {
     const [data, setData] = useState([]);
@@ -87,6 +88,7 @@ const Events = ({ user }) => {
         formData.append("description", description);
         formData.append("date", date);
         formData.append("where", where);
+        formData.append("category", category);
         if (category === "Reunion") {
             formData.append("course", course);
             formData.append("year", year);
@@ -115,6 +117,7 @@ const Events = ({ user }) => {
                 </div>
             ) : (
                 <div className="events_container">
+                    <ScrollToTop />
                     <div className="events_header">
                         <h1>Events</h1>
                         <div className="header_right">

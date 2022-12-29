@@ -9,6 +9,7 @@ const eventSchema = new mongoose.Schema({
     course: { type: String },
     year: { type: Number },
     date: { type: Date, default: Date.now },
+    read: { type: Boolean, default: false },
 });
 
 const Events = mongoose.model("events", eventSchema);

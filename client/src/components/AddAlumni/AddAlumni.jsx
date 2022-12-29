@@ -10,6 +10,7 @@ import Snackbar from "../../components/Snackbar/Snackbar";
 //icons
 import { FaUserCircle, FaSave } from "react-icons/fa";
 import axios from "axios";
+import ScrollToTop from "../ScrollToTop/ScrollToTop";
 
 const VerifyUser = ({ user }) => {
     // const [lastName, setLastName] = useState();
@@ -73,6 +74,7 @@ const VerifyUser = ({ user }) => {
 
     return (
         <div className="verify_container">
+            <ScrollToTop />
             {/* snackbar notif */}
             <div
                 className="snackbar_position"

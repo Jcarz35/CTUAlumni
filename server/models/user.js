@@ -23,6 +23,15 @@ const userSchema = new mongoose.Schema({
     schoolYear: { type: Number },
     empStat: { type: String },
     notification: [String],
+    // notification: [
+    //     {
+    //         notificationId: { type: String },
+    //         title: { type: String },
+    //         description: { type: String },
+    //         date: { type: Date, default: Date.now },
+    //         read: { type: Boolean, default: false },
+    //     },
+    // ],
 
     experience: [{ title: String, description: String }],
     education: [{ title: String, location: String }],

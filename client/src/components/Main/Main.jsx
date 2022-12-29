@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 
 import axios from "axios";
 import { format } from "timeago.js";
+import { useParams } from "react-router-dom";
 
 //icons
 import { FaBars, FaUser } from "react-icons/fa";
@@ -34,6 +35,19 @@ const Main = ({ children, theme, toggleTheme, user }) => {
     //para events
     const [data, setData] = useState([]);
 
+    ///para ig click ma mark as read na ang notif
+    const [clicked, setClicked] = useState(false);
+
+    // fetch the current URL
+    const currentUrl = window.location.href;
+
+    //split the url
+    const parts = currentUrl.split("/");
+
+    //get only the 5th part of the url
+    const idNotification = parts[4];
+
+    //logout
     const handleLogout = () => {
         localStorage.removeItem("token");
         setTimeout(() => {
@@ -54,6 +68,14 @@ const Main = ({ children, theme, toggleTheme, user }) => {
                 console.log(err);
             });
     }, [userInfo]);
+
+    //para count sa notifications nga wala pa nabasa
+    let count = 0;
+    data.map((data) => {
+        if (data.read === false) {
+            count++;
+        }
+    });
 
     //fetch all events
     useEffect(() => {
@@ -362,6 +384,7 @@ const Main = ({ children, theme, toggleTheme, user }) => {
                     <nav className="navbar">
                         <h1 className="alumni">Alumni Information System</h1>
 
+                        {/* night mode and dark mode */}
                         <div className="right_theme" onClick={toggleTheme}>
                             {theme === "light" ? (
                                 <FiMoon className="moon" title="Dark Mode" />
@@ -380,7 +403,10 @@ const Main = ({ children, theme, toggleTheme, user }) => {
                             ) : (
                                 <IoMdNotificationsOutline className="icon" />
                             )}
-                            <span className="topIconBadge">2</span>
+                            {/* <span className="topIconBadge">{count}</span> */}
+                            {count > 0 ? (
+                                <span className="topIconBadge">{count}</span>
+                            ) : null}
                         </div>
                         <motion.div
                             animate={{
@@ -390,7 +416,7 @@ const Main = ({ children, theme, toggleTheme, user }) => {
                         >
                             <div className="inner_notif_dialog">
                                 {openNotification && (
-                                    <h1 className="h1">Notifications</h1>
+                                    <h1 className="h1">Events Notifications</h1>
                                 )}
                                 {openNotification &&
                                     data
@@ -403,6 +429,7 @@ const Main = ({ children, theme, toggleTheme, user }) => {
                                                     title="Click me"
                                                 >
                                                     <h5>{val.title}</h5>
+                                                    {}
                                                     <p>
                                                         {val.description.substring(
                                                             0,
@@ -410,9 +437,16 @@ const Main = ({ children, theme, toggleTheme, user }) => {
                                                         )}
                                                         {"..."}
                                                     </p>
-                                                    <p className="para_time">
-                                                        {format(val.date)}
-                                                    </p>
+                                                    <div className="para_time">
+                                                        <p>
+                                                            {format(val.date)}
+                                                        </p>
+                                                        {val.read === false ? (
+                                                            <p className="unRead">
+                                                                Unread
+                                                            </p>
+                                                        ) : null}
+                                                    </div>
                                                 </Link>
                                             );
                                         })
@@ -513,7 +547,7 @@ const Main = ({ children, theme, toggleTheme, user }) => {
                                         </div>
 
                                         <div className="right_link_text">
-                                            {"Resume/Cv"}
+                                            {"Build a Resume"}
                                         </div>
                                     </NavLink>
                                 </div>

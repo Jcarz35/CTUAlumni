@@ -3,7 +3,6 @@ import "./joblist.css";
 import { format } from "timeago.js";
 import { motion } from "framer-motion";
 import FadeLoader from "react-spinners/FadeLoader";
-
 // /snackbar
 import Snackbar from "../../components/Snackbar/Snackbar";
 
@@ -22,7 +21,8 @@ import { FaBriefcase } from "react-icons/fa";
 import { IoCloseSharp } from "react-icons/io5";
 
 import {} from "react-icons/io5";
-const JobPosting = ({ user }) => {
+import ScrollToTop from "../ScrollToTop/ScrollToTop";
+const JobPosting = ({ children, user }) => {
     const { id } = useParams(); // get the id from the URL
 
     const dropIn = {
@@ -88,41 +88,13 @@ const JobPosting = ({ user }) => {
         setFileName(e.target.files[0]);
     };
 
-    //para add og job
-    const handleSubmit = () => {
-        const formData = new FormData();
-        formData.append("companyLogo", fileName);
-        formData.append("title", title);
-        formData.append("companyName", companyName);
-        formData.append("location", location);
-        formData.append("entryLevel", entryLevel);
-        formData.append("description", description);
-
-        axios.post("http://localhost:8080/api/jobs/add", formData);
-        // .then(() => {})`
-        // .catch((err) => {
-        //     console.log("Error sa pag add", err);
-        // });
-        // {
-        //     title: title,
-        //     companyName: companyName,
-        //     location: location,
-        //     entryLevel: entryLevel,
-        //     description: description,
-        // }
-        handleClose();
-        setShowSnackbar(true);
-        setTimeout(() => {
-            setShowSnackbar(false);
-        }, 3000);
-    };
-
     //fetch all job
     useEffect(() => {
         axios
             .get("http://localhost:8080/api/jobs/all")
             .then((res) => {
                 setData(res.data);
+
                 setLoading(false);
 
                 // ibutang sa user na variable ang data gikan DB
@@ -146,249 +118,261 @@ const JobPosting = ({ user }) => {
             });
     }, [userInfo]);
 
+    //para add og job
+    const handleSubmit = () => {
+        const formData = new FormData();
+        const ownerName = userInfo.firstName + " " + userInfo.lastName;
+        formData.append("ownerId", userInfo._id);
+        formData.append("ownerName", ownerName);
+        formData.append("ownerPhoto", userInfo.profilePic);
+        formData.append("companyLogo", fileName);
+        formData.append("title", title);
+        formData.append("companyName", companyName);
+        formData.append("location", location);
+        formData.append("entryLevel", entryLevel);
+        formData.append("description", description);
+
+        axios.post("http://localhost:8080/api/jobs/add", formData);
+
+        handleClose();
+        setShowSnackbar(true);
+        setTimeout(() => {
+            setShowSnackbar(false);
+        }, 3000);
+    };
+
     let [color, setColor] = useState("#36d7b7");
     // add job
 
     return (
         <>
-            {loading ? (
-                <div className="loading_page">
-                    <div className="loading_center">
-                        <FadeLoader
-                            loading={loading}
-                            size={200}
-                            aria-label="Loading Spinner"
-                            color={color}
-                        />
-                        <label htmlFor="">Loading...</label>
-                    </div>
+            <div className="jobposting_containers">
+                <ScrollToTop />
+                {/* snackbar notif */}
+                <div
+                    className="snackbar_position"
+                    id={showSnackbar ? "show" : "hide"}
+                >
+                    <Snackbar
+                        message={"Job Added Succesfully"}
+                        type={SnackbarType.success}
+                    />
                 </div>
-            ) : (
-                <div className="jobposting_containers">
-                    {/* snackbar notif */}
-                    <div
-                        className="snackbar_position"
-                        id={showSnackbar ? "show" : "hide"}
-                    >
-                        <Snackbar
-                            message={"Job Added Succesfully"}
-                            type={SnackbarType.success}
+                <div className="header_jobs">
+                    <div className="header_left">
+                        <h5>Job List</h5>
+                        <input
+                            type="text"
+                            placeholder="Search Keyword..."
+                            value={filter}
+                            onChange={(e) => setFilter(e.target.value)}
+                            className="search_input"
                         />
                     </div>
-                    <div className="header_jobs">
-                        <div className="header_left">
-                            <h5>Job List</h5>
-                            <input
-                                type="text"
-                                placeholder="Search Keyword..."
-                                value={filter}
-                                onChange={(e) => setFilter(e.target.value)}
-                                className="search_input"
-                            />
-                        </div>
-                        <div className="header_right">
-                            {userInfo.isAdmin && (
+
+                    {/* para add og job */}
+                    <div className="header_right">
+                        {userInfo.isAdmin ? (
+                            <NavLink
+                                exact={true}
+                                key="JobList"
+                                to="/jobposting/acceptjobs"
+                                className="accept_jobs"
+                            >
+                                Accept Job
+                            </NavLink>
+                        ) : null}
+                        <motion.button
+                            onClick={handleClickOpen}
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                        >
+                            Add Job
+                        </motion.button>
+                    </div>
+                    {/* dialog for add Job*/}
+                    <Dialog
+                        open={openDialog}
+                        onClose={handleClose}
+                        className="job_dialog"
+                    >
+                        <motion.div
+                            animate={{
+                                height: openDialog ? "520px" : "0px",
+                                width: "550px",
+                            }}
+                            transition={{ type: "spring", stiffness: 300 }}
+                            className="sidebar_dialog"
+                        >
+                            <div className="header_job">
+                                <DialogTitle>
+                                    <h4>Add Job </h4>
+                                </DialogTitle>
+                                <Button
+                                    className="btn_close"
+                                    onClick={handleClose}
+                                >
+                                    <IoCloseSharp className="close_icon" />
+                                </Button>
+                            </div>
+                            {/* title companyName location entryLevel description */}
+                            <form encType="multipart/form-data" method="post">
+                                <div className="input_job_div">
+                                    <div className="job_input_holder">
+                                        <h5>Job Title</h5>
+                                        <input
+                                            type="file"
+                                            fileName="companyLogo"
+                                            onChange={onChangeFile}
+                                        ></input>
+                                    </div>
+
+                                    <div className="job_input_holder">
+                                        <h5>Job Title</h5>
+                                        <input
+                                            name="job_title"
+                                            type="text"
+                                            className="job_title"
+                                            onChange={(e) =>
+                                                setTitle(e.target.value)
+                                            }
+                                        ></input>
+                                    </div>
+
+                                    <div className="job_input_holder">
+                                        <h5>Company Name</h5>
+                                        <input
+                                            name="job_company"
+                                            type="text"
+                                            className="job_company"
+                                            onChange={(e) =>
+                                                setCompanyName(e.target.value)
+                                            }
+                                        ></input>
+                                    </div>
+
+                                    <div className="job_input_holder">
+                                        <h5>Location</h5>
+                                        <input
+                                            name="job_location"
+                                            type="text"
+                                            className="job_location"
+                                            onChange={(e) =>
+                                                setLocation(e.target.value)
+                                            }
+                                        ></input>
+                                    </div>
+                                    <div className="job_input_holder">
+                                        <h5>Qualifications</h5>
+                                        <input
+                                            name="job_entry"
+                                            type="text"
+                                            className="job_entry"
+                                            onChange={(e) =>
+                                                setEntryLevel(e.target.value)
+                                            }
+                                        ></input>
+                                    </div>
+
+                                    <div className="job_input_holder">
+                                        <h5>Job Description</h5>
+                                        <textarea
+                                            name="job_description"
+                                            type="text"
+                                            className="job_description"
+                                            onChange={(e) =>
+                                                setDescription(e.target.value)
+                                            }
+                                        ></textarea>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <div className="button_save">
                                 <motion.button
-                                    onClick={handleClickOpen}
+                                    onClick={() => {
+                                        handleSubmit();
+                                    }}
                                     whileHover={{ scale: 1.1 }}
                                     whileTap={{ scale: 0.9 }}
                                 >
-                                    Add Job
+                                    Post Job
                                 </motion.button>
-                            )}
-                        </div>
-                        {/* dialog for add Job*/}
-                        <Dialog
-                            open={openDialog}
-                            onClose={handleClose}
-                            className="job_dialog"
-                        >
-                            <motion.div
-                                animate={{
-                                    height: openDialog ? "520px" : "0px",
-                                    width: "550px",
-                                }}
-                                transition={{ type: "spring", stiffness: 300 }}
-                                className="sidebar_dialog"
-                            >
-                                <div className="header_job">
-                                    <DialogTitle>
-                                        <h4>Add Job </h4>
-                                    </DialogTitle>
-                                    <Button
-                                        className="btn_close"
-                                        onClick={handleClose}
+                            </div>
+                        </motion.div>
+                    </Dialog>
+                </div>
+
+                {/* job body container */}
+                <div className="jobBodys">
+                    <div className="leftss">
+                        {data
+                            .filter((item) => {
+                                return (
+                                    item.title
+                                        .toLowerCase()
+                                        .includes(filter.toLowerCase()) ||
+                                    item.companyName
+                                        .toLowerCase()
+                                        .includes(filter.toLowerCase()) ||
+                                    item.description
+                                        .toLowerCase()
+                                        .includes(filter.toLowerCase())
+                                );
+                            })
+                            .map((val, key) => {
+                                return (
+                                    <NavLink
+                                        to={"/job/" + val._id}
+                                        key={val._id}
+                                        className="lefts_cards"
+                                        onClick={toggle_arrow}
                                     >
-                                        <IoCloseSharp className="close_icon" />
-                                    </Button>
-                                </div>
-                                {/* title companyName location entryLevel description */}
-                                <form
-                                    encType="multipart/form-data"
-                                    method="post"
-                                >
-                                    <div className="input_job_div">
-                                        <div className="job_input_holder">
-                                            <h5>Job Title</h5>
-                                            <input
-                                                type="file"
-                                                fileName="companyLogo"
-                                                onChange={onChangeFile}
-                                            ></input>
+                                        <div>
+                                            <img
+                                                src={`http://localhost:8080/companyLogo/${val.companyLogo}`}
+                                                alt="picture"
+                                            />
+                                        </div>
+                                        <div className="lefts_cards_title">
+                                            <h1>{val.title}</h1>
+                                        </div>
+                                        <div className="lefts_cards_companyname">
+                                            <h4>{val.companyName}</h4>
+                                        </div>
+                                        <div className="lefts_cards_location">
+                                            <IoLocationSharp className="icon" />
+                                            <h5>{val.location}</h5>
+                                        </div>
+                                        <div className="lefts_cards_entrylevel">
+                                            <FaBriefcase className="icon" />
+                                            <h5>{val.entryLevel}</h5>
                                         </div>
 
-                                        <div className="job_input_holder">
-                                            <h5>Job Title</h5>
-                                            <input
-                                                name="job_title"
-                                                type="text"
-                                                className="job_title"
-                                                onChange={(e) =>
-                                                    setTitle(e.target.value)
-                                                }
-                                            ></input>
+                                        <div className="lefts_cards_p">
+                                            <p>
+                                                {val.description.substring(
+                                                    0,
+                                                    180
+                                                )}
+                                                ....
+                                            </p>
                                         </div>
 
-                                        <div className="job_input_holder">
-                                            <h5>Company Name</h5>
-                                            <input
-                                                name="job_company"
-                                                type="text"
-                                                className="job_company"
-                                                onChange={(e) =>
-                                                    setCompanyName(
-                                                        e.target.value
-                                                    )
-                                                }
-                                            ></input>
+                                        <div className="job_card_footer">
+                                            <button className="button">
+                                                Read More
+                                            </button>
+                                            <p>{format(val.postDate)}</p>
                                         </div>
-
-                                        <div className="job_input_holder">
-                                            <h5>Location</h5>
-                                            <input
-                                                name="job_location"
-                                                type="text"
-                                                className="job_location"
-                                                onChange={(e) =>
-                                                    setLocation(e.target.value)
-                                                }
-                                            ></input>
-                                        </div>
-                                        <div className="job_input_holder">
-                                            <h5>Entry Level</h5>
-                                            <input
-                                                name="job_entry"
-                                                type="text"
-                                                className="job_entry"
-                                                onChange={(e) =>
-                                                    setEntryLevel(
-                                                        e.target.value
-                                                    )
-                                                }
-                                            ></input>
-                                        </div>
-
-                                        <div className="job_input_holder">
-                                            <h5>Job Description</h5>
-                                            <textarea
-                                                name="job_description"
-                                                type="text"
-                                                className="job_description"
-                                                onChange={(e) =>
-                                                    setDescription(
-                                                        e.target.value
-                                                    )
-                                                }
-                                            ></textarea>
-                                        </div>
-                                    </div>
-                                </form>
-
-                                <div className="button_save">
-                                    <motion.button
-                                        onClick={() => {
-                                            handleSubmit();
-                                        }}
-                                        whileHover={{ scale: 1.1 }}
-                                        whileTap={{ scale: 0.9 }}
-                                    >
-                                        Post Job
-                                    </motion.button>
-                                </div>
-                            </motion.div>
-                        </Dialog>
-                    </div>
-
-                    <div className="jobBodys">
-                        <div className="leftss">
-                            {data
-                                .filter((item) => {
-                                    return (
-                                        item.title
-                                            .toLowerCase()
-                                            .includes(filter.toLowerCase()) ||
-                                        item.companyName
-                                            .toLowerCase()
-                                            .includes(filter.toLowerCase()) ||
-                                        item.description
-                                            .toLowerCase()
-                                            .includes(filter.toLowerCase())
-                                    );
-                                })
-                                .map((val, key) => {
-                                    return (
-                                        <NavLink
-                                            to={"/job/" + val._id}
-                                            key={val._id}
-                                            className="lefts_cards"
-                                            onClick={toggle_arrow}
-                                        >
-                                            <div>
-                                                <img
-                                                    src={`http://localhost:8080/companyLogo/${val.companyLogo}`}
-                                                    alt="picture"
-                                                />
-                                            </div>
-                                            <div className="lefts_cards_title">
-                                                <h1>{val.title}</h1>
-                                            </div>
-                                            <div className="lefts_cards_companyname">
-                                                <h4>{val.companyName}</h4>
-                                            </div>
-                                            <div className="lefts_cards_location">
-                                                <IoLocationSharp className="icon" />
-                                                <h5>{val.location}</h5>
-                                            </div>
-                                            <div className="lefts_cards_entrylevel">
-                                                <FaBriefcase className="icon" />
-                                                <h5>{val.entryLevel}</h5>
-                                            </div>
-
-                                            <div className="lefts_cards_p">
-                                                <p>
-                                                    {val.description.substring(
-                                                        0,
-                                                        180
-                                                    )}
-                                                    ....
-                                                </p>
-                                            </div>
-
-                                            <div className="job_card_footer">
-                                                <button className="button">
-                                                    Read More
-                                                </button>
-                                                <p>{format(val.postDate)}</p>
-                                            </div>
-                                        </NavLink>
-                                    );
-                                })
-                                .sort()
-                                .reverse()}
-                        </div>
+                                    </NavLink>
+                                );
+                            })
+                            .sort()
+                            .reverse()}
                     </div>
                 </div>
-            )}
+            </div>
         </>
     );
 };

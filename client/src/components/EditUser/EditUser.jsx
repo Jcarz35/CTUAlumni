@@ -17,6 +17,8 @@ import { IoCloseSharp } from "react-icons/io5";
 
 // notification
 import Snackbar from "../../components/Snackbar/Snackbar";
+import ScrollToTop from "../ScrollToTop/ScrollToTop";
+import { AiOutlinePlus } from "react-icons/ai";
 
 const EditUser = () => {
     const { id } = useParams(); // get the id from the URL
@@ -125,6 +127,7 @@ const EditUser = () => {
 
     return (
         <div className="edit_user_container">
+            <ScrollToTop />
             {/* snackbar notif */}
             <div
                 className="snackbar_position"
@@ -260,65 +263,65 @@ const EditUser = () => {
 
                 {/**Right */}
                 <div className="right">
-                    <div className="settings">
-                        <h1>Edit Your Profile</h1>
-                    </div>
-                    <div className="edit_personal_info">
-                        <FaUserCircle className="edit_user_icons" />
-                        <h1>Personal Info</h1>
-                    </div>{" "}
-                    <div></div>
-                    {/**Full name Input */}
-                    <div className="fname">
-                        <div className="fname_holder">
-                            <p>Last Name</p>
-                            <input
-                                type="text"
-                                className="input_fname"
-                                placeholder={user.lastName}
-                                defaultValue={user.lastName}
-                                onChange={(e) => setLastName(e.target.value)}
-                            />
+                    {/* personal details input */}
+                    <div className="top_profile">
+                        <div className="settings">
+                            <h1>Edit Your Profile</h1>
                         </div>
-                        <div className="fname_holder">
-                            <p>First Name</p>
-                            <input
-                                type="text"
-                                className="input_fname"
-                                placeholder={user.firstName}
-                                onChange={(e) => setFirstName(e.target.value)}
-                                defaultValue={user.firstName}
-                            />
+                        <div className="edit_personal_info">
+                            <FaUserCircle className="edit_user_icons" />
+                            <h1>Personal Info</h1>
                         </div>
-                        <div className="fname_holder">
-                            <p>Middle Name</p>
-                            <input
-                                type="text"
-                                className="input_fname"
-                                placeholder={user.middleName}
-                                defaultValue={user.middleName}
-                                onChange={(e) => setMiddleName(e.target.value)}
-                            />
-                        </div>
-                        {/**Bio */}
-                        <div className="bio">
-                            <p>Bio</p>
-                            <textarea
-                                className="bio_area"
-                                defaultValue={user.bio}
-                                onChange={(e) => setBio(e.target.value)}
-                            ></textarea>
-                        </div>
-                        <div className="phone_holder">
-                            <p>Address</p>
-                            <input
-                                type="text"
-                                className="input_fname"
-                                defaultValue={user.address}
-                                onChange={(e) => setAddress(e.target.value)}
-                            />
-                        </div>
-                        {/* <div className="email_holder">
+
+                        {/**Full name Input */}
+                        <div className="fname">
+                            <div className="fname_holder">
+                                <p>Last Name</p>
+                                <input
+                                    type="text"
+                                    className="input_fname"
+                                    placeholder={user.lastName}
+                                    defaultValue={user.lastName}
+                                    onChange={(e) =>
+                                        setLastName(e.target.value)
+                                    }
+                                />
+                            </div>
+                            <div className="fname_holder">
+                                <p>First Name</p>
+                                <input
+                                    type="text"
+                                    className="input_fname"
+                                    placeholder={user.firstName}
+                                    onChange={(e) =>
+                                        setFirstName(e.target.value)
+                                    }
+                                    defaultValue={user.firstName}
+                                />
+                            </div>
+                            <div className="fname_holder">
+                                <p>Middle Name</p>
+                                <input
+                                    type="text"
+                                    className="input_fname"
+                                    placeholder={user.middleName}
+                                    defaultValue={user.middleName}
+                                    onChange={(e) =>
+                                        setMiddleName(e.target.value)
+                                    }
+                                />
+                            </div>
+                            {/* phone input */}
+                            <div className="phone_holder">
+                                <p>Address</p>
+                                <input
+                                    type="text"
+                                    className="input_fname"
+                                    defaultValue={user.address}
+                                    onChange={(e) => setAddress(e.target.value)}
+                                />
+                            </div>
+                            {/* <div className="email_holder">
                             <p>Email </p>
                             <input
                                 type="text"
@@ -327,145 +330,162 @@ const EditUser = () => {
                                 onChange={(e) => setEmail(e.target.value)}
                             />
                         </div> */}
-                        <div className="phone_holder">
-                            <p>Phone</p>
-                            <input
-                                type="text"
-                                className="input_fname"
-                                defaultValue={user.phone}
-                                onChange={(e) => setPhone(e.target.value)}
-                            />
-                        </div>
+                            <div className="phone_holder">
+                                <p>Phone</p>
+                                <input
+                                    type="text"
+                                    className="input_fname"
+                                    defaultValue={user.phone}
+                                    onChange={(e) => setPhone(e.target.value)}
+                                />
+                            </div>
 
-                        <div className="gender_holder">
-                            <p>Gender</p>
-                            <select
-                                defaultValue={user.gender}
-                                onChange={(e) => setGender(e.target.value)}
-                                className="selectGender"
-                            >
-                                <option value="">--Select--</option>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                            </select>
-                        </div>
+                            <div className="gender_holder">
+                                <p>Gender</p>
+                                <select
+                                    defaultValue={user.gender}
+                                    onChange={(e) => setGender(e.target.value)}
+                                    className="selectGender"
+                                >
+                                    <option value="">--Select--</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                </select>
+                            </div>
 
-                        <div className="age_holder">
-                            <p>Age</p>
-                            <input
-                                type="text"
-                                className="input_fname"
-                                defaultValue={user.age}
-                                onChange={(e) => setAge(e.target.value)}
-                            />
-                        </div>
+                            <div className="age_holder">
+                                <p>Age</p>
+                                <input
+                                    type="text"
+                                    className="input_fname"
+                                    defaultValue={user.age}
+                                    onChange={(e) => setAge(e.target.value)}
+                                />
+                            </div>
 
-                        {/** <div className="birthdate_holder}>
+                            {/** <div className="birthdate_holder}>
                             <p>Birthdate</p>
                         <input type="date" className="input_fname} />
                         </div> */}
 
-                        <div className="course_holder">
-                            <p>Course</p>
-                            <select
-                                defaultValue={user.course}
-                                onChange={(e) => setCourse(e.target.value)}
-                                className="selectCourse"
-                            >
-                                <option value="">--Select--</option>
-                                <option value="BAL">
-                                    Bachelor of Arts In Literature
-                                </option>
-                                <option value="BAEL">
-                                    Bachelor of Arts in English Languange
-                                </option>
-                                <option value="BTLED">
-                                    Bachelor of Techology and Livelihood
-                                    Education
-                                </option>
-                                <option value="BSED">
-                                    Bachelor of Secondary Education
-                                </option>
-                                <option value="BEED">
-                                    Bachelor of Elementary Education
-                                </option>
-                                <option value="BSIE">
-                                    Bachelor of Science in Industrial
-                                    Engineering
-                                </option>
-                                <option value="BSIT">
-                                    Bachelor of Science in Information
-                                    Technology
-                                </option>
-                                <option value="BIT-Garments">
-                                    BIT Garments
-                                </option>
-                                <option value="BIT-Drafting">
-                                    BIT Drafting
-                                </option>
-                                <option value="BIT-Computer-Technology">
-                                    BIT Computer Technology
-                                </option>
-                                <option value="BIT-Automotive">
-                                    BIT Automotive
-                                </option>
-                                <option value="BIT-Electronics">
-                                    BIT Electronics
-                                </option>
-                                <option value="BSHM">
-                                    Bachelor of Science in Hospitality
-                                    Management
-                                </option>
-                                <option value="BSA">
-                                    Bachelor of Science in Agriculture
-                                </option>
-                                <option value="BSHM">
-                                    Bachelor of Science in Hospitality
-                                    Management
-                                </option>
-                            </select>
-                        </div>
+                            <div className="course_holder">
+                                <p>Course</p>
+                                <select
+                                    defaultValue={user.course}
+                                    onChange={(e) => setCourse(e.target.value)}
+                                    className="selectCourse"
+                                >
+                                    <option value="">--Select--</option>
+                                    <option value="BAL">
+                                        Bachelor of Arts In Literature
+                                    </option>
+                                    <option value="BAEL">
+                                        Bachelor of Arts in English Languange
+                                    </option>
+                                    <option value="BTLED">
+                                        Bachelor of Techology and Livelihood
+                                        Education
+                                    </option>
+                                    <option value="BSED">
+                                        Bachelor of Secondary Education
+                                    </option>
+                                    <option value="BEED">
+                                        Bachelor of Elementary Education
+                                    </option>
+                                    <option value="BSIE">
+                                        Bachelor of Science in Industrial
+                                        Engineering
+                                    </option>
+                                    <option value="BSIT">
+                                        Bachelor of Science in Information
+                                        Technology
+                                    </option>
+                                    <option value="BIT-Garments">
+                                        BIT Garments
+                                    </option>
+                                    <option value="BIT-Drafting">
+                                        BIT Drafting
+                                    </option>
+                                    <option value="BIT-Computer-Technology">
+                                        BIT Computer Technology
+                                    </option>
+                                    <option value="BIT-Automotive">
+                                        BIT Automotive
+                                    </option>
+                                    <option value="BIT-Electronics">
+                                        BIT Electronics
+                                    </option>
+                                    <option value="BSHM">
+                                        Bachelor of Science in Hospitality
+                                        Management
+                                    </option>
+                                    <option value="BSA">
+                                        Bachelor of Science in Agriculture
+                                    </option>
+                                    <option value="BSHM">
+                                        Bachelor of Science in Hospitality
+                                        Management
+                                    </option>
+                                </select>
+                            </div>
 
-                        <div className="year_holder">
-                            <p>School Year</p>
-                            <input
-                                type="text"
-                                className="input_fname"
-                                defaultValue={user.schoolYear}
-                                onChange={(e) => setSchoolYear(e.target.value)}
-                            />
-                        </div>
+                            <div className="year_holder">
+                                <p>School Year</p>
+                                <input
+                                    type="text"
+                                    className="input_fname"
+                                    defaultValue={user.schoolYear}
+                                    onChange={(e) =>
+                                        setSchoolYear(e.target.value)
+                                    }
+                                />
+                            </div>
 
-                        <div className="status_holder">
-                            <p>Employment Status :</p>
-                            <select
-                                defaultValue={user.empStat}
-                                onChange={(e) => setEmpStat(e.target.value)}
+                            <div className="status_holder">
+                                <p>Employment Status :</p>
+                                <select
+                                    defaultValue={user.empStat}
+                                    onChange={(e) => setEmpStat(e.target.value)}
+                                >
+                                    <option value="">--Select--</option>
+                                    <option value="Unemployed">
+                                        Unemployed
+                                    </option>
+                                    <option value="Employed">Employed</option>
+                                    <option value="UnderEmployed">
+                                        UnderEmployed
+                                    </option>
+                                    <option value="Self-Employed">
+                                        Self-Employed
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        {/* save button */}
+                        <div className="button_holder">
+                            <button
+                                className="button"
+                                onClick={() => {
+                                    updateUser(user._id);
+                                }}
                             >
-                                <option value="">--Select--</option>
-                                <option value="Unemployed">Unemployed</option>
-                                <option value="Employed">Employed</option>
-                                <option value="UnderEmployed">
-                                    UnderEmployed
-                                </option>
-                                <option value="Self-Employed">
-                                    Self-Employed
-                                </option>
-                            </select>
+                                <FaSave className="icon" />
+                                <p>Save</p>
+                            </button>
                         </div>
                     </div>
-                    {/* save button */}
-                    <div className="button_holder">
-                        <button
-                            className="button"
-                            onClick={() => {
-                                updateUser(user._id);
-                            }}
-                        >
-                            <FaSave className="icon" />
-                            <p>Save</p>
-                        </button>
-                    </div>
+
+                    {/* job details */}
+                    {newempstat === "Employed" && (
+                        <div className="job_profile_section">
+                            <div className="jps_header">
+                                <h1>Job Details</h1>
+                                <AiOutlinePlus className="icon" />
+                            </div>
+
+                            <div className="job_profile_section_body"></div>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

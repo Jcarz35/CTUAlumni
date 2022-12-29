@@ -18,22 +18,9 @@ const upload = multer({ storage: storage });
 
 router.post("/addAlumni", async (req, res) => {
     const id = req.body.userId;
-    console.log(id);
+
     try {
         const user = await User.findOne({ userId: id });
-
-        // const userID = await User.findOne({ userId: req.body.userId });
-
-        // try {
-        //     if (userID.isActive) {
-        //         return res.status(409).send({
-        //             message: "User with given Alumni ID  already Exist!",
-        //         });
-        //     }
-        // } catch (error) {
-        //     throw new Error(error.message);
-        //     //  res.status(400).send({ message: error.message });
-        // }
 
         if (user) {
             return res.status(409).send({
@@ -355,6 +342,53 @@ router.get("/countEmploymentStatus", async (req, res) => {
     } catch (err) {
         console.log("Error " + err);
     }
+});
+
+//find and update for resume
+router.put("/updateResume", async (req, res) => {
+    const id = req.body.id;
+
+    // experience
+    const experience = req.body.experience
+        .map((skill) => {
+            return { title: skill.title, description: skill.description };
+        })
+        .filter((exp) => exp !== "");
+
+    // education
+    const education = req.body.education
+        .map((skill) => {
+            return { title: skill.title, location: skill.location };
+        })
+        .filter((edu) => edu !== "");
+
+    // skills
+    const skills = [];
+    req.body.skills
+        .map((skill) => {
+            skills.push(skill.title);
+        })
+        .filter((skill) => skill !== "");
+    // Filter out empty strings from the arrays
+
+    try {
+        await User.updateOne(
+            { _id: id },
+
+            {
+                $set: { bio: req.body.bio },
+                $push: {
+                    experience: { $each: experience },
+                    education: { $each: education },
+                    skills: { $each: skills },
+                },
+            }
+        );
+    } catch (err) {
+        console.log("Error " + err);
+    }
+
+    res.send("Updated");
 });
 
 module.exports = router;

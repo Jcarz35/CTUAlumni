@@ -36,8 +36,11 @@
     padding: 5px 30px;
 }
 .header_jobs .header_right {
-    margin-top: 30px;
-    margin-right: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    width: 240px;
+    gap: 18px;
 }
 .header_jobs .header_right button {
     padding: 5px 10px;
@@ -46,6 +49,8 @@
     background-color: #007352;
     color: white;
     cursor: pointer;
+    width: 140px;
+
     transition: background-color 0.3s ease-in;
 }
 .header_jobs .header_right button:hover {
@@ -61,6 +66,47 @@
 }
 #dark .header_jobs h5 {
     color: var(--active);
+}
+
+.accept_jobs {
+    background-color: var(--background);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 135px;
+    padding: 0 5px;
+    font-size: 14px;
+    padding: 0;
+    text-decoration: none;
+    color: rgb(56, 55, 55);
+    border: 1px solid rgb(53, 52, 52);
+    border-radius: 14px;
+    margin-left: 20px;
+    padding: 3px 7px;
+}
+.accept_jobs:hover {
+    background-color: #e2e6e5;
+    border: 2px solid rgb(53, 52, 52);
+}
+
+#dark .accept_jobs {
+    background-color: rgb(31, 29, 29);
+    color: rgb(209, 208, 208);
+    border: 1px solid rgb(182, 180, 180);
+}
+#dark .accept_jobs:hover {
+    background-color: rgb(75, 73, 73);
+    color: rgb(250, 247, 247);
+    border: 2px solid rgb(182, 180, 180);
+}
+
+.jobBody_children {
+    display: flex;
+    flex: 1;
+    margin: 0 30px auto;
+    overflow-y: hidden;
+    background-color: red;
+    transition: background-color 0.7s ease-in;
 }
 
 .jobBodys {

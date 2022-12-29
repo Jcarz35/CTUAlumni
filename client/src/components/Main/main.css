@@ -368,22 +368,31 @@
 
 .moon {
     position: absolute;
-    top: 6px;
-    left: 8px;
+    top: 0;
+    left: 0;
     font-size: 20px;
     color: gray;
     cursor: pointer;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    padding: 6.5px;
+}
+.moon:hover {
+    color: white;
+    background-color: rgb(34, 92, 52);
 }
 .sun {
     position: absolute;
     top: 5px;
     left: 6px;
     font-size: 22px;
-    color: var(--active);
+    color: #e4e6eb;
     cursor: pointer;
 }
+
 .topBarIconContainer {
-    border-radius: 10px;
+    border-radius: 50%;
     position: fixed;
     background-color: #e2f3fc;
     right: 48px;
@@ -399,13 +408,13 @@
 }
 #dark .topBarIconContainer {
     color: white;
-    background-color: var(--dark-main-background);
+    background-color: #4b4c4d;
 }
 
 .topBarIconContainer .icon {
     position: relative;
     top: 1px;
-    left: -5px;
+    left: -4px;
     font-size: 20.5px;
     color: #707070;
 }
@@ -433,8 +442,8 @@
     background-color: red;
     border-radius: 50%;
     font-size: 12px;
-    top: 3px;
-    right: 3px;
+    top: -3px;
+    right: 0;
     font-weight: 600;
 }
 
@@ -560,10 +569,24 @@
     color: rgb(218, 216, 216);
 }
 .event_cards_notif .para_time {
+    display: flex;
+    justify-content: space-between;
+}
+.event_cards_notif .para_time p {
     font-size: 11px;
-    font-weight: 600;
+    font-weight: 500;
     color: rgb(77, 157, 248);
 }
+.unRead {
+    font-weight: normal;
+    padding: 2px 5px;
+    background-color: rgb(241, 241, 241);
+    border-radius: 3px 6px;
+}
+#dark .unRead {
+    background-color: rgb(37, 36, 36);
+}
+
 #dark .event_cards_notif .para_time {
     color: rgb(146, 224, 255);
     font-weight: normal;
@@ -614,19 +637,19 @@
 }
 
 .right_theme {
+    position: fixed;
     width: 34px;
     height: 34px;
+    border-radius: 50%;
     background-color: #e2f3fc;
-    position: absolute;
-    border-radius: 10px;
     top: 7.5px;
-    right: 298px;
+    right: 89px;
 }
 .right_theme:hover {
-    background-color: #d7fdf2;
+    background-color: #0ed89f;
 }
 #dark .right_theme {
-    background-color: var(--dark-main-background);
+    background-color: #4e4f50;
 }
 .right_bars {
     display: flex;

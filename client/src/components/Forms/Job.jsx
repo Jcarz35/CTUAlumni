@@ -76,14 +76,6 @@ const ArticlesPage = ({ user }) => {
 
     // update job
     const updateJob = (id) => {
-        // const formData = new FormData();
-        // formData.append("id", id);
-        // formData.append("title", newTitle);
-        // formData.append("companyName", newCompanyName);
-        // formData.append("location", newLocation);
-        // formData.append("entryLevel", newEntryLevel);
-        // formData.append("description", newDescription);
-
         axios
             .put("http://localhost:8080/api/jobs/updateJob", {
                 id: id,
@@ -446,7 +438,7 @@ const ArticlesPage = ({ user }) => {
                                             ></input>
                                         </div>
                                         <div className="job_input_holder">
-                                            <h5>Entry Level</h5>
+                                            <h5>Qualifications</h5>
                                             <input
                                                 name="job_entry"
                                                 type="text"
@@ -481,6 +473,7 @@ const ArticlesPage = ({ user }) => {
                                     </div>
                                     {/* </form> */}
 
+                                    {/* button save para edit sa job */}
                                     <div className="button_save">
                                         <button
                                             onClick={() => {

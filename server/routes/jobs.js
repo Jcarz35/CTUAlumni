@@ -3,6 +3,8 @@ const router = express.Router();
 
 //import ang model
 const { Jobs } = require("../models/jobs");
+const { User } = require("../models/user");
+const { ObjectId } = require("mongodb");
 
 const multer = require("multer");
 // desk storage para image upload
@@ -25,9 +27,20 @@ router.get("/", (req, res) => {
         .catch((err) => res.status(400).json(`Error: ${err}`));
 });
 
-// get all jobs post
+// get all accepted jobs post
 router.get("/all", async (req, res) => {
-    Jobs.find({}, (err, result) => {
+    Jobs.find({ accept: true }, (err, result) => {
+        if (err) {
+            res.send(err);
+        } else {
+            res.send(result);
+        }
+    });
+});
+
+// get all raw jobs from users post
+router.get("/allRaw", async (req, res) => {
+    Jobs.find({ accept: false }, (err, result) => {
         if (err) {
             res.send(err);
         } else {
@@ -50,19 +63,74 @@ router.get("/job/:id", async (req, res) => {
 // add job post
 router.post("/add", upload.single("companyLogo"), async (req, res, next) => {
     const companyLogo = req.file.originalname;
-    try {
-        await new Jobs({
-            title: req.body.title,
-            companyName: req.body.companyName,
-            location: req.body.location,
-            entryLevel: req.body.entryLevel,
-            description: req.body.description,
-            companyLogo: companyLogo,
-        }).save();
-        console.log("success");
-    } catch (err) {
-        console.log(err);
+
+    const objectId = ObjectId(req.body.ownerId);
+    const owner = await User.findOne({ _id: objectId });
+
+    if (owner.isAdmin) {
+        try {
+            await new Jobs({
+                ownerId: req.body.ownerId,
+                ownerName: req.body.ownerName,
+                ownerPhoto: req.body.ownerPhoto,
+                title: req.body.title,
+                companyName: req.body.companyName,
+                location: req.body.location,
+                entryLevel: req.body.entryLevel,
+                description: req.body.description,
+                companyLogo: companyLogo,
+                accept: true,
+            })
+                .save()
+                .then(() => {
+                    console.log("success");
+                });
+        } catch (err) {
+            console.log(err);
+        }
+    } else {
+        try {
+            await new Jobs({
+                ownerId: req.body.ownerId,
+                ownerName: req.body.ownerName,
+                ownerPhoto: req.body.ownerPhoto,
+                title: req.body.title,
+                companyName: req.body.companyName,
+                location: req.body.location,
+                entryLevel: req.body.entryLevel,
+                description: req.body.description,
+                companyLogo: companyLogo,
+            })
+                .save()
+                .then(() => {
+                    console.log("success");
+                });
+        } catch (err) {
+            console.log(err);
+        }
     }
+});
+
+//find and accept job , make accept property to true
+router.put("/acceptJob", async (req, res) => {
+    const id = req.body.id;
+
+    try {
+        await Jobs.updateOne(
+            { _id: id },
+            {
+                $set: {
+                    accept: true,
+                },
+            }
+        ).then(() => {
+            console.log("success", id);
+        });
+    } catch (err) {
+        console.log("Error " + err);
+    }
+
+    res.send("Updated");
 });
 
 //find and update single job

@@ -1,29 +1,24 @@
 import React from "react";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { PDFExport } from "@progress/kendo-react-pdf";
 import "./resume.css";
 
+import axios from "axios";
 import { FaUserAlt } from "react-icons/fa";
 import { AiFillHome } from "react-icons/ai";
 import { BsTelephoneFill } from "react-icons/bs";
 import { MdEmail } from "react-icons/md";
 
 import madara from "../../images/jennie.png";
-const Resume = () => {
+const Resume = ({ user }) => {
     // Declare state variables to store the resume data
-    const [personalInfo, setPersonalInfo] = useState({
-        firstName: "",
-        lastName: "",
-        email: "",
-        phone: "",
-        address: "",
-        skills: [],
-        experience: [],
-        education: [],
-    });
-
-    const [workExperience, setWorkExperience] = useState([]);
-    const [education, setEducation] = useState([]);
+    const [info, setInfo] = useState([]);
+    const [personalInfo, setPersonalInfo] = useState([]);
+    const [aboutMe, setAboutMe] = useState("");
+    const [workExperience, setWorkExperience] = useState([
+        { title: "", description: "" },
+    ]);
+    const [education, setEducation] = useState([{ title: "", location: "" }]);
     const [skills, setSkills] = useState([]);
 
     const pdfExportRef = useRef();
@@ -38,16 +33,31 @@ const Resume = () => {
     // ...
 
     // Function to generate the PDF
+
     function generatePDF() {
         pdfExportRef.current.save();
     }
+
+    useEffect(() => {
+        axios
+            .get("http://localhost:8080/api/users/user/" + user)
+            .then((res) => {
+                console.log(res.data);
+                setPersonalInfo(res.data);
+
+                // ibutang sa user na variable ang data gikan DB
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, [personalInfo]);
 
     // Render the resume builder form
     return (
         <div className="resume_container">
             <div className="header_resume">
                 <button className="button_pdf" onClick={generatePDF}>
-                    Generate PDF
+                    Download PDF
                 </button>
             </div>
 
@@ -64,7 +74,10 @@ const Resume = () => {
                             <div className="profile_info_resume">
                                 <FaUserAlt className="icon_fullName" />
                                 <h1>Full Name </h1>
-                                <p>Jennie Kim Pang</p>
+                                <p>
+                                    {personalInfo.firstName}{" "}
+                                    {personalInfo.lastName}
+                                </p>
                             </div>
                             <div className="profile_info_resume">
                                 <AiFillHome className="icon_fullName" />
@@ -141,6 +154,7 @@ const Resume = () => {
                         </div>
                     </div>
                 </div>
+
                 {/* Work experience, education, and skills sections will go here */}
             </PDFExport>
         </div>

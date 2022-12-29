@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import "./Event.css";
 
 import madara from "../../images/madara.jpg";
+import ScrollToTop from "../ScrollToTop/ScrollToTop";
 
 const Event = () => {
     const { id } = useParams(); // get the id from the URL
@@ -24,6 +25,7 @@ const Event = () => {
     }, [id]);
     return (
         <div className="event_container">
+            <ScrollToTop />
             <div className="events_header">
                 <h1>Events</h1>
             </div>
@@ -52,7 +54,7 @@ const Event = () => {
                     </div>
                 </div>
 
-                <div className="event_body_description"></div>
+                <div className="event_markRead"></div>
             </div>
         </div>
     );

@@ -9,6 +9,7 @@ import { AiTwotoneRightCircle } from "react-icons/ai";
 //image
 import dash from "../../images/dash.png";
 import employment from "../../images/employment.png";
+import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 
 const Home = ({ theme }) => {
     const [open, setOpen] = useState(false);
@@ -46,6 +47,7 @@ const Home = ({ theme }) => {
     }, [empStatCount]);
     return (
         <div className="main_containers">
+            <ScrollToTop />
             <div className="home_bar">
                 <h5 className="h5">Home</h5>
             </div>
