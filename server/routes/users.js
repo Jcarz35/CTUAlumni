@@ -344,6 +344,35 @@ router.get("/countEmploymentStatus", async (req, res) => {
     }
 });
 
+//para change sa notifications  read to true
+router.put("/changeRead/:id", async (req, res) => {
+    const userId = req.params.id;
+    // console.log("user ID ni", userId);
+
+    const notificationId = req.body.notificationId;
+    // console.log("notification id nga na click na notification", notificationId);
+
+    const updateResult = await User.updateOne(
+        {
+            _id: userId,
+            "notification.notificationId": req.body.notificationId,
+        },
+        { $set: { "notification.$.read": true } }
+    );
+    res.send(updateResult);
+});
+
+//para cound sa notifications nga wapa na read
+router.get("/countUnReadEvents/:id", async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+        const count = user.notification.filter((n) => n.read === false).length;
+        res.status(200).send({ count });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 //find and update for resume
 router.put("/updateResume", async (req, res) => {
     const id = req.body.id;
@@ -391,4 +420,40 @@ router.put("/updateResume", async (req, res) => {
     res.send("Updated");
 });
 
+//find and update or add honor and award
+router.put("/addAward", (req, res) => {
+    const newAward = {
+        awardName: req.body.awardName,
+        issuer: req.body.issuer,
+        dateIssued: req.body.dateIssued,
+        description: req.body.awardDescription,
+    };
+    User.updateOne(
+        { _id: req.body.id },
+        { $push: { award: newAward } },
+        function (error) {
+            if (error) {
+                res.status(500).send(error);
+            } else {
+                res.send("Award added successfully");
+            }
+        }
+    );
+});
+
+router.put("/deleteAward/:awardId", (req, res) => {
+    console.log("userId", req.body.userId);
+    console.log("Deleting", req.params.awardId);
+    User.updateOne(
+        { _id: req.body.userId },
+        { $pull: { award: { _id: req.params.awardId } } },
+        function (error) {
+            if (error) {
+                res.status(500).send(error);
+            } else {
+                res.send("Award deleted successfully");
+            }
+        }
+    );
+});
 module.exports = router;

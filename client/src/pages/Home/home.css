@@ -1,13 +1,3 @@
-:root {
-    --background: #eff2f4;
-    --white: #fff;
-    --active: #e3fcf7;
-    --dark-main-background: #191d33;
-    --dark-background: #293146;
-    --light-dark-background: rgb(71, 70, 78);
-    --gray-h1-p: rgb(169, 166, 189);
-    --light-violet: #8790c4;
-}
 .main_containers {
     display: flex;
     flex-direction: column;

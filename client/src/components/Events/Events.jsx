@@ -140,7 +140,6 @@ const Events = ({ user }) => {
                                     height: openDialog ? "500px" : "0px",
                                     width: "550px",
                                 }}
-                                transition={{ type: "spring", stiffness: 300 }}
                                 className="sidebar_dialog"
                             >
                                 <div className="header_job">

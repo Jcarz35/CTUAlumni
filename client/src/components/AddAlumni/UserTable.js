@@ -5,16 +5,6 @@ import "./addalumni.css";
 import Axios, { AxiosError } from "axios";
 import { useState, useEffect } from "react";
 
-//para dialog
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-
-// icons
-import { RiDeleteBin5Line } from "react-icons/ri";
-import { GrFormClose } from "react-icons/gr";
-import { AiOutlineCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
-
 //loading spinner
 import FadeLoader from "react-spinners/FadeLoader";
 

@@ -1,19 +1,4 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
-:root {
-    --light-blue: #019ff8;
-    --gray-icons: #494343;
-    --light-gray-icons: rgb(212, 209, 209);
-    --green: rgb(1, 53, 1);
-    --active: #e3fcf7;
-
-    --blue-link: rgb(41, 41, 211);
-    --background: #f6f9fb;
-    --white: #fff;
-    --dark-main-background: #191d33;
-    --dark-background: #293146;
-    --dark-Username: #212744;
-    --light-violet: #8790c4;
-}
 
 .verify_container {
     margin: 0;
@@ -36,7 +21,7 @@
     font-weight: normal;
 }
 #dark .header_verify h5 {
-    color: rgb(144, 144, 144);
+    color: var(--active);
 }
 
 .verify_body {

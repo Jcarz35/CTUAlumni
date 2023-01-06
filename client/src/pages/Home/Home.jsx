@@ -4,16 +4,13 @@ import "./home.css";
 import axios from "axios";
 
 //icons
-import { AiTwotoneRightCircle } from "react-icons/ai";
 
 //image
 import dash from "../../images/dash.png";
-import employment from "../../images/employment.png";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 
 const Home = ({ theme }) => {
     const [open, setOpen] = useState(false);
-    const toggle_arrow = () => setOpen(!open);
     const [quotes, setQuotes] = useState(false);
 
     useEffect(() => {

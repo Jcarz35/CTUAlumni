@@ -22,16 +22,25 @@ const userSchema = new mongoose.Schema({
     course: { type: String },
     schoolYear: { type: Number },
     empStat: { type: String },
-    notification: [String],
-    // notification: [
-    //     {
-    //         notificationId: { type: String },
-    //         title: { type: String },
-    //         description: { type: String },
-    //         date: { type: Date, default: Date.now },
-    //         read: { type: Boolean, default: false },
-    //     },
-    // ],
+
+    notification: [
+        {
+            notificationId: { type: String },
+            title: { type: String },
+            description: { type: String },
+            date: { type: Date, default: Date.now },
+            read: { type: Boolean, default: false },
+        },
+    ],
+
+    award: [
+        {
+            awardName: { type: String },
+            issuer: { type: String },
+            dateIssued: { type: String },
+            description: { type: String },
+        },
+    ],
 
     experience: [{ title: String, description: String }],
     education: [{ title: String, location: String }],

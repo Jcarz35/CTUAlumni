@@ -1,18 +1,3 @@
-:root {
-    --light-blue: #019ff8;
-    --gray-icons: #494343;
-    --light-gray-icons: rgb(212, 209, 209);
-    --green: #007352;
-    --active: #e3fcf7;
-
-    --blue-link: rgb(41, 41, 211);
-    --background: #eff2f4;
-    --white: #fff;
-    --dark-main-background: #191d33;
-    --dark-background: #293146;
-    --dark-Username: #212744;
-    --light-violet: #8790c4;
-}
 .jobposting_containers {
     display: flex;
     justify-content: center;

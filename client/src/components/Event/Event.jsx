@@ -3,7 +3,6 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import "./Event.css";
 
-import madara from "../../images/madara.jpg";
 import ScrollToTop from "../ScrollToTop/ScrollToTop";
 
 const Event = () => {

@@ -7,6 +7,11 @@ import axios from "axios";
 import { format } from "timeago.js";
 import { useParams } from "react-router-dom";
 
+//para dialog
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+
 //icons
 import { FaBars, FaUser } from "react-icons/fa";
 import { FaRegWindowClose } from "react-icons/fa";
@@ -15,25 +20,36 @@ import {
     AiOutlineHome,
     AiOutlineUserAdd,
     AiOutlineUsergroupAdd,
+    AiFillFilePpt,
+    AiFillFilePdf,
 } from "react-icons/ai";
 import { VscCalendar } from "react-icons/vsc";
-import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { IoMdNotifications, IoMdNotificationsOutline } from "react-icons/io";
 import { FiMoon } from "react-icons/fi";
-import { BsSun } from "react-icons/bs";
-import { BiUser, BiFile } from "react-icons/bi";
+import { BsFilePerson, BsPersonSquare, BsSun } from "react-icons/bs";
+import { BiUser, BiFile, BiUserVoice } from "react-icons/bi";
 import { TbListDetails } from "react-icons/tb";
 
 import { Link, NavLink } from "react-router-dom";
 import { useState, useEffect } from "react";
 
+import Snackbar from "../../components/Snackbar/Snackbar";
+
 //images
 import ctu from "../../images/ctu.png";
+import { IoCloseCircleSharp, IoCloseSharp } from "react-icons/io5";
 // import Snackbar from "../Snackbar/Snackbar";
 
 const Main = ({ children, theme, toggleTheme, user }) => {
     //para events
     const [data, setData] = useState([]);
+
+    //snackbar
+    const [showSnackbar, setShowSnackbar] = useState(false);
+    const SnackbarType = {
+        success: "success",
+        fail: "fail",
+    };
 
     ///para ig click ma mark as read na ang notif
     const [clicked, setClicked] = useState(false);
@@ -55,7 +71,38 @@ const Main = ({ children, theme, toggleTheme, user }) => {
         }, 1000);
     };
 
+    // let count = 0;
+    // userInfo.notification.map((data) => {
+    //     if (data.read === false) {
+    //         count++;
+    //     }
+    // });
     // para kuha sa usa ka data sa user
+    // const count = userInfo.reduce((acc, user) => {
+    //     return (
+    //         acc +
+    //         user.notification.filter(
+    //             (notification) => notification.read === false
+    //         ).length
+    //     );
+    // }, 0);
+
+    // para count sa notifications nga wa pa na read
+    const [count, setCount] = useState(0);
+    useEffect(() => {
+        axios
+            .get("http://localhost:8080/api/users/countUnreadEvents/" + user)
+            .then((res) => {
+                setCount(res.data);
+
+                // ibutang sa user na variable ang data gikan DB
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, [count]);
+
+    //para kuha sa User info sa usa
     const [userInfo, setUserInfo] = useState([]);
     useEffect(() => {
         axios
@@ -69,15 +116,7 @@ const Main = ({ children, theme, toggleTheme, user }) => {
             });
     }, [userInfo]);
 
-    //para count sa notifications nga wala pa nabasa
-    let count = 0;
-    data.map((data) => {
-        if (data.read === false) {
-            count++;
-        }
-    });
-
-    //fetch all events
+    //fetch all events para ibutang sa notification
     useEffect(() => {
         axios
             .get(`http://localhost:8080/api/events/all/${user}`)
@@ -91,13 +130,38 @@ const Main = ({ children, theme, toggleTheme, user }) => {
             });
     }, [data]);
 
+    // Dialog
+    const [openDialog, setOpenDialog] = useState(false);
+    const handleClickOpen = () => {
+        setOpenDialog(true);
+    };
+    const handleClose = () => {
+        setOpenDialog(false);
+    };
+    // para request og alumni id
+    const [email, setEmail] = useState();
+    const handleSubmit = () => {
+        axios.post("http://localhost:8080/api/requests/addRequest", {
+            email: email,
+            ownerId: userInfo._id,
+            firstName: userInfo.firstName,
+            lastName: userInfo.lastName,
+        });
+        handleClose();
+        setShowSnackbar(true);
+        setTimeout(() => {
+            setShowSnackbar(false);
+        }, 3000);
+    };
+    const changeRead = (id, notificationID) => {
+        axios.put("http://localhost:8080/api/users/changeRead/" + id, {
+            notificationId: notificationID,
+        });
+    };
+
     // para funtionalities sa button
     const [isOpen, setIsOpen] = useState(true);
     const toggle = () => setIsOpen(!isOpen);
-
-    // para sa alumni navigations
-    const [open, setOpen] = useState(false);
-    const toggle_arrow = () => setOpen(!open);
 
     // para sa jobs na navigation
     const [opens, setOpens] = useState(false);
@@ -113,6 +177,16 @@ const Main = ({ children, theme, toggleTheme, user }) => {
 
     return (
         <div className="main_container">
+            {/* snackbar notif */}
+            <div
+                className="snackbar_position"
+                id={showSnackbar ? "show" : "hide"}
+            >
+                <Snackbar
+                    message={"Request Successfully"}
+                    type={SnackbarType.success}
+                />
+            </div>
             <div className="blur" style={{ top: "-18%", right: "0" }}></div>
             <div className="blur" style={{ top: "36%", left: "-8rem" }}></div>
 
@@ -152,16 +226,20 @@ const Main = ({ children, theme, toggleTheme, user }) => {
                 >
                     <div className="icon">{<BiFile />}</div>
                 </NavLink>
-                <NavLink
-                    exact={true}
-                    to={"/addalumni"}
-                    key={"AddAlumni"}
-                    className={({ isActive }) =>
-                        isActive ? "sidebar_active" : "sidebar_icon"
-                    }
-                >
-                    <div className="icon">{<AiOutlineUsergroupAdd />}</div>
-                </NavLink>
+
+                {/* add alumni nav icon */}
+                {userInfo.isAdmin && (
+                    <NavLink
+                        exact={true}
+                        to={"/addalumni"}
+                        key={"AddAlumni"}
+                        className={({ isActive }) =>
+                            isActive ? "sidebar_active" : "sidebar_icon"
+                        }
+                    >
+                        <div className="icon">{<AiOutlineUsergroupAdd />}</div>
+                    </NavLink>
+                )}
 
                 {/* events nav button */}
                 <NavLink
@@ -174,6 +252,19 @@ const Main = ({ children, theme, toggleTheme, user }) => {
                 >
                     <div className="icon">{<VscCalendar />}</div>
                 </NavLink>
+
+                {userInfo.isAdmin && (
+                    <NavLink
+                        exact={true}
+                        to={"/requestId"}
+                        key={"RequestId"}
+                        className={({ isActive }) =>
+                            isActive ? "sidebar_active" : "sidebar_icon"
+                        }
+                    >
+                        <div className="icon">{<BiUserVoice />}</div>
+                    </NavLink>
+                )}
             </div>
 
             {/*SideBar Links */}
@@ -266,67 +357,32 @@ const Main = ({ children, theme, toggleTheme, user }) => {
 
                                     {/* Arrow Button*/}
                                 </NavLink>
-                                <div className="arrow_icon_holder">
-                                    <div className="arrow_icon">
-                                        {
-                                            <MdOutlineKeyboardArrowRight
-                                                className={`toggle_btn ${
-                                                    opens ? "rotate" : ""
-                                                }`}
-                                                onClick={toggle_arrows}
-                                                id="toggle_btn"
-                                            />
-                                        }
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Submenu*/}
-                            <div
-                                className={({ open }) =>
-                                    open ? "submenu_open" : "submenu"
-                                }
-                            >
-                                <NavLink
-                                    exact={true}
-                                    to={"/createjob"}
-                                    key={"CreateJob"}
-                                    className={({ isActive }) =>
-                                        isActive
-                                            ? "active_sub_link"
-                                            : "sub_link"
-                                    }
-                                >
-                                    {opens && (
-                                        <div className="link_text_submenu">
-                                            {"Post Job"}
-                                        </div>
-                                    )}
-                                </NavLink>
                             </div>
                         </div>
 
                         {/* Alumni Button Menu*/}
-                        <div className="link_holder">
-                            <div className="link_container">
-                                <NavLink
-                                    exact={true}
-                                    to={"/addalumni"}
-                                    key={"AddAlumni"}
-                                    className={({ isActive }) =>
-                                        isActive ? "active" : "link"
-                                    }
-                                >
-                                    {isOpen && (
-                                        <div className="link_text">
-                                            {"Add Alumni"}
-                                        </div>
-                                    )}
+                        {userInfo.isAdmin && (
+                            <div className="link_holder">
+                                <div className="link_container">
+                                    <NavLink
+                                        exact={true}
+                                        to={"/addalumni"}
+                                        key={"AddAlumni"}
+                                        className={({ isActive }) =>
+                                            isActive ? "active" : "link"
+                                        }
+                                    >
+                                        {isOpen && (
+                                            <div className="link_text">
+                                                {"Add Alumni"}
+                                            </div>
+                                        )}
 
-                                    {/* Arrow Button*/}
-                                </NavLink>
+                                        {/* Arrow Button*/}
+                                    </NavLink>
+                                </div>
                             </div>
-                        </div>
+                        )}
 
                         {/* Events Button Menu*/}
                         <div className="link_holder">
@@ -373,10 +429,33 @@ const Main = ({ children, theme, toggleTheme, user }) => {
                                 </NavLink>
                             </div> */}
                         </div>
+
+                        {/* Requested ID Button Menu*/}
+                        {userInfo.isAdmin && (
+                            <div className="link_holder">
+                                <div className="link_container">
+                                    <NavLink
+                                        exact={true}
+                                        to={"/requestId"}
+                                        key={"RequestId"}
+                                        className={({ isActive }) =>
+                                            isActive ? "active" : "link"
+                                        }
+                                    >
+                                        {isOpen && (
+                                            <div className="link_text">
+                                                {"Requested ID"}
+                                            </div>
+                                        )}
+
+                                        {/* Arrow Button*/}
+                                    </NavLink>
+                                </div>
+                            </div>
+                        )}
                     </section>
                 )}
             </motion.div>
-
             {/*Right container  */}
             <div className="right_container">
                 {/*Navbar og title bar sa taas */}
@@ -404,10 +483,14 @@ const Main = ({ children, theme, toggleTheme, user }) => {
                                 <IoMdNotificationsOutline className="icon" />
                             )}
                             {/* <span className="topIconBadge">{count}</span> */}
-                            {count > 0 ? (
-                                <span className="topIconBadge">{count}</span>
+                            {count.count > 0 ? (
+                                <span className="topIconBadge">
+                                    {count.count}
+                                </span>
                             ) : null}
                         </div>
+
+                        {/* dropdown para notificacion */}
                         <motion.div
                             animate={{
                                 height: openNotification ? "570px" : "0",
@@ -418,15 +501,25 @@ const Main = ({ children, theme, toggleTheme, user }) => {
                                 {openNotification && (
                                     <h1 className="h1">Events Notifications</h1>
                                 )}
+
                                 {openNotification &&
-                                    data
+                                    userInfo.notification
                                         .map((val, key) => {
                                             return (
                                                 <Link
-                                                    key={val._id}
-                                                    to={"/event/" + val._id}
+                                                    key={val.notificationId}
+                                                    to={
+                                                        "/event/" +
+                                                        val.notificationId
+                                                    }
                                                     className="event_cards_notif"
                                                     title="Click me"
+                                                    onClick={() => {
+                                                        changeRead(
+                                                            userInfo._id,
+                                                            val.notificationId
+                                                        );
+                                                    }}
                                                 >
                                                     <h5>{val.title}</h5>
                                                     {}
@@ -543,13 +636,27 @@ const Main = ({ children, theme, toggleTheme, user }) => {
                                         }
                                     >
                                         <div className="icons">
-                                            {<TbListDetails />}
+                                            {<AiFillFilePdf />}
                                         </div>
 
                                         <div className="right_link_text">
-                                            {"Build a Resume"}
+                                            {"Build a resume"}
                                         </div>
                                     </NavLink>
+                                </div>
+
+                                {/* Request Id nav  */}
+                                <div className="right_link_holder">
+                                    <div className="button_request_id">
+                                        <button
+                                            className="requestId"
+                                            title="button"
+                                            onClick={handleClickOpen}
+                                        >
+                                            <BsPersonSquare className="icon" />
+                                            <p>Request Alumni Id</p>
+                                        </button>
+                                    </div>
                                 </div>
 
                                 {/* logout */}
@@ -576,6 +683,52 @@ const Main = ({ children, theme, toggleTheme, user }) => {
                     </nav>
                 </div>
 
+                {/* Dialog para request og ID */}
+                <Dialog
+                    className="Id_request_dialog"
+                    open={openDialog}
+                    onClose={handleClose}
+                >
+                    <motion.div
+                        animate={{
+                            height: openDialog ? "260px" : "0px",
+                            width: "450px",
+                        }}
+                        className="Id_request_dialog_div"
+                    >
+                        <div className="header_job">
+                            <DialogTitle>
+                                <h5>Would you like to request an Alumni ID?</h5>
+                            </DialogTitle>
+                            <Button className="btn_close" onClick={handleClose}>
+                                <IoCloseCircleSharp className="close_icon" />
+                            </Button>
+                        </div>
+
+                        <div className="id_input_holder">
+                            <h5>Email</h5>
+                            <input
+                                style={{ border: "1px solid gray" }}
+                                name="job_title"
+                                type="email"
+                                className="job_title"
+                                required
+                                placeholder="Enter a valid email address"
+                                onChange={(e) => setEmail(e.target.value)}
+                            ></input>
+                        </div>
+
+                        <div className="button_save_id">
+                            <button
+                                onClick={() => {
+                                    handleSubmit();
+                                }}
+                            >
+                                Yes Please
+                            </button>
+                        </div>
+                    </motion.div>
+                </Dialog>
                 {/*Container para sa mga Router link */}
                 <main className="side_container">{children}</main>
             </div>

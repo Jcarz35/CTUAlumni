@@ -23,6 +23,7 @@ import Event from "./components/Event/Event";
 import Resume from "./components/Resume/Resume";
 import ResumeBuilder from "./components/ResumeBuilder/ResumeBuilder";
 import JobList from "./components/JobPosting/JobList/JobList"; //acceptjob ni
+import RequestList from "./components/Request/RequestList";
 
 export const ThemeContext = createContext(null);
 
@@ -103,6 +104,11 @@ function App() {
                                 path="/event/:id"
                                 exact
                                 element={<Event user={user} />}
+                            ></Route>
+                            <Route
+                                path="/requestId"
+                                exact
+                                element={<RequestList user={user} />}
                             ></Route>
                             <Route
                                 path="/resume"

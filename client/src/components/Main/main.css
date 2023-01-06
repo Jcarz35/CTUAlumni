@@ -9,8 +9,8 @@
     --blue-link: rgb(41, 41, 211);
     --background: #eff2f4;
     --white: #fff;
-    --dark-main-background: #191d33;
-    --dark-background: #293146;
+    --dark-background: #373b42;
+    --dark-main-background: #2c2d2e;
     --dark-Username: #212744;
     --light-violet: #8790c4;
 }
@@ -434,17 +434,59 @@
 .topIconBadge {
     position: absolute;
     color: white;
-    height: 15px;
-    width: 15px;
+    height: 21px;
+    width: 21px;
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: red;
     border-radius: 50%;
     font-size: 12px;
-    top: -3px;
-    right: 0;
+    top: -6px;
+    right: -2px;
     font-weight: 600;
+    border: 2px solid rgb(244, 246, 247);
+}
+#dark .topIconBadge {
+    border: 2px solid rgb(36, 34, 34);
+}
+
+.Id_request_dialog {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    width: 450px;
+    height: 100%;
+}
+.header_job h5 {
+    font-size: 16px;
+}
+
+.Id_request_dialog .id_input_holder {
+    margin: 25px 25px;
+}
+.id_input_holder input {
+    margin-top: 2px;
+    width: 100%;
+    border: none;
+    background-color: var(--active);
+    border-radius: 3px;
+}
+.button_save_id {
+    display: flex;
+    justify-content: end;
+    margin: 20px 25px;
+}
+.button_save_id button {
+    outline: none;
+    border: none;
+    cursor: pointer;
+    color: green;
+    border-radius: 4px;
+    background-color: rgb(192, 238, 192);
+    padding: 5px;
+    width: 110px;
 }
 
 /* snackbar /toast notification */
@@ -518,13 +560,13 @@
 
 #dark .notificationContainer {
     /* background-color: rgb(79, 80, 79); */
-    background-color: #373b42;
+    background-color: #4e5055;
     box-shadow: 1px 13px 26px 1px rgba(68, 64, 64, 0.75);
     -webkit-box-shadow: 1px 13px 26px 1px rgba(31, 26, 26, 0.75);
     -moz-box-shadow: 1px 13px 26px 1px rgba(82, 77, 77, 0.75);
 }
 .notificationContainer .h1 {
-    font-size: 18px;
+    font-size: 17px;
     margin-top: 15px;
     margin-left: 20px;
     margin-bottom: 15px;
@@ -763,6 +805,55 @@ p {
     display: flex;
     align-items: center;
 }
+.button_request_id {
+    height: 25px;
+    width: 197px;
+}
+.requestId {
+    background-color: white;
+    cursor: pointer;
+    display: flex;
+    gap: 5px;
+    border: none;
+    padding: 0;
+    color: gray;
+    font-size: 12px;
+    height: 30px;
+    padding-top: 3.5px;
+}
+#dark .requestId {
+    background-color: #212744;
+}
+.requestId:hover {
+    background-color: #e7e6e6;
+    width: 220px;
+    color: green;
+    margin-left: 0;
+}
+
+.requestId:hover p {
+    color: green;
+}
+#dark .requestId:hover p {
+    color: var(--active);
+}
+.requestId .icon {
+    padding: 0;
+    margin: 0;
+    font-size: 15px;
+    margin-left: 2.5px;
+    margin-top: 1px;
+}
+#dark .requestId:hover .icon {
+    color: var(--active);
+}
+.requestId p {
+    margin-left: 2px;
+    margin-top: -3px;
+    color: gray;
+    font-size: 15px;
+}
+
 .right_link_active {
     display: flex;
     width: 220px;
@@ -822,7 +913,6 @@ p {
     flex: 1;
     z-index: 2;
     margin-top: 50px;
-
     height: 100%;
     background-color: var(--white);
 }

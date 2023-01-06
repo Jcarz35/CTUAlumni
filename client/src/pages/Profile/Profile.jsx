@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import "./profile.css";
+import { motion } from "framer-motion";
 
 //para dialog
 import Button from "@mui/material/Button";
@@ -12,12 +13,16 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { FaUserCircle, FaSave } from "react-icons/fa";
 import { BsFillCameraFill } from "react-icons/bs";
 import { AiOutlinePlus } from "react-icons/ai";
+import { IoCloseCircleSharp, IoCloseSharp } from "react-icons/io5";
+
 //images
 import Snackbar from "../../components/Snackbar/Snackbar";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
+import JobDetails from "./JobDetails/JobDetails";
 
 const Profile = ({ user }) => {
     const [userInfo, setUserInfo] = useState([]);
+    const [userId, setUserId] = useState();
 
     const [newfirstName, setFirstName] = useState(userInfo.firstName);
     const [newlastName, setLastName] = useState(userInfo.lastName);
@@ -34,9 +39,7 @@ const Profile = ({ user }) => {
     const [birthday, setBirthday] = useState();
 
     const [message, setMessage] = useState("");
-
-    //para enable sa companyName if empolyed ang alumni
-    const [disable, setDisable] = useState(true);
+    const [awards, setAwards] = useState([]);
 
     // para Dialog sa Image upload
     const [open, setOpen] = useState(false);
@@ -47,12 +50,12 @@ const Profile = ({ user }) => {
         setOpen(false);
     };
 
-    // para state sa file
+    // para state sa file sa profile picture
     const onChangeFile = (e) => {
         setFileName(e.target.files[0]);
     };
 
-    // changeOnClick formdata
+    //  formdata para update sa profile picture
     const changeOnClick = (e) => {
         e.preventDefault();
         const formData = new FormData();
@@ -82,14 +85,14 @@ const Profile = ({ user }) => {
         success: "success",
         fail: "fail",
     };
-
     // para kuha sa usa ka data sa user
     useEffect(() => {
         axios
             .get("http://localhost:8080/api/users/user/" + user)
             .then((res) => {
-                console.log(res.data);
                 setUserInfo(res.data);
+                setUserId(res.data._id);
+                setAwards(res.data.award);
 
                 // ibutang sa user na variable ang data gikan DB
             })
@@ -98,7 +101,7 @@ const Profile = ({ user }) => {
             });
     }, [userInfo]);
 
-    //update call api
+    //update call api for user details
     const updateUser = (id) => {
         const formData = new FormData();
         formData.append("profilePic", fileName);
@@ -128,6 +131,108 @@ const Profile = ({ user }) => {
             });
     };
 
+    const [jobDetails, setJobDetails] = useState([]);
+    useEffect(() => {
+        const fetchJobs = async () => {
+            try {
+                const res = await axios.get(
+                    `http://localhost:8080/api/jobDetails/jobs/${userId}`
+                );
+                setJobDetails(res.data);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+        fetchJobs();
+    }, [jobDetails]);
+
+    //para job details sa user
+    // Dialog para job
+    const [openDialogJob, setOpenDialogJob] = useState(false);
+    const handleClickOpenJob = () => {
+        setOpenDialogJob(true);
+    };
+    const handleCloseJob = () => {
+        setOpenDialogJob(false);
+    };
+
+    const [jobTitle, setJobTitle] = useState();
+    const [companyName, setCompanyName] = useState();
+    const [companyAddress, setCompanyAddress] = useState();
+    const [fileNameJob, setFileNameJob] = useState();
+
+    const onChangeFileJob = (e) => {
+        setFileNameJob(e.target.files[0]);
+    };
+
+    //sa form para job details ig submit
+    const changeOnClickJob = async (e) => {
+        e.preventDefault();
+        const formDatas = new FormData();
+        formDatas.append("id", userInfo._id);
+        formDatas.append("jobTitle", jobTitle);
+        formDatas.append("companyName", companyName);
+        formDatas.append("companyAddress", companyAddress);
+        formDatas.append("companyId", fileNameJob);
+        axios
+            .put(
+                "http://localhost:8080/api/jobDetails/addJobDetails",
+                formDatas
+            )
+            .then(() => {
+                setShowSnackbar(true);
+                setTimeout(() => {
+                    setShowSnackbar(false);
+                }, 3000);
+            });
+    };
+
+    // =============================================================
+    //para Honor and Award details sa user
+    const [awardName, setAwardName] = useState();
+    const [issuer, setIssuer] = useState();
+    const [dateIssued, setDateIssued] = useState();
+    const [awardDescription, setAwardDescription] = useState();
+    // Dialog para Award
+    const [openDialogAward, setOpenDialogAward] = useState(false);
+    const handleClickOpenAward = () => {
+        setOpenDialogAward(true);
+    };
+    const handleCloseAward = () => {
+        setOpenDialogAward(false);
+    };
+    //sa form para Award details ig submit
+    const changeOnClickAward = async (e) => {
+        e.preventDefault();
+
+        axios
+            .put("http://localhost:8080/api/users/addAward", {
+                id: userInfo._id,
+                awardName: awardName,
+                issuer: issuer,
+                dateIssued: dateIssued,
+                awardDescription: awardDescription,
+            })
+            .then(() => {
+                setShowSnackbar(true);
+                setTimeout(() => {
+                    setShowSnackbar(false);
+                }, 3000);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+    // para delete sa award
+    const handleDeleteAward = (awardId) => {
+        axios
+            .put(`http://localhost:8080/api/users/deleteAward/${awardId}`, {
+                userId: userId,
+            })
+            .then((res) => {
+                setAwards(awards.filter((award) => award._id !== awardId));
+            });
+    };
     return (
         <div className="edit_user_container">
             <ScrollToTop />
@@ -168,7 +273,7 @@ const Profile = ({ user }) => {
                                 </div>
                             </label>
 
-                            {/* save dialog */}
+                            {/* save dialog  para sa upload pictures*/}
                             <Dialog
                                 open={open}
                                 onClose={handleClose}
@@ -185,7 +290,7 @@ const Profile = ({ user }) => {
                                         x
                                     </Button>
                                 </div>
-
+                                {/* form para upload og profile picture */}
                                 <form
                                     onSubmit={changeOnClick}
                                     encType="multipart/form-data"
@@ -473,17 +578,404 @@ const Profile = ({ user }) => {
                         </div>
                     </div>
 
-                    {/* job details */}
-                    {newempstat === "Employed" && (
-                        <div className="job_profile_section">
-                            <div className="jps_header">
-                                <h1>Job Details</h1>
-                                <AiOutlinePlus className="icon" />
+                    {/* job details container*/}
+                    <div className="job_profile_section">
+                        <div className="jps_header">
+                            <h1>Job Details</h1>
+                            <AiOutlinePlus
+                                className="icon"
+                                onClick={handleClickOpenJob}
+                            />
+                        </div>
+
+                        <div className="job_profile_section_body">
+                            {/* Job details Map */}
+                            {jobDetails.map((jobDetail) => (
+                                <div
+                                    key={jobDetail._id}
+                                    className="jobDetails_card"
+                                >
+                                    <h5>
+                                        {"Job Title: "}
+                                        {jobDetail.title}
+                                    </h5>
+                                    <p style={{ "margin-bottom": 0 }}>
+                                        {"Compay Name: "}
+                                        {jobDetail.companyName}
+                                    </p>
+                                    <p style={{ "margin-bottom": 0 }}>
+                                        {"Company Address: "}
+                                        {jobDetail.companyAddress}
+                                    </p>
+                                    {jobDetail.companyId === "N/A" ? null : (
+                                        <a
+                                            href={`http://localhost:8080/companyId/${jobDetail.companyId}`}
+                                            title="Click to open Image"
+                                            target="_blank"
+                                            download
+                                            // style={{ height: 200, width: 120 }}
+                                        >
+                                            Company Id
+                                        </a>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Award details container */}
+                    <div className="job_profile_section">
+                        <div className="jps_header">
+                            <h1>Honor & Awards</h1>
+                            <AiOutlinePlus
+                                className="icon"
+                                onClick={handleClickOpenAward}
+                            />
+                        </div>
+
+                        <div className="job_profile_section_body">
+                            {/* Awards details .map */}
+                            {awards &&
+                                awards.map((award, index) => {
+                                    return (
+                                        <div key={index}>
+                                            <h1>{award.awardName}</h1>
+                                            <button
+                                                onClick={() =>
+                                                    handleDeleteAward(award._id)
+                                                }
+                                            >
+                                                Delete
+                                            </button>
+                                        </div>
+                                    );
+                                })}
+                        </div>
+                    </div>
+
+                    {/* dialog para add og job details sa User */}
+                    <Dialog
+                        className="job_details_dialog"
+                        open={openDialogJob}
+                        onClose={handleCloseJob}
+                    >
+                        <motion.div
+                            animate={{
+                                height: openDialogJob ? "410px" : "0px",
+                                width: "550px",
+                            }}
+                            className="Id_request_dialog_div"
+                        >
+                            <div className="header_job">
+                                <DialogTitle>
+                                    <h5>Add Job Details</h5>
+                                </DialogTitle>
+                                <Button
+                                    className="btn_close"
+                                    onClick={handleCloseJob}
+                                >
+                                    <IoCloseCircleSharp className="close_icon" />
+                                </Button>
                             </div>
 
-                            <div className="job_profile_section_body"></div>
-                        </div>
-                    )}
+                            {/* form para sa Job Details */}
+                            <form
+                                encType="multipart/form-data"
+                                method="post"
+                                // onSubmit={(event) => {
+                                //     changeOnClickJob(userInfo._id, event);
+                                // }}
+
+                                onSubmit={changeOnClickJob}
+                                style={{ "margin-top": 15 }}
+                            >
+                                {/* Job Title */}
+                                <div
+                                    className="id_input_holder"
+                                    style={{
+                                        width: "90%",
+                                        margin: "5px auto",
+                                    }}
+                                >
+                                    <h5>Job Title</h5>
+                                    <input
+                                        style={{
+                                            border: "1px solid gray",
+                                            height: 35,
+                                            fontSize: 14,
+                                            padding: "1px 5px",
+                                            backgroundColor: "#edf7f8",
+                                        }}
+                                        type="text"
+                                        className="job_title"
+                                        required
+                                        placeholder="Ex. Carpenter"
+                                        name="jobTitle"
+                                        onChange={(e) =>
+                                            setJobTitle(e.target.value)
+                                        }
+                                    ></input>
+                                </div>
+
+                                {/* Company Name */}
+                                <div
+                                    className="id_input_holder"
+                                    style={{
+                                        width: "90%",
+                                        margin: "5px auto",
+                                    }}
+                                >
+                                    <h5>Company Name</h5>
+                                    <input
+                                        style={{
+                                            border: "1px solid gray",
+                                            height: 35,
+                                            fontSize: 14,
+                                            padding: "1px 5px",
+                                            backgroundColor: "#edf7f8",
+                                        }}
+                                        type="text"
+                                        className="job_title"
+                                        required
+                                        name="companyName"
+                                        onChange={(e) =>
+                                            setCompanyName(e.target.value)
+                                        }
+                                        // onChange={(e) => setEmail(e.target.value)}
+                                    ></input>
+                                </div>
+
+                                {/* Company Address */}
+                                <div
+                                    className="id_input_holder"
+                                    style={{
+                                        width: "90%",
+                                        margin: "5px auto",
+                                    }}
+                                >
+                                    <h5>Company Address</h5>
+                                    <input
+                                        style={{
+                                            border: "1px solid gray",
+                                            height: 35,
+                                            fontSize: 14,
+                                            padding: "1px 5px",
+                                            backgroundColor: "#edf7f8",
+                                        }}
+                                        type="text"
+                                        className="job_title"
+                                        required
+                                        name="companyAddress"
+                                        onChange={(e) =>
+                                            setCompanyAddress(e.target.value)
+                                        }
+                                        // onChange={(e) => setEmail(e.target.value)}
+                                    ></input>
+                                </div>
+
+                                {/* Company ID */}
+                                <div
+                                    className="id_input_holder"
+                                    style={{
+                                        width: "90%",
+                                        margin: "5px auto",
+                                    }}
+                                >
+                                    <h5>Company Id</h5>
+                                    <input
+                                        style={{
+                                            border: "1px solid gray",
+                                            height: 35,
+                                            fontSize: 14,
+                                            padding: "5px 5px",
+                                            backgroundColor: "#edf7f8",
+                                        }}
+                                        type="file"
+                                        name="companyId"
+                                        onChange={onChangeFileJob}
+                                        // onChange={(e) => setEmail(e.target.value)}
+                                    ></input>
+                                </div>
+
+                                <div
+                                    className="button_save_id"
+                                    style={{
+                                        width: "90%",
+                                        display: "flex",
+                                        justifyContent: "end",
+                                    }}
+                                >
+                                    <button
+                                        style={{ border: "1px solid green" }}
+                                        onClick={handleCloseJob}
+                                    >
+                                        Save
+                                    </button>
+                                </div>
+                            </form>
+                        </motion.div>
+                    </Dialog>
+
+                    {/* dialog para add og Honor and Awards details sa User */}
+                    <Dialog
+                        className="job_details_dialog"
+                        open={openDialogAward}
+                        onClose={handleCloseAward}
+                    >
+                        <motion.div
+                            animate={{
+                                height: openDialogAward ? "410px" : "0px",
+                                width: "550px",
+                            }}
+                            className="Id_request_dialog_div"
+                        >
+                            <div className="header_job">
+                                <DialogTitle>
+                                    <h5>Add Job Details</h5>
+                                </DialogTitle>
+                                <Button
+                                    className="btn_close"
+                                    onClick={handleCloseAward}
+                                >
+                                    <IoCloseCircleSharp className="close_icon" />
+                                </Button>
+                            </div>
+
+                            {/* form para sa Job Details */}
+                            <form
+                                encType="multipart/form-data"
+                                method="post"
+                                onSubmit={changeOnClickAward}
+                                style={{ "margin-top": 15 }}
+                            >
+                                {/* Award Name*/}
+                                <div
+                                    className="id_input_holder"
+                                    style={{
+                                        width: "90%",
+                                        margin: "5px auto",
+                                    }}
+                                >
+                                    <h5>Name</h5>
+                                    <input
+                                        style={{
+                                            border: "1px solid gray",
+                                            height: 35,
+                                            fontSize: 14,
+                                            padding: "1px 5px",
+                                            backgroundColor: "#edf7f8",
+                                        }}
+                                        type="text"
+                                        className="job_title"
+                                        required
+                                        placeholder="Ex. Employee of the Year"
+                                        name="jobTitle"
+                                        onChange={(e) =>
+                                            setAwardName(e.target.value)
+                                        }
+                                    ></input>
+                                </div>
+
+                                {/* Issuer*/}
+                                <div
+                                    className="id_input_holder"
+                                    style={{
+                                        width: "90%",
+                                        margin: "5px auto",
+                                    }}
+                                >
+                                    <h5>Issuer</h5>
+                                    <input
+                                        style={{
+                                            border: "1px solid gray",
+                                            height: 35,
+                                            fontSize: 14,
+                                            padding: "1px 5px",
+                                            backgroundColor: "#edf7f8",
+                                        }}
+                                        type="text"
+                                        className="job_title"
+                                        required
+                                        name="jobTitle"
+                                        onChange={(e) =>
+                                            setIssuer(e.target.value)
+                                        }
+                                    ></input>
+                                </div>
+
+                                {/* Date issued */}
+                                <div
+                                    className="id_input_holder"
+                                    style={{
+                                        width: "90%",
+                                        margin: "5px auto",
+                                    }}
+                                >
+                                    <h5>Date Issued</h5>
+                                    <input
+                                        style={{
+                                            border: "1px solid gray",
+                                            height: 35,
+                                            fontSize: 14,
+                                            padding: "1px 5px",
+                                            backgroundColor: "#edf7f8",
+                                        }}
+                                        type="date"
+                                        className="job_title"
+                                        required
+                                        name="dateIssued"
+                                        onChange={(e) =>
+                                            setDateIssued(e.target.value)
+                                        }
+                                        // onChange={(e) => setEmail(e.target.value)}
+                                    ></input>
+                                </div>
+
+                                {/* Award Description */}
+                                <div
+                                    className="id_input_holder"
+                                    style={{
+                                        width: "90%",
+                                        margin: "5px auto",
+                                    }}
+                                >
+                                    <h5>Description</h5>
+                                    <input
+                                        style={{
+                                            border: "1px solid gray",
+                                            height: 35,
+                                            fontSize: 14,
+                                            padding: "1px 5px",
+                                            backgroundColor: "#edf7f8",
+                                        }}
+                                        type="text"
+                                        className="job_title"
+                                        required
+                                        name="awardDescription"
+                                        onChange={(e) =>
+                                            setAwardDescription(e.target.value)
+                                        }
+                                        // onChange={(e) => setEmail(e.target.value)}
+                                    ></input>
+                                </div>
+
+                                <div
+                                    className="button_save_id"
+                                    style={{
+                                        width: "90%",
+                                        display: "flex",
+                                        justifyContent: "end",
+                                    }}
+                                >
+                                    <button onClick={handleCloseAward}>
+                                        Save
+                                    </button>
+                                </div>
+                            </form>
+                        </motion.div>
+                    </Dialog>
+
+                    {/* all job details of a single USer */}
                 </div>
             </div>
         </div>

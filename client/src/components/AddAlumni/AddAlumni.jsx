@@ -13,14 +13,7 @@ import axios from "axios";
 import ScrollToTop from "../ScrollToTop/ScrollToTop";
 
 const VerifyUser = ({ user }) => {
-    // const [lastName, setLastName] = useState();
-    // const [firstName, setFirstName] = useState();
-    // const [userId, setUserId] = useState();
-    // const [birthday, setBirthday] = useState();
-
     const [data, setData] = useState({
-        // firstName: "",
-        // lastName: "",
         lastName: "",
         firstName: "",
         userId: "",
@@ -43,11 +36,7 @@ const VerifyUser = ({ user }) => {
     //para add og job
     const AddAlumni = async (e) => {
         e.preventDefault();
-        // const formData = new FormData();
-        // formData.append("lastName", lastName);
-        // formData.append("firsName", firstName);
-        // formData.append("userId", userId);
-        // formData.append("birthday", birthday);
+
         try {
             const url = "http://localhost:8080/api/users/addAlumni";
             const { data: res } = await axios.post(url, data);
