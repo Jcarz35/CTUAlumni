@@ -367,6 +367,9 @@ textarea:focus {
 	backdrop-filter: blur(2px);
 */
 /* para dialog sa job details */
+.jps_header {
+    margin-bottom: 0;
+}
 .job_details_dialog {
     display: flex;
     justify-content: center;
@@ -378,9 +381,34 @@ textarea:focus {
 .id_input_holder {
     margin-bottom: 30px;
 }
+.job_profile_section_body {
+    transition: background-color 0.7s ease-in;
+}
 .job_profile_section_body h5 {
     font-size: 15px;
     color: black;
+}
+#dark .job_profile_section {
+    background-color: var(--dark-background);
+}
+#dark .job_profile_section h1 {
+    color: var(--active);
+    font-weight: normal;
+}
+#dark .job_profile_section h5 {
+    color: rgb(247, 244, 244);
+    font-weight: normal;
+}
+#dark .job_profile_section p {
+    color: rgb(218, 214, 214);
+    font-weight: normal;
+}
+.job_profile_section_body {
+    transition: background-color 0.7s ease-in;
+}
+
+#dark .job_profile_section_body {
+    background-color: var(--dark-background);
 }
 .id_input_holder h5,
 .id_input_holder input {
@@ -395,4 +423,34 @@ textarea:focus {
 .jobDetails_card {
     margin: 10px 4px;
     padding: 5px 2px;
+}
+
+/* AWard details */
+.award_card button {
+    display: flex;
+    width: 90px;
+    border: none;
+    padding: 5px;
+    height: 30px;
+    gap: 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: white;
+    margin-bottom: 15px;
+}
+.award_card button:hover {
+    background-color: #dfdff1;
+}
+
+#dark .award_card button {
+    background-color: #191d33;
+    border: 1px solid black;
+}
+.award_card .icon {
+    font-size: 15px;
+    margin-top: 1px;
+    margin-left: 2px;
+}
+#dark .award_card .icon {
+    color: white;
 }

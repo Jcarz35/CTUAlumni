@@ -21,6 +21,7 @@
     padding: 5px 30px;
 }
 .header_jobs .header_right {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: end;
@@ -43,6 +44,22 @@
     box-shadow: 1px 13px 26px 1px rgba(143, 137, 137, 0.75);
     -webkit-box-shadow: 1px 13px 26px 1px rgba(143, 137, 137, 0.75);
     -moz-box-shadow: 1px 13px 26px 1px rgba(143, 137, 137, 0.75);
+}
+
+.header_jobs .header_right .jobCounter {
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    right: 120px;
+    top: 10px;
+    background-color: red;
+    display: flex;
+    color: white;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    border-radius: 50%;
+    border: 2px solid #eff2f4;
 }
 
 .header_jobs h5 {
@@ -99,6 +116,7 @@
     flex: 1;
     margin: 0 30px auto;
     overflow-y: hidden;
+    height: 700px;
     transition: background-color 0.7s ease-in;
 }
 /* button */
@@ -117,11 +135,11 @@
 
 .leftss {
     display: flex;
-    height: 740px;
     justify-content: start;
     flex-wrap: wrap;
-    overflow-y: hidden;
+    overflow-y: scroll;
     gap: 22px;
+    height: 750px;
     transition: background-color 0.7s ease-in;
 
     padding: 5px;

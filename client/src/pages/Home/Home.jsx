@@ -3,11 +3,17 @@ import { useState, useEffect } from "react";
 import "./home.css";
 import axios from "axios";
 
-//icons
-
-//image
 import dash from "../../images/dash.png";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
+import BarChartExample from "./BarChartEample";
+import SchoolYearChart from "./SchoolYearChart";
+import GenderChart from "./GenderChart";
+
+//icons
+import { MdEmojiEvents, MdOutlineWork } from "react-icons/md";
+import { FaUserCircle } from "react-icons/fa";
+import { NavLink } from "react-router-dom";
+import { BsFillArrowRightCircleFill } from "react-icons/bs";
 
 const Home = ({ theme }) => {
     const [open, setOpen] = useState(false);
@@ -23,6 +29,25 @@ const Home = ({ theme }) => {
         } catch (error) {
             console.log(error);
         }
+    }, []);
+
+    // count para sa total of jobs events and idrequest
+    const [eventCount, setEventCount] = useState(0);
+    const [jobCount, setJobsCount] = useState(0);
+    const [idRequestCount, setIdRequestCount] = useState(0);
+    useEffect(() => {
+        axios
+            .get("http://localhost:8080/api/jobs/getCount")
+            .then((res) => {
+                setEventCount(res.data.eventCount);
+                setJobsCount(res.data.jobCount);
+                setIdRequestCount(res.data.idRequestCount);
+
+                // ibutang sa user na variable ang data gikan DB
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     }, []);
 
     const lightSrc =
@@ -88,17 +113,21 @@ const Home = ({ theme }) => {
                             </div>
                         </div>
                         <img src={employment} alt="" /> */}
-                    {theme === "light" ? (
-                        <iframe
-                            className="courseChart"
-                            src="https://charts.mongodb.com/charts-ctualumni-acewb/embed/charts?id=6378c867-14ab-4809-86db-051750fa7f0f&maxDataAge=10&theme=light&autoRefresh=true"
-                        ></iframe>
-                    ) : (
-                        <iframe
-                            className="courseChart"
-                            src="https://charts.mongodb.com/charts-ctualumni-acewb/embed/charts?id=6378c867-14ab-4809-86db-051750fa7f0f&maxDataAge=10&theme=dark&autoRefresh=true"
-                        ></iframe>
-                    )}
+
+                    <h5
+                        style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            fontSize: "15px",
+                            "margin-top": "10px",
+                            "margin-right": "5px",
+
+                            "margin-bottom": "8px",
+                        }}
+                    >
+                        Course Distribution
+                    </h5>
+                    <BarChartExample />
                     {/* </div> */}
                 </div>
             </div>
@@ -136,21 +165,89 @@ const Home = ({ theme }) => {
             {/* third div container */}
             <div className="third_div">
                 <div className="third_div_content">
+                    <h5
+                        style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            fontSize: "15px",
+                            "margin-top": "10px",
+                            "margin-right": "5px",
+                            "margin-bottom": "8px",
+                        }}
+                    >
+                        Number of Alumni by Year
+                    </h5>
+                    <SchoolYearChart />
                     {/* light and dark para chart */}
-                    {theme === "light" ? (
+                    {/* {theme === "light" ? (
                         <iframe className="alumniChart" src={lightSrc}></iframe>
                     ) : (
                         <iframe className="alumniChart" src={darkSrc}></iframe>
-                    )}
+                    )} */}
                 </div>
 
                 <div className="third_div_content">
-                    <iframe
-                        className="genderChart"
-                        src="https://charts.mongodb.com/charts-ctualumni-acewb/embed/charts?id=6388a2d3-0bf1-4293-838a-6c00c013a914&maxDataAge=3600&theme=light&autoRefresh=true"
-                    ></iframe>
+                    <h5
+                        style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            fontSize: "15px",
+                            "margin-top": "10px",
+                        }}
+                    >
+                        Gender Distribution
+                    </h5>
+                    <GenderChart />
                 </div>
-                <div className="third_div_content"></div>
+                <div className="third_div_content">
+                    <NavLink
+                        exact={true}
+                        to={"/jobposting"}
+                        key={"JobPosting"}
+                        className="total_job"
+                    >
+                        <div className="logo_container">
+                            <MdOutlineWork className="icon" />
+                        </div>
+                        <div className="contents">
+                            <h5 style={{ "margin-bottom": "2px" }}>
+                                Number of Jobs Posted
+                            </h5>
+
+                            <h1>{jobCount}</h1>
+                        </div>
+                    </NavLink>
+                    <NavLink
+                        exact={true}
+                        to={"/events"}
+                        key={"Events"}
+                        className="total_events"
+                    >
+                        <div className="logo_container">
+                            <MdEmojiEvents className="icon" />
+                        </div>
+                        <div className="contents">
+                            <h5 style={{ margin: "0" }}>Number of Events </h5>
+                            <h1>{eventCount}</h1>
+                        </div>
+                    </NavLink>
+                    <NavLink
+                        exact={true}
+                        to={"/requestId"}
+                        key={"RequestId"}
+                        className="total_idRequest"
+                    >
+                        <div className="logo_container">
+                            <FaUserCircle className="icon" />
+                        </div>
+                        <div className="contents">
+                            <h5 style={{ "margin-bottom": "2px" }}>
+                                Number of Id Request
+                            </h5>
+                            <h1>{idRequestCount}</h1>
+                        </div>
+                    </NavLink>
+                </div>
             </div>
         </div>
     );

@@ -2,6 +2,8 @@ const router = require("express").Router();
 const { User, validate } = require("../models/user");
 const bcrypt = require("bcrypt");
 
+const xlsx = require("xlsx");
+
 const nodemailer = require("nodemailer"); // para send Email
 
 const multer = require("multer"); // para file upload
@@ -117,6 +119,53 @@ router.put("/register", async (req, res) => {
                         },
                     }
                 );
+
+                // para email sa alumni para naa siyay discount
+                var transporter = nodemailer.createTransport({
+                    host: process.env.HOST,
+                    port: "587",
+                    auth: {
+                        user: process.env.USER,
+                        pass: process.env.PASS,
+                    },
+                    tls: {
+                        rejectUnauthorized: false,
+                    },
+                });
+
+                const userVerify = await User.findById(userID._id);
+
+                const mailOptions = {
+                    from: {
+                        name: "CTU Alumni Information System",
+                        address: process.env.USER,
+                    }, // sender address
+                    to: userVerify.email, // list of receivers
+                    subject: "Account Active", // Subject line
+                    text: "Hello",
+                    html: `
+                    <div style="padding:30px;border-style: ridge; background-color: #212429; height:100% ">
+                    <p style="color: #BFBFBF; font-size: 19px">Dear ${userVerify.firstName} ${userVerify.lastName}</p>
+                    <p style="color: #BFBFBF; font-size: 17px">Account succesfully Registered</p>
+                    <ul>
+                        <li style="color: #FFFFFF; font-size: 15px">From: Cebu Technological University Alumni Information System</li>
+                        <li style="color: #FFFFFF; font-size: 15px">Subject: Your account to CTU AIS has been activated</li>
+                        <li style="color: #FFFFFF; font-size: 15px">Message: Heres your discount Code </li>
+                    </ul>
+                    <div style="display:flex; height:90px; margin-left:90px; width:465px; justify-content:center; align-items:center; background-color: #17191C; "><h1 style="color: #3A9AED; font-size: 30px; margin-left:30px;">${userVerify._id}<h1></div>
+
+                    <p style="color: #BFBFBF; font-size: 15px">Best regards,</p>
+            <p style="color: #BFBFBF; font-size: 15px">The CTU Alumni Team</p>
+                    </div>
+                    `,
+                };
+                transporter.sendMail(mailOptions, function (error, info) {
+                    if (error) {
+                        console.log("errors");
+                    } else {
+                        console.log("Email successfully sent");
+                    }
+                });
             } catch (err) {
                 console.log("Error " + err);
             }
@@ -456,4 +505,36 @@ router.put("/deleteAward/:awardId", (req, res) => {
         }
     );
 });
+
+const uploads = multer({ dest: "uploadss/" });
+
+router.post("/excels", uploads.single("file"), (req, res) => {
+    // Read the Excel file
+    const workbook = xlsx.readFile(req.file.path);
+    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+    const rows = xlsx.utils.sheet_to_json(sheet);
+
+    // Extract the users from the Excel file
+    const users = [];
+    for (const row of rows) {
+        const user = {
+            firstName: row.firstName,
+            lastName: row.lastName,
+            userId: row.userId,
+            birthday: row.birthday,
+        };
+        users.push(user);
+    }
+
+    // Insert the users into the database
+    User.insertMany(users, (err, result) => {
+        if (err) throw err;
+        console.log(
+            `Inserted ${result.insertedCount} users into the collection`
+        );
+
+        res.send("File uploaded successfully");
+    });
+});
+
 module.exports = router;

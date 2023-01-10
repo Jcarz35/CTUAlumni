@@ -61,6 +61,8 @@
     display: flex;
     gap: 10px;
     margin-bottom: 10px;
+    font: inherit;
+    text-decoration: none;
 }
 .accept_card_top img {
     width: 50px;

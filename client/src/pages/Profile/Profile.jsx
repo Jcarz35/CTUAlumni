@@ -11,7 +11,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 
 //icons
 import { FaUserCircle, FaSave } from "react-icons/fa";
-import { BsFillCameraFill } from "react-icons/bs";
+import { BsFillCameraFill, BsTrash } from "react-icons/bs";
 import { AiOutlinePlus } from "react-icons/ai";
 import { IoCloseCircleSharp, IoCloseSharp } from "react-icons/io5";
 
@@ -233,6 +233,14 @@ const Profile = ({ user }) => {
                 setAwards(awards.filter((award) => award._id !== awardId));
             });
     };
+
+    // para format sa date
+    function formatDate(date) {
+        const options = { year: "numeric", month: "long", day: "numeric" };
+        return new Date(date).toLocaleDateString("en-US", options);
+    }
+    const formattedbirthday = formatDate(userInfo.birthday);
+
     return (
         <div className="edit_user_container">
             <ScrollToTop />
@@ -255,11 +263,18 @@ const Profile = ({ user }) => {
                 {/**Left */}
                 <div className="left">
                     <div className="profile_pic">
-                        <img
-                            src={`http://localhost:8080/uploads/${userInfo.profilePic}`}
-                            alt=""
-                            className="profile_pic"
-                        />
+                        <a
+                            href={`http://localhost:8080/uploads/${userInfo.profilePic}`}
+                            title="Click to open Image"
+                            target="_blank"
+                            // style={{ height: 200, width: 120 }}
+                        >
+                            <img
+                                src={`http://localhost:8080/uploads/${userInfo.profilePic}`}
+                                alt=""
+                                className="profile_pic"
+                            />
+                        </a>
 
                         {/* form  */}
 
@@ -344,6 +359,9 @@ const Profile = ({ user }) => {
                             </p>
                         </div>
                         <div className="fullname">
+                            <h1>Alumni Id : </h1> <p>{userInfo.userId}</p>
+                        </div>
+                        <div className="fullname">
                             <h1>Address : </h1> <p>{userInfo.address}</p>
                         </div>
                         <div className="fullname">
@@ -354,6 +372,9 @@ const Profile = ({ user }) => {
                         </div>
                         <div className="fullname">
                             <h1>Gender : </h1> <p>{userInfo.gender}</p>
+                        </div>
+                        <div className="fullname">
+                            <h1>Birthday : </h1> <p>{formattedbirthday}</p>
                         </div>
                         <div className="fullname">
                             <h1>Course : </h1> <p>{userInfo.course}</p>
@@ -462,18 +483,6 @@ const Profile = ({ user }) => {
                                 />
                             </div>
 
-                            {/* birthday */}
-                            <div className="birthdate_holder">
-                                <p>Birthdate</p>
-                                <input
-                                    type="date"
-                                    className="input_fname"
-                                    onChange={(e) =>
-                                        setBirthday(e.target.value)
-                                    }
-                                />
-                            </div>
-
                             <div className="course_holder">
                                 <p>Course</p>
                                 <select
@@ -506,19 +515,15 @@ const Profile = ({ user }) => {
                                         Bachelor of Science in Information
                                         Technology
                                     </option>
-                                    <option value="BIT-Garments">
-                                        BIT Garments
-                                    </option>
-                                    <option value="BIT-Drafting">
-                                        BIT Drafting
-                                    </option>
-                                    <option value="BIT-Computer-Technology">
+                                    <option value="BIT-G">BIT Garments</option>
+                                    <option value="BIT-D">BIT Drafting</option>
+                                    <option value="BIT-CT">
                                         BIT Computer Technology
                                     </option>
-                                    <option value="BIT-Automotive">
+                                    <option value="BIT-A">
                                         BIT Automotive
                                     </option>
-                                    <option value="BIT-Electronics">
+                                    <option value="BIT-E">
                                         BIT Electronics
                                     </option>
 
@@ -637,15 +642,32 @@ const Profile = ({ user }) => {
                             {/* Awards details .map */}
                             {awards &&
                                 awards.map((award, index) => {
+                                    const formattedDate = formatDate(
+                                        award.dateIssued
+                                    );
                                     return (
-                                        <div key={index}>
-                                            <h1>{award.awardName}</h1>
+                                        <div key={index} className="award_card">
+                                            <h5 style={{ fontWeight: "600" }}>
+                                                {award.awardName} -{" "}
+                                                {award.issuer}
+                                            </h5>
+                                            <p
+                                                style={{
+                                                    "margin-bottom": 0,
+                                                }}
+                                            >
+                                                {formattedDate}
+                                            </p>
+                                            <p style={{ "margin-bottom": 0 }}>
+                                                {award.description}
+                                            </p>
                                             <button
                                                 onClick={() =>
                                                     handleDeleteAward(award._id)
                                                 }
                                             >
-                                                Delete
+                                                <BsTrash className="icon" />
+                                                <p>Delete</p>
                                             </button>
                                         </div>
                                     );

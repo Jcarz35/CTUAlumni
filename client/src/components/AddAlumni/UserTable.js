@@ -68,84 +68,32 @@ const UserTable = ({ userBuang }) => {
         handleClose();
     };
 
+    // para format sa date
+    function formatDate(date) {
+        const options = { year: "numeric", month: "long", day: "numeric" };
+        return new Date(date).toLocaleDateString("en-US", options);
+    }
+
     // para header sa table
     const columns = [
         { field: "lastName", headerName: "Last Name", width: 180 },
         { field: "firstName", headerName: "First Name", width: 180 },
         { field: "userId", headerName: "Alumni Id", width: 200 },
-        { field: "birthday", headerName: "Birthday", width: 150 },
+        // { field: "birthday", headerName: "Birthday", width: 150 },
 
-        // {
-        //     field: "action",
-        //     headerName: "Action",
-        //     width: 150,
-        //     renderCell: (params) => {
-        //         return (
-        //             <>
-        //                 {userInfo.isAdmin && (
-        //                     <button
-        //                         className="approve_button"
-        //                         onClick={() => {
-        //                             activateUser(params.row._id);
-        //                         }}
-        //                     >
-        //                         <AiOutlineCheckCircle className="icon" />
-        //                         <p>Approve</p>
-        //                     </button>
-        //                 )}
-
-        //                 {userInfo.isAdmin && (
-        //                     <button
-        //                         className="disapprove_button"
-        //                         onClick={handleClickOpen}
-        //                     >
-        //                         <AiOutlineCloseCircle className="icon" />
-        //                         <p>Reject</p>
-        //                     </button>
-        //                 )}
-
-        //                 {/* Dialog para confirmation to delete */}
-        //                 <Dialog
-        //                     // width={400}
-        //                     // height={500}
-        //                     open={open}
-        //                     onClose={handleClose}
-        //                     className="delete_dialog"
-        //                 >
-        //                     <div className="header_close">
-        //                         <DialogTitle>
-        //                             <h5>Reject Confirmation</h5>
-        //                         </DialogTitle>
-        //                         <div>
-        //                             {" "}
-        //                             <GrFormClose
-        //                                 className="close_button"
-        //                                 onClick={handleClose}
-        //                             />
-        //                         </div>
-        //                     </div>
-        //                     <div className="body_close">
-        //                         <h1>
-        //                             Are you sure you want to reject the request?
-        //                         </h1>
-        //                         <h1>It will be deleted from the database</h1>
-        //                     </div>
-        //                     <div className="footer_close">
-        //                         <Button onClick={handleClose}>Cancel</Button>
-        //                         <button
-        //                             onClick={() => {
-        //                                 deleteUser(params.row._id);
-        //                             }}
-        //                             className="button_delete"
-        //                         >
-        //                             Yes
-        //                         </button>
-        //                     </div>
-        //                 </Dialog>
-        //             </>
-        //         );
-        //     },
-        // },
+        {
+            field: "birthday",
+            headerName: "Birthday",
+            width: 150,
+            renderCell: (params) => {
+                const formattedDate = formatDate(params.row.birthday);
+                return (
+                    <div>
+                        <p>{formattedDate}</p>
+                    </div>
+                );
+            },
+        },
     ];
 
     return (

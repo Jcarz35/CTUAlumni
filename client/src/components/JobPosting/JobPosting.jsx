@@ -22,6 +22,7 @@ import { IoCloseSharp } from "react-icons/io5";
 
 import {} from "react-icons/io5";
 import ScrollToTop from "../ScrollToTop/ScrollToTop";
+import { Pagination } from "@mui/material";
 const JobPosting = ({ children, user }) => {
     const { id } = useParams(); // get the id from the URL
 
@@ -67,7 +68,7 @@ const JobPosting = ({ children, user }) => {
         setFileName(e.target.files[0]);
     };
 
-    //fetch all job
+    //fetch all accepted job
     useEffect(() => {
         axios
             .get("http://localhost:8080/api/jobs/all")
@@ -97,6 +98,22 @@ const JobPosting = ({ children, user }) => {
             });
     }, [userInfo]);
 
+    const [countRawJob, setCountRawJob] = useState();
+    //fetch all raw job nga wala pa na accept sa Admin
+    useEffect(() => {
+        axios
+            .get("http://localhost:8080/api/jobs/countRawJob")
+            .then((res) => {
+                setCountRawJob(res.data.numJobs);
+                setLoading(false);
+
+                // ibutang sa user na variable ang data gikan DB
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, [countRawJob]);
+
     //para add og job
     const handleSubmit = () => {
         const formData = new FormData();
@@ -122,6 +139,8 @@ const JobPosting = ({ children, user }) => {
 
     let [color, setColor] = useState("#36d7b7");
     // add job
+
+    // para pagination
 
     return (
         <>
@@ -160,8 +179,14 @@ const JobPosting = ({ children, user }) => {
                                 className="accept_jobs"
                             >
                                 Accept Job
+                                {countRawJob > 0 ? (
+                                    <span className="jobCounter">
+                                        {countRawJob}
+                                    </span>
+                                ) : null}
                             </NavLink>
                         ) : null}
+
                         <motion.button
                             onClick={handleClickOpen}
                             whileHover={{ scale: 1.1 }}
@@ -352,6 +377,8 @@ const JobPosting = ({ children, user }) => {
                             .reverse()}
                     </div>
                 </div>
+
+                <h1>yeah</h1>
             </div>
         </>
     );

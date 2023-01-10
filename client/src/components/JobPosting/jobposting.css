@@ -64,7 +64,7 @@
 
     min-width: 320px;
     max-width: 350px;
-    background-color: var(--background);
+    background-color: white;
     display: flex;
     flex-direction: column;
     padding: 20px;
@@ -286,7 +286,7 @@
 /* right */
 .rights {
     margin-left: 30px;
-    background-color: var(--background);
+    background-color: white;
     flex: 2;
     z-index: 1;
     padding: 20px;
@@ -370,6 +370,7 @@
 
 .button_holder_job button {
     background-color: var(--background);
+    height: 30px;
     transition: background-color 0.7s ease-in;
 }
 .button_holder_job button:hover {

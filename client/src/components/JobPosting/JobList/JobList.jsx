@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./acceptjobs.css";
 
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 import { format } from "timeago.js";
 import FadeLoader from "react-spinners/FadeLoader";
@@ -299,7 +299,10 @@ const JobList = ({ user }) => {
                         .map((job, key) => {
                             return (
                                 <div className="accept_card">
-                                    <div className="accept_card_top">
+                                    <Link
+                                        to={"/user/" + job.ownerId}
+                                        className="accept_card_top"
+                                    >
                                         <img
                                             src={`http://localhost:8080/uploads/${job.ownerPhoto}`}
                                             alt="picture"
@@ -308,7 +311,7 @@ const JobList = ({ user }) => {
                                             <h5>{job.ownerName}</h5>
                                             <p>{format(job.postDate)}</p>
                                         </div>
-                                    </div>
+                                    </Link>
 
                                     <div className="accept_card_body">
                                         <h2>Job Title : {job.title}</h2>

@@ -55,17 +55,21 @@ router.put("/updateDate/:id", async (req, res) => {
             subject: "Alumni Id Request Accepted", // Subject line
             text: "Hello",
             html: `
-            <div style="padding:10px;border-style: ridge">
-            <p>Dear ${req.body.firstName} ${req.body.lastName}</p>
-            <p>Your Request for Alumni Id </p>
+            <div style="padding:30px;border-style: ridge; background-color: #212429; height:100% ">
+            <p style="color: #BFBFBF; font-size: 19px">Dear ${req.body.firstName} ${req.body.lastName}</p>
+            <p style="color: #BFBFBF; font-size: 17px">Your request for an alumni ID has been approved!</p>
             <ul>
-                <li>From: Cebu Technological University Alumni Information System AC</li>
-                <li>I am pleased to inform you that your request for an alumni ID has been approved. </li>
-                <li>Message: Your schedule for processing alumni ID will be on ${formattedDate}.</li>
+                <li style="color: #FFFFFF; font-size: 15px">From: Cebu Technological University Alumni Information System</li>
+                <li style="color: #FFFFFF; font-size: 15px" >We are happy to inform you that your request for an alumni ID has been approved and will be processed. </li>
+                <li style="color: #FFFFFF; font-size: 15px">Please come to the alumni office at the following date to process your ID on ${formattedDate}.</li>
             </ul>
+            <p style="color: #BFBFBF; font-size: 15px">We look forward to seeing you!</p>
+            <p style="color: #BFBFBF; font-size: 15px">Best regards,</p>
+            <p style="color: #BFBFBF; font-size: 15px">The CTU Alumni Team</p>
             </div>
             `,
         };
+
         transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
                 console.log("errors");

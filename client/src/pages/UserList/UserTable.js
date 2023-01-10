@@ -57,13 +57,13 @@ const UserTable = ({ userBuang }) => {
         });
     }, [user]);
 
-    // deleteUser
-    // const deleteUser = (id) => {
-    //     Axios.delete(`http://localhost:8080/api/users/deleteUser/${id}`);
-    //     setUser(user.filter((item) => item._id !== id));
-    //     console.log("user ids", id);
-    //     handleClose();
-    // };
+    // deleteUser;
+    const deleteUser = (id) => {
+        Axios.delete(`http://localhost:8080/api/users/deleteUser/${id}`);
+        setUser(user.filter((item) => item._id !== id));
+        console.log("user ids", id);
+        handleClose();
+    };
 
     // para header sa table
     const columns = [
@@ -90,7 +90,9 @@ const UserTable = ({ userBuang }) => {
                         {/* {userInfo.isAdmin && (
                             <button
                                 className="delete_button"
-                                onClick={handleClickOpen}
+                                onClick={() => {
+                                    deleteUser(params.row._id);
+                                }}
                             >
                                 <RiDeleteBin5Line className="deleteBi" />
                             </button>

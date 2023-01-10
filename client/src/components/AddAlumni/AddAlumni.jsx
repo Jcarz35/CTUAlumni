@@ -61,6 +61,30 @@ const VerifyUser = ({ user }) => {
         }
     };
 
+    //para excell
+    const [file, setFile] = useState(null);
+
+    function handleFileChange(event) {
+        setFile(event.target.files[0]);
+    }
+
+    function handleSubmit(event) {
+        event.preventDefault();
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        axios
+            .post("http://localhost:8080/api/users/excels", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            })
+            .then((response) => {
+                console.log(response.data);
+            });
+    }
+
     return (
         <div className="verify_container">
             <ScrollToTop />
@@ -81,7 +105,11 @@ const VerifyUser = ({ user }) => {
             <div className="verify_body">
                 <div className="left_body">
                     <h5>Add Alumni</h5>
-                    <form className="formAdd_container" onSubmit={AddAlumni}>
+                    <form
+                        className="formAdd_container"
+                        onSubmit={AddAlumni}
+                        method="post"
+                    >
                         <div className="fname_holderss">
                             <p>Last Name</p>
                             <input
@@ -145,6 +173,25 @@ const VerifyUser = ({ user }) => {
                             </motion.button>
                         </div>
                     </form>
+                    <p
+                        style={{
+                            "margin-bottom": "0",
+                            "margin-left": "35px",
+                            "margin-top": "15px",
+                        }}
+                    >
+                        Tired of inputting it manually?
+                    </p>
+                    <h5 style={{ "font-size": "15px", "margin-top": "1px" }}>
+                        Upload an excel file
+                    </h5>
+                    {/* form para upload excell file */}
+                    <div className="form_container">
+                        <form onSubmit={handleSubmit} className="form_excell">
+                            <input type="file" onChange={handleFileChange} />
+                            <button type="submit">Upload</button>
+                        </form>
+                    </div>
                 </div>
                 <div className="AddUser_table">
                     <UserTable userBuang={user} />

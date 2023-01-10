@@ -48,6 +48,7 @@
     width: 100%;
     margin: 0;
     padding: 30px 50px;
+
     /* border: 1px solid rgb(230, 224, 224); */
     border-radius: 3px;
     /* box-shadow: 0px 3px 3px -2px rgb(0 0 0 / 20%),
@@ -85,6 +86,7 @@
     padding: 5px 10px;
     font-size: 13px;
     background-color: var(--background);
+    background-color: white;
 }
 .resume_input_title input:focus {
     border: 1px solid gray;
@@ -99,12 +101,13 @@
     flex-direction: column;
     width: 100%;
     height: 200px;
-    background-color: white;
+    background-color: var(--background);
 }
 .resume_input_des textarea {
     height: 100px;
     border: 1px solid rgb(150, 149, 149);
     background-color: var(--background);
+    background-color: white;
 }
 .button_resume_holder {
     margin-left: 580px;
@@ -193,7 +196,7 @@
     height: 30px;
     padding: 5px 10px;
     font-size: 13px;
-    background-color: var(--background);
+    background-color: white;
 }
 
 .skills_input_title h1 {
@@ -229,6 +232,7 @@
 #dark .resume_builder input {
     font-weight: normal;
     background-color: var(--dark-background);
+    background-color: white;
     color: white;
 }
 

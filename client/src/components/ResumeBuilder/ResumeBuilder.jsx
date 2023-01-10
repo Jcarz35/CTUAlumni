@@ -115,7 +115,7 @@ const ResumeBuilder = ({ user }) => {
 
                         {workExperience.map((item, index) => (
                             <div key={index} className="exp_input_holder">
-                                e<p>Experience{" " + (index + 1)}</p>
+                                <p>Experience{" " + (index + 1)}</p>
                                 <div className="resume_input_title">
                                     <h1>Title</h1>
                                     <input

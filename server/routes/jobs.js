@@ -4,6 +4,8 @@ const router = express.Router();
 //import ang model
 const { Jobs } = require("../models/jobs");
 const { User } = require("../models/user");
+const { Events } = require("../models/events");
+const { Request } = require("../models/requestid");
 const { ObjectId } = require("mongodb");
 
 const multer = require("multer");
@@ -47,6 +49,14 @@ router.get("/allRaw", async (req, res) => {
             res.send(result);
         }
     });
+});
+//count all raw jobs
+router.get("/countRawJob", async (req, res) => {
+    // Count the number of jobs with accept set to false
+    const numJobs = await Jobs.countDocuments({ accept: false });
+
+    // Return the count in the response
+    res.json({ numJobs });
 });
 
 //get single Job
@@ -193,6 +203,13 @@ router.delete("/deleteJob/:id", async (req, res) => {
 
     res.send("item deleted");
     console.log("na delete ng job");
+});
+
+router.get("/getCount", async (req, res) => {
+    const eventCount = await Events.countDocuments();
+    const jobCount = await Jobs.countDocuments({ accept: true });
+    const idRequestCount = await Request.countDocuments();
+    res.json({ eventCount, jobCount, idRequestCount });
 });
 
 module.exports = router;

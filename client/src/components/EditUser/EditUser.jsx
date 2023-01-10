@@ -19,10 +19,14 @@ import { IoCloseSharp } from "react-icons/io5";
 import Snackbar from "../../components/Snackbar/Snackbar";
 import ScrollToTop from "../ScrollToTop/ScrollToTop";
 import { AiOutlinePlus } from "react-icons/ai";
+import { BsTrash } from "react-icons/bs";
 
 const EditUser = () => {
     const { id } = useParams(); // get the id from the URL
     const [user, setUser] = useState([]);
+
+    const [userInfo, setUserInfo] = useState([]);
+    const [userId, setUserId] = useState();
 
     const [newfirstName, setFirstName] = useState(user.firstName);
     const [newlastName, setLastName] = useState(user.lastName);
@@ -89,7 +93,10 @@ const EditUser = () => {
         axios
             .get("http://localhost:8080/api/users/user/" + id)
             .then((res) => {
-                setUser(res.data); // ibutang sa user na variable ang data gikan DB
+                setUser(res.data);
+                setUserId(res.data._id);
+                setAwards(res.data.award);
+                // ibutang sa user na variable ang data gikan DB
             })
             .catch((err) => {
                 console.log(err);
@@ -125,6 +132,117 @@ const EditUser = () => {
             });
     };
 
+    //===================================================
+    const [jobDetails, setJobDetails] = useState([]);
+    useEffect(() => {
+        const fetchJobs = async () => {
+            try {
+                const res = await axios.get(
+                    `http://localhost:8080/api/jobDetails/jobs/${userId}`
+                );
+                setJobDetails(res.data);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+        fetchJobs();
+    }, [jobDetails]);
+
+    //para job details sa user
+    // Dialog para job
+    const [openDialogJob, setOpenDialogJob] = useState(false);
+    const handleClickOpenJob = () => {
+        setOpenDialogJob(true);
+    };
+    const handleCloseJob = () => {
+        setOpenDialogJob(false);
+    };
+
+    const [jobTitle, setJobTitle] = useState();
+    const [companyName, setCompanyName] = useState();
+    const [companyAddress, setCompanyAddress] = useState();
+    const [fileNameJob, setFileNameJob] = useState();
+
+    const onChangeFileJob = (e) => {
+        setFileNameJob(e.target.files[0]);
+    };
+
+    //sa form para job details ig submit
+    const changeOnClickJob = async (e) => {
+        e.preventDefault();
+        const formDatas = new FormData();
+        formDatas.append("id", userInfo._id);
+        formDatas.append("jobTitle", jobTitle);
+        formDatas.append("companyName", companyName);
+        formDatas.append("companyAddress", companyAddress);
+        formDatas.append("companyId", fileNameJob);
+        axios
+            .put(
+                "http://localhost:8080/api/jobDetails/addJobDetails",
+                formDatas
+            )
+            .then(() => {
+                setShowSnackbar(true);
+                setTimeout(() => {
+                    setShowSnackbar(false);
+                }, 3000);
+            });
+    };
+
+    //===================================================
+    const [awards, setAwards] = useState([]);
+    //para Honor and Award details sa user
+    const [awardName, setAwardName] = useState();
+    const [issuer, setIssuer] = useState();
+    const [dateIssued, setDateIssued] = useState();
+    const [awardDescription, setAwardDescription] = useState();
+    // Dialog para Award
+    const [openDialogAward, setOpenDialogAward] = useState(false);
+    const handleClickOpenAward = () => {
+        setOpenDialogAward(true);
+    };
+    const handleCloseAward = () => {
+        setOpenDialogAward(false);
+    };
+    //sa form para Award details ig submit
+    // const changeOnClickAward = async (e) => {
+    //     e.preventDefault();
+
+    //     axios
+    //         .put("http://localhost:8080/api/users/addAward", {
+    //             id: userInfo._id,
+    //             awardName: awardName,
+    //             issuer: issuer,
+    //             dateIssued: dateIssued,
+    //             awardDescription: awardDescription,
+    //         })
+    //         .then(() => {
+    //             setShowSnackbar(true);
+    //             setTimeout(() => {
+    //                 setShowSnackbar(false);
+    //             }, 3000);
+    //         })
+    //         .catch((err) => {
+    //             console.log(err);
+    //         });
+    // };
+    // para delete sa award
+    // const handleDeleteAward = (awardId) => {
+    //     axios
+    //         .put(`http://localhost:8080/api/users/deleteAward/${awardId}`, {
+    //             userId: userId,
+    //         })
+    //         .then((res) => {
+    //             setAwards(awards.filter((award) => award._id !== awardId));
+    //         });
+    // };
+
+    // para format sa date
+    function formatDate(date) {
+        const options = { year: "numeric", month: "long", day: "numeric" };
+        return new Date(date).toLocaleDateString("en-US", options);
+    }
+    const formattedbirthday = formatDate(user.birthday);
     return (
         <div className="edit_user_container">
             <ScrollToTop />
@@ -146,12 +264,18 @@ const EditUser = () => {
                 {/**Left */}
                 <div className="left">
                     <div className="profile_pic">
-                        <img
-                            src={`http://localhost:8080/uploads/${user.profilePic}`}
-                            alt=""
-                            className="profile_pic"
-                        />
-
+                        <a
+                            href={`http://localhost:8080/uploads/${user.profilePic}`}
+                            title="Click to open Image"
+                            target="_blank"
+                            // style={{ height: 200, width: 120 }}
+                        >
+                            <img
+                                src={`http://localhost:8080/uploads/${user.profilePic}`}
+                                alt=""
+                                className="profile_pic"
+                            />
+                        </a>
                         {/* form  */}
 
                         <div className="update_img">
@@ -234,6 +358,9 @@ const EditUser = () => {
                             </p>
                         </div>
                         <div className="fullname">
+                            <h1>Alumni Id : </h1> <p>{user.userId}</p>
+                        </div>
+                        <div className="fullname">
                             <h1>Address : </h1> <p>{user.address}</p>
                         </div>
                         <div className="fullname">
@@ -244,6 +371,9 @@ const EditUser = () => {
                         </div>
                         <div className="fullname">
                             <h1>Gender : </h1> <p>{user.gender}</p>
+                        </div>
+                        <div className="fullname">
+                            <h1>Birthday : </h1> <p>{formattedbirthday}</p>
                         </div>
                         <div className="fullname">
                             <h1>Age : </h1> <p>{user.age}</p>
@@ -475,17 +605,97 @@ const EditUser = () => {
                         </div>
                     </div>
 
-                    {/* job details */}
-                    {newempstat === "Employed" && (
-                        <div className="job_profile_section">
-                            <div className="jps_header">
-                                <h1>Job Details</h1>
-                                <AiOutlinePlus className="icon" />
-                            </div>
-
-                            <div className="job_profile_section_body"></div>
+                    {/* job details container*/}
+                    <div className="job_profile_section">
+                        <div className="jps_header">
+                            <h1>Job Details</h1>
+                            {/* <AiOutlinePlus
+                                className="icon"
+                                onClick={handleClickOpenJob}
+                            /> */}
                         </div>
-                    )}
+
+                        <div className="job_profile_section_body">
+                            {/* Job details Map */}
+                            {jobDetails.map((jobDetail) => (
+                                <div
+                                    key={jobDetail._id}
+                                    className="jobDetails_card"
+                                >
+                                    <h5>
+                                        {"Job Title: "}
+                                        {jobDetail.title}
+                                    </h5>
+                                    <p style={{ "margin-bottom": 0 }}>
+                                        {"Compay Name: "}
+                                        {jobDetail.companyName}
+                                    </p>
+                                    <p style={{ "margin-bottom": 0 }}>
+                                        {"Company Address: "}
+                                        {jobDetail.companyAddress}
+                                    </p>
+                                    {jobDetail.companyId === "N/A" ? null : (
+                                        <a
+                                            href={`http://localhost:8080/companyId/${jobDetail.companyId}`}
+                                            title="Click to open Image"
+                                            target="_blank"
+                                            download
+                                            // style={{ height: 200, width: 120 }}
+                                        >
+                                            Company Id
+                                        </a>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Award details container */}
+                    <div className="job_profile_section">
+                        <div className="jps_header">
+                            <h1>Honor & Awards</h1>
+                            {/* <AiOutlinePlus
+                                className="icon"
+                                onClick={handleClickOpenAward}
+                            /> */}
+                        </div>
+
+                        <div className="job_profile_section_body">
+                            {/* Awards details .map */}
+                            {awards &&
+                                awards.map((award, index) => {
+                                    const formattedDate = formatDate(
+                                        award.dateIssued
+                                    );
+                                    return (
+                                        <div key={index} className="award_card">
+                                            <h5 style={{ fontWeight: "600" }}>
+                                                {award.awardName} -{" "}
+                                                {award.issuer}
+                                            </h5>
+                                            <p
+                                                style={{
+                                                    "margin-bottom": 0,
+                                                }}
+                                            >
+                                                {formattedDate}
+                                            </p>
+                                            <p style={{ "margin-bottom": 0 }}>
+                                                {award.description}
+                                            </p>
+                                            {/* <button
+                                                onClick={() =>
+                                                    handleDeleteAward(award._id)
+                                                }
+                                            >
+                                                <BsTrash className="icon" />
+                                                <p>Delete</p>
+                                            </button> */}
+                                        </div>
+                                    );
+                                })}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

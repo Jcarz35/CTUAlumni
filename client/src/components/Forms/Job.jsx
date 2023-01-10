@@ -261,7 +261,10 @@ const ArticlesPage = ({ user }) => {
                                     alt="picture"
                                 />
                                 {userInfo.isAdmin && (
-                                    <div className="button_holder_job">
+                                    <div
+                                        className="button_holder_job"
+                                        title="Edit"
+                                    >
                                         <button className="userListEdit">
                                             <BiEdit
                                                 className="editBi"
@@ -269,7 +272,10 @@ const ArticlesPage = ({ user }) => {
                                             />
                                         </button>
                                         {/* button update and delete Job post */}
-                                        <div className="button_holder_job">
+                                        <div
+                                            className="button_holder_job"
+                                            title="Delete"
+                                        >
                                             <button
                                                 className="delete_button"
                                                 onClick={() => {

@@ -643,7 +643,7 @@
     transition: background-color 0.7s ease-in;
 }
 #dark .Username {
-    background-color: var(--dark-Username);
+    background-color: var(--dark-background);
     box-shadow: 1px 13px 26px 1px rgba(68, 64, 64, 0.75);
     -webkit-box-shadow: 1px 13px 26px 1px rgba(31, 26, 26, 0.75);
     -moz-box-shadow: 1px 13px 26px 1px rgba(82, 77, 77, 0.75);
@@ -914,5 +914,5 @@ p {
     z-index: 2;
     margin-top: 50px;
     height: 100%;
-    background-color: var(--white);
+    background-color: var(--background);
 }
