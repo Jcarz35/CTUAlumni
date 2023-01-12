@@ -359,7 +359,7 @@ const Profile = ({ user }) => {
                             </p>
                         </div>
                         <div className="fullname">
-                            <h1>Alumni Id : </h1> <p>{userInfo.userId}</p>
+                            <h1>Student Id : </h1> <p>{userInfo.userId}</p>
                         </div>
                         <div className="fullname">
                             <h1>Address : </h1> <p>{userInfo.address}</p>

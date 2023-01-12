@@ -97,7 +97,7 @@ const Signup = () => {
                     /> */}
                     <input
                         type="text"
-                        placeholder="Alumni Id"
+                        placeholder="Student Id"
                         name="userId"
                         onChange={handleChange}
                         value={data.userId}

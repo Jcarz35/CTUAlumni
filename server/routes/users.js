@@ -506,6 +506,7 @@ router.put("/deleteAward/:awardId", (req, res) => {
     );
 });
 
+//para upload excel
 const uploads = multer({ dest: "uploadss/" });
 
 router.post("/excels", uploads.single("file"), (req, res) => {
@@ -537,4 +538,42 @@ router.post("/excels", uploads.single("file"), (req, res) => {
     });
 });
 
+router.get("/usersWithAward", (req, res) => {
+    User.aggregate([
+        {
+            $match: { award: { $exists: true, $ne: [] } },
+        },
+        {
+            $project: {
+                award: { $arrayElemAt: ["$award", 0] },
+                firstName: 1,
+                lastName: 1,
+                _id: 1,
+                profilePic: 1,
+            },
+        },
+    ])
+        .then((users) => {
+            res.json(users);
+        })
+        .catch((err) => console.log(err));
+});
+
+// router.post("/usersWithAward", async (req, res) => {
+//     const users = await User.aggregate([
+//         { $match: { award: { $exists: true, $ne: [] } } },
+//         {
+//             $project: {
+//                 _id: 0,
+//                 userId: 1,
+//                 birthday: 1,
+//                 firstName: 1,
+//                 lastName: 1,
+//                 award: 1,
+//             },
+//         },
+//     ]);
+
+//     res.send(users);
+// });
 module.exports = router;

@@ -12,13 +12,14 @@ import GenderChart from "./GenderChart";
 //icons
 import { MdEmojiEvents, MdOutlineWork } from "react-icons/md";
 import { FaUserCircle } from "react-icons/fa";
-import { NavLink } from "react-router-dom";
-import { BsFillArrowRightCircleFill } from "react-icons/bs";
+import { Link, NavLink } from "react-router-dom";
+import AddressChart from "./AddressChart";
 
-const Home = ({ theme }) => {
+const Home = ({ theme, user }) => {
     const [open, setOpen] = useState(false);
     const [quotes, setQuotes] = useState(false);
 
+    //fetch random qoutes online
     useEffect(() => {
         try {
             axios
@@ -50,12 +51,7 @@ const Home = ({ theme }) => {
             });
     }, []);
 
-    const lightSrc =
-        "https://charts.mongodb.com/charts-ctualumni-acewb/embed/charts?id=6317f14a-acdd-4055-868d-64b972381308&maxDataAge=3600&theme=light&autoRefresh=true";
-
-    const darkSrc =
-        "https://charts.mongodb.com/charts-ctualumni-acewb/embed/charts?id=6317f14a-acdd-4055-868d-64b972381308&maxDataAge=3600&theme=dark&autoRefresh=true";
-
+    // para count emp status
     const [empStatCount, setEmpStatCount] = useState([]);
     useEffect(() => {
         axios
@@ -67,6 +63,16 @@ const Home = ({ theme }) => {
                 console.log("empstat nabuang", err);
             });
     }, [empStatCount]);
+
+    // para awards
+    const [userAwards, setUserAwards] = useState([]);
+    useEffect(() => {
+        axios
+            .get("http://localhost:8080/api/users/usersWithAward")
+            .then((res) => setUserAwards(res.data))
+            .catch((err) => console.log(err));
+    }, [userAwards]);
+
     return (
         <div className="main_containers">
             <ScrollToTop />
@@ -86,13 +92,6 @@ const Home = ({ theme }) => {
                 </div>
                 {/* first div right container */}
                 <div className="first_div_right">
-                    {/* <div className="first_div_right_title">
-                        <h1>Employment Status</h1>
-                        <div className="employment_content_total">
-                            <h1>Total:</h1> <span>1200</span>
-                        </div>
-                    </div> */}
-                    {/* <div className="employment"> */}
                     {/* <div className="employment_content">
                             <div className="employment_content_one">
                                 <AiTwotoneRightCircle className="icon" />
@@ -247,6 +246,57 @@ const Home = ({ theme }) => {
                             <h1>{idRequestCount}</h1>
                         </div>
                     </NavLink>
+                </div>
+            </div>
+
+            {/* third div container */}
+            <div className="fourth_div">
+                <div className="fourth_div_content">
+                    {/* user awards chart */}
+                    <h4 style={{ "margin-bottom": "1px" }}>Awards</h4>
+                    {userAwards.map((user) => (
+                        <Link
+                            key={user._id}
+                            to={"/user/" + user._id}
+                            className="fourth_div_link"
+                        >
+                            <img
+                                src={`http://localhost:8080/uploads/${user.profilePic}`}
+                                alt="picture"
+                            />
+                            <div className="header">
+                                <h5>
+                                    {user.firstName} {user.lastName}
+                                </h5>
+                                {/* {user.award.map((awd) => (
+                                    <div>
+                                        <p style={{ "margin-bottom": "2px" }}>
+                                            {awd.awardName}
+                                        </p>
+                                    </div>
+                                ))} */}
+                                <h4>{user.award.awardName}</h4>
+                            </div>
+                            <button>View</button>
+                        </Link>
+                    ))}
+                </div>
+
+                {/* address chart */}
+                <div className="fourth_div_content">
+                    <h5
+                        style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            fontSize: "15px",
+                            "margin-top": "10px",
+                            "margin-right": "5px",
+                            "margin-bottom": "8px",
+                        }}
+                    >
+                        Address Frequency among Users
+                    </h5>
+                    <AddressChart />
                 </div>
             </div>
         </div>

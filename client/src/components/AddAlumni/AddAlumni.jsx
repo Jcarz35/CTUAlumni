@@ -135,7 +135,7 @@ const VerifyUser = ({ user }) => {
                         </div>
 
                         <div className="fname_holderss">
-                            <p>Alumni ID</p>
+                            <p>Student ID</p>
                             <input
                                 type="text"
                                 name="userId"

@@ -22,11 +22,15 @@ router.post("/addEvent", upload.single("eventPic"), async (req, res) => {
     try {
         //i save sa events database ang na add na event
         const event = await new Events({
+            ownerId: req.body.ownerId,
+            ownerName: req.body.ownerName,
+            ownerPhoto: req.body.ownerPhoto,
             title: req.body.title,
             description: req.body.description,
             eventPic: pic,
             postDate: req.body.date,
             where: req.body.where,
+            category: req.body.category,
             course: req.body.course,
             year: req.body.year,
         });
@@ -37,26 +41,47 @@ router.post("/addEvent", upload.single("eventPic"), async (req, res) => {
                 console.log("success");
             }
         });
+    } catch (error) {
+        console.log(error);
+    }
+});
 
+//find and accept job , make accept property to true
+router.put("/acceptEvent", async (req, res) => {
+    const id = req.body.id;
+
+    try {
+        await Events.updateOne(
+            { _id: id },
+            {
+                $set: {
+                    accept: true,
+                },
+            }
+        ).then(() => {
+            console.log("success", id);
+        });
+
+        const eventdetails = await Events.findById({ _id: id });
+        console.log(eventdetails);
         // notification array
-        const notification = [].concat(req.body).map((notif) => {
+        const notification = [].concat(eventdetails).map((notif) => {
             return {
-                notificationId: event._id,
-                title: req.body.title,
-                description: req.body.description,
+                notificationId: eventdetails._id,
+                title: eventdetails.title,
+                description: eventdetails.description,
             };
         });
-        console.log(notification);
-
         // ibutang sa notofication property
-        if (req.body.category === "Reunion") {
+        if (eventdetails.category === "Reunion") {
             // para sa mga alumni nga apil sa events
+            console.log("succes ang event details");
             await User.updateMany(
                 {
                     $and: [
                         {
-                            course: req.body.course,
-                            schoolYear: req.body.year,
+                            course: eventdetails.course,
+                            schoolYear: eventdetails.year,
                         },
                     ],
                 },
@@ -67,6 +92,7 @@ router.post("/addEvent", upload.single("eventPic"), async (req, res) => {
                     },
                 }
             );
+
             // para admin
             await User.findOneAndUpdate(
                 {
@@ -92,9 +118,11 @@ router.post("/addEvent", upload.single("eventPic"), async (req, res) => {
                 // { $addToSet: { notification: event._id } }
             );
         }
-    } catch (error) {
-        console.log(error);
+    } catch (err) {
+        console.log("Error " + err);
     }
+
+    res.send("Updated");
 });
 
 // get all events id from notifications property
@@ -107,11 +135,30 @@ router.get("/all/:id", async (req, res) => {
 
     const list = await Promise.all(
         notificationList.map(async (Id) => {
-            return await Events.find({ _id: Id.notificationId });
+            return await Events.find({ _id: Id.notificationId, accept: true });
         })
     );
 
     res.status(200).json(list.flat());
+});
+
+// all raw events
+router.get("/allRaw", async (req, res) => {
+    Events.find({ accept: false }, (err, result) => {
+        if (err) {
+            res.send(err);
+        } else {
+            res.send(result);
+        }
+    });
+});
+//count all raw events
+router.get("/countRawEvent", async (req, res) => {
+    // Count the number of jobs with accept set to false
+    const numEvents = await Events.countDocuments({ accept: false });
+
+    // Return the count in the response
+    res.json({ numEvents });
 });
 
 //get single event and when click thhe read will be true

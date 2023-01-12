@@ -358,7 +358,7 @@ const EditUser = () => {
                             </p>
                         </div>
                         <div className="fullname">
-                            <h1>Alumni Id : </h1> <p>{user.userId}</p>
+                            <h1>Student Id : </h1> <p>{user.userId}</p>
                         </div>
                         <div className="fullname">
                             <h1>Address : </h1> <p>{user.address}</p>

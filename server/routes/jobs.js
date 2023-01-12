@@ -206,7 +206,7 @@ router.delete("/deleteJob/:id", async (req, res) => {
 });
 
 router.get("/getCount", async (req, res) => {
-    const eventCount = await Events.countDocuments();
+    const eventCount = await Events.countDocuments({ accept: true });
     const jobCount = await Jobs.countDocuments({ accept: true });
     const idRequestCount = await Request.countDocuments();
     res.json({ eventCount, jobCount, idRequestCount });

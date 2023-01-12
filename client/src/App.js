@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 import { createContext } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
-import Axios from "axios";
 
 // Components and pages
 import Main from "./components/Main/Main";
@@ -24,6 +23,7 @@ import Resume from "./components/Resume/Resume";
 import ResumeBuilder from "./components/ResumeBuilder/ResumeBuilder";
 import JobList from "./components/JobPosting/JobList/JobList"; //acceptjob ni
 import RequestList from "./components/Request/RequestList";
+import RawEvents from "./components/Events/RawEvents";
 
 export const ThemeContext = createContext(null);
 
@@ -52,7 +52,7 @@ function App() {
                             <Route
                                 path="/home"
                                 exact
-                                element={<Home theme={theme} />}
+                                element={<Home user={user} theme={theme} />}
                             />
                             <Route path="/alumni" exact element={<Alumni />} />
                             <Route
@@ -104,6 +104,11 @@ function App() {
                                 path="/event/:id"
                                 exact
                                 element={<Event user={user} />}
+                            ></Route>
+                            <Route
+                                path="/events/acceptevents"
+                                exact
+                                element={<RawEvents user={user} />}
                             ></Route>
                             <Route
                                 path="/requestId"

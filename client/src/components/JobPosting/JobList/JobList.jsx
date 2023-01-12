@@ -62,12 +62,7 @@ const JobList = ({ user }) => {
                 console.log(err);
             });
     }, [jobData]);
-    // let jobList = [];
-    // jobData.map((job) => {
-    //     jobList.push(job.ownerId);
-    // });
-    // console.log(jobList);
-    //loading page
+
     const [loading, setLoading] = useState(false);
 
     const toggle_arrow = (e) => {

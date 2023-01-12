@@ -22,6 +22,7 @@ import { useParams } from "react-router-dom";
 
 import madara from "../../images/madara.jpg";
 import ScrollToTop from "../ScrollToTop/ScrollToTop";
+import Snackbar from "../Snackbar/Snackbar";
 
 const Events = ({ user }) => {
     const [data, setData] = useState([]);
@@ -74,15 +75,20 @@ const Events = ({ user }) => {
     };
 
     //snackbar
+    const [message, setMessage] = useState(null);
     const [showSnackbar, setShowSnackbar] = useState(false);
     const SnackbarType = {
         success: "success",
         fail: "fail",
     };
 
-    //para add og job
+    //para add og Event
     const handleSubmit = () => {
         const formData = new FormData();
+        const ownerName = userInfo.firstName + " " + userInfo.lastName;
+        formData.append("ownerId", userInfo._id);
+        formData.append("ownerName", ownerName);
+        formData.append("ownerPhoto", userInfo.profilePic);
         formData.append("eventPic", fileName);
         formData.append("title", title);
         formData.append("description", description);
@@ -96,11 +102,43 @@ const Events = ({ user }) => {
         axios.post("http://localhost:8080/api/events/addEvent", formData);
 
         handleClose();
+        setMessage("Event Added Succesfully");
         setShowSnackbar(true);
         setTimeout(() => {
             setShowSnackbar(false);
         }, 3000);
     };
+
+    // para kuha sa usa ka data sa user
+    const [userInfo, setUserInfo] = useState([]);
+    useEffect(() => {
+        axios
+            .get("http://localhost:8080/api/users/user/" + user)
+            .then((res) => {
+                setUserInfo(res.data);
+                // ibutang sa user na variable ang data gikan DB
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, [userInfo]);
+
+    //fetch all raw event nga wala pa na accept sa Admin
+    const [countRawEvent, setCountRawEvent] = useState();
+    useEffect(() => {
+        axios
+            .get("http://localhost:8080/api/events/countRawEvent")
+            .then((res) => {
+                setCountRawEvent(res.data.numEvents);
+                setLoading(false);
+
+                // ibutang sa user na variable ang data gikan DB
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, [countRawEvent]);
+
     return (
         <>
             {loading ? (
@@ -118,9 +156,38 @@ const Events = ({ user }) => {
             ) : (
                 <div className="events_container">
                     <ScrollToTop />
+                    {/* snackbar notif */}
+                    <div
+                        className="snackbar_position"
+                        id={showSnackbar ? "show" : "hide"}
+                    >
+                        <Snackbar
+                            message={message}
+                            type={SnackbarType.success}
+                        />
+                    </div>
                     <div className="events_header">
                         <h1>Events</h1>
+
+                        {/* para add og accept sa Event */}
                         <div className="header_right">
+                            {/* accept event button */}
+                            {userInfo.isAdmin ? (
+                                <NavLink
+                                    exact={true}
+                                    key="RawEvents"
+                                    to="/events/acceptevents"
+                                    className="accept_jobs"
+                                >
+                                    Accept Events
+                                    {countRawEvent > 0 ? (
+                                        <span className="jobCounter">
+                                            {countRawEvent}
+                                        </span>
+                                    ) : null}
+                                </NavLink>
+                            ) : null}
+
                             <motion.button
                                 onClick={handleClickOpen}
                                 whileHover={{ scale: 1.1 }}
