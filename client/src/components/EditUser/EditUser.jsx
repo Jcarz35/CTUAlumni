@@ -262,7 +262,7 @@ const EditUser = () => {
 
             <div className="container">
                 {/**Left */}
-                <div className="left">
+                <div className="profile_left">
                     <div className="profile_pic">
                         <a
                             href={`http://localhost:8080/uploads/${user.profilePic}`}
@@ -347,7 +347,7 @@ const EditUser = () => {
                         </div>
                     </div>
 
-                    <div className="about_info">
+                    <div className="profile_about_info">
                         <h1>About Me :</h1>
                         <p className="p">{user.bio}</p>
                         <div className="fullname">
@@ -441,6 +441,16 @@ const EditUser = () => {
                                     }
                                 />
                             </div>
+                            {/* about me */}
+                            <div className="bio">
+                                <p>About Me</p>
+                                <textarea
+                                    type="text"
+                                    className="bio_area"
+                                    defaultValue={user.bio}
+                                    onChange={(e) => setBio(e.target.value)}
+                                />
+                            </div>
                             {/* phone input */}
                             <div className="phone_holder">
                                 <p>Address</p>
@@ -530,19 +540,15 @@ const EditUser = () => {
                                         Bachelor of Science in Information
                                         Technology
                                     </option>
-                                    <option value="BIT-Garments">
-                                        BIT Garments
-                                    </option>
-                                    <option value="BIT-Drafting">
-                                        BIT Drafting
-                                    </option>
-                                    <option value="BIT-Computer-Technology">
+                                    <option value="BIT-G">BIT Garments</option>
+                                    <option value="BIT-D">BIT Drafting</option>
+                                    <option value="BIT-CT">
                                         BIT Computer Technology
                                     </option>
-                                    <option value="BIT-Automotive">
+                                    <option value="BIT-A">
                                         BIT Automotive
                                     </option>
-                                    <option value="BIT-Electronics">
+                                    <option value="BIT-E">
                                         BIT Electronics
                                     </option>
                                     <option value="BSHM">
@@ -551,10 +557,6 @@ const EditUser = () => {
                                     </option>
                                     <option value="BSA">
                                         Bachelor of Science in Agriculture
-                                    </option>
-                                    <option value="BSHM">
-                                        Bachelor of Science in Hospitality
-                                        Management
                                     </option>
                                 </select>
                             </div>
@@ -591,7 +593,7 @@ const EditUser = () => {
                                 </select>
                             </div>
                         </div>
-                        {/* save button */}
+                        {/* save  button */}
                         <div className="button_holder">
                             <button
                                 className="button"

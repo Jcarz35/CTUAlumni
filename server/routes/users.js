@@ -490,12 +490,124 @@ router.put("/addAward", (req, res) => {
     );
 });
 
+//delete award
 router.put("/deleteAward/:awardId", (req, res) => {
     console.log("userId", req.body.userId);
     console.log("Deleting", req.params.awardId);
     User.updateOne(
         { _id: req.body.userId },
         { $pull: { award: { _id: req.params.awardId } } },
+        function (error) {
+            if (error) {
+                res.status(500).send(error);
+            } else {
+                res.send("Award deleted successfully");
+            }
+        }
+    );
+});
+
+//find and update or add experience
+router.put("/addExperience", (req, res) => {
+    const newExperience = {
+        title: req.body.title,
+        description: req.body.description,
+    };
+    User.updateOne(
+        { _id: req.body.id },
+        { $push: { experience: newExperience } },
+        function (error) {
+            if (error) {
+                res.status(500).send(error);
+            } else {
+                res.send("Award added successfully");
+            }
+        }
+    );
+});
+
+//delete experience
+router.put("/deleteExperience/:experienceId", (req, res) => {
+    console.log("userId", req.body.userId);
+    console.log("Deleting", req.params.awardId);
+    User.updateOne(
+        { _id: req.body.userId },
+        { $pull: { experience: { _id: req.params.experienceId } } },
+        function (error) {
+            if (error) {
+                console.log(error);
+            } else {
+                res.send("Award deleted successfully");
+                console.log("Award deleted successfully");
+            }
+        }
+    );
+});
+
+//find and update or add education details
+router.put("/addEducation", (req, res) => {
+    const newEducation = {
+        title: req.body.title,
+        location: req.body.location,
+    };
+    User.updateOne(
+        { _id: req.body.id },
+        { $push: { education: newEducation } },
+        function (error) {
+            if (error) {
+                res.status(500).send(error);
+            } else {
+                console.log(
+                    "Education added successfully",
+                    req.body.title + req.body.description
+                );
+            }
+        }
+    );
+});
+
+//delete education
+router.put("/deleteEducation/:educationId", (req, res) => {
+    console.log("userId", req.body.userId);
+    console.log("Deleting", req.params.educationId);
+    User.updateOne(
+        { _id: req.body.userId },
+        { $pull: { education: { _id: req.params.educationId } } },
+        function (error) {
+            if (error) {
+                res.status(500).send(error);
+            } else {
+                res.send("Award deleted successfully");
+            }
+        }
+    );
+});
+
+//find and update or add education details
+router.put("/addSkills", (req, res) => {
+    const newSkills = {
+        title: req.body.title,
+    };
+    User.updateOne(
+        { _id: req.body.id },
+        { $push: { skills: newSkills } },
+        function (error) {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log("Skills added successfully", req.body.title);
+            }
+        }
+    );
+});
+
+//delete skills
+router.put("/deleteSkills/:skillsId", (req, res) => {
+    console.log("userId", req.body.userId);
+    console.log("Deleting", req.params.skillsId);
+    User.updateOne(
+        { _id: req.body.userId },
+        { $pull: { skills: { _id: req.params.skillsId } } },
         function (error) {
             if (error) {
                 res.status(500).send(error);

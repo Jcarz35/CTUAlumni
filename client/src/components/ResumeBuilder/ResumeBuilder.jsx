@@ -11,8 +11,22 @@ import { BsTelephoneFill } from "react-icons/bs";
 import { MdEmail } from "react-icons/md";
 import { PDFExport } from "@progress/kendo-react-pdf";
 
+import { motion } from "framer-motion";
+//para dialog
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+
+//icons
+import { FaUserCircle, FaSave } from "react-icons/fa";
+import { BsFillCameraFill, BsTrash } from "react-icons/bs";
+import { AiOutlinePlus } from "react-icons/ai";
+import { IoCloseCircleSharp, IoCloseSharp } from "react-icons/io5";
+
 const ResumeBuilder = ({ user }) => {
     const pdfExportRef = useRef();
+
+    const [userId, setUserId] = useState();
 
     //para download pdf
     function generatePDF() {
@@ -24,8 +38,6 @@ const ResumeBuilder = ({ user }) => {
     const [workExperience, setWorkExperience] = useState([
         { title: "", description: "" },
     ]);
-    const [education, setEducation] = useState([{ title: "", location: "" }]);
-    const [skills, setSkills] = useState([{ title: "" }]);
 
     const [userInfo, setUserInfo] = useState([]);
 
@@ -36,12 +48,20 @@ const ResumeBuilder = ({ user }) => {
         fail: "fail",
     };
 
+    const [experience, setExperience] = useState([]);
+    const [education, setEducation] = useState([]);
+    const [skills, setSkills] = useState([]);
+
     // para kuha sa usa ka data sa user
     useEffect(() => {
         axios
             .get("http://localhost:8080/api/users/user/" + user)
             .then((res) => {
                 setUserInfo(res.data);
+                setUserId(res.data._id);
+                setExperience(res.data.experience);
+                setEducation(res.data.education);
+                setSkills(res.data.skills);
 
                 // ibutang sa user na variable ang data gikan DB
             })
@@ -50,16 +70,34 @@ const ResumeBuilder = ({ user }) => {
             });
     }, [userInfo]);
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
+    const generatePDFRef = useRef();
+    function handleGeneratePDF() {
+        console.log("Generating PDF");
+        generatePDFRef.current.generatePDF();
+    }
+
+    // =============================================================
+    //para Experience details
+    const [experienceTitle, setExperienceTitle] = useState();
+    const [experienceDescription, setExperienceDescription] = useState();
+
+    // Dialog para Experience details
+    const [openDialogExperience, setOpenDialogExperience] = useState(false);
+    const handleClickOpenExperience = () => {
+        setOpenDialogExperience(true);
+    };
+    const handleCloseExperience = () => {
+        setOpenDialogExperience(false);
+    };
+    //sa form para Award details ig submit
+    const changeonClickExperience = async (e) => {
+        e.preventDefault();
 
         axios
-            .put("http://localhost:8080/api/users/updateResume", {
+            .put("http://localhost:8080/api/users/addExperience", {
                 id: userInfo._id,
-                bio: aboutMe,
-                experience: workExperience,
-                education: education,
-                skills: skills,
+                title: experienceTitle,
+                description: experienceDescription,
             })
             .then(() => {
                 setShowSnackbar(true);
@@ -71,12 +109,112 @@ const ResumeBuilder = ({ user }) => {
                 console.log(err);
             });
     };
+    // para delete sa experience
+    const handleDeleteExperience = (experienceId) => {
+        axios
+            .put(
+                `http://localhost:8080/api/users/deleteExperience/${experienceId}`,
+                {
+                    userId: userId,
+                }
+            )
+            .then((res) => {
+                setExperience(
+                    experience.filter((exp) => exp._id !== experienceId)
+                );
+            });
+    };
 
-    const generatePDFRef = useRef();
-    function handleGeneratePDF() {
-        console.log("Generating PDF");
-        generatePDFRef.current.generatePDF();
-    }
+    // =============================================================
+    //para education details
+    const [skillsTitle, setSkillsTitle] = useState();
+
+    // Dialog para Experience details
+    const [openDialogSkills, setOpenDialogSkills] = useState(false);
+    const handleClickOpenSkills = () => {
+        setOpenDialogSkills(true);
+    };
+    const handleCloseSkills = () => {
+        setOpenDialogSkills(false);
+    };
+    //sa form para education details ig submit
+    const changeOnClickSkills = async (e) => {
+        e.preventDefault();
+
+        axios
+            .put("http://localhost:8080/api/users/addSkills", {
+                id: userInfo._id,
+                title: skillsTitle,
+            })
+            .then(() => {
+                setShowSnackbar(true);
+                setTimeout(() => {
+                    setShowSnackbar(false);
+                }, 3000);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+    // para delete sa education
+    const handleDeleteSkills = (skillsId) => {
+        axios
+            .put(`http://localhost:8080/api/users/deleteSkills/${skillsId}`, {
+                userId: userId,
+            })
+            .then((res) => {
+                setSkills(skills.filter((skill) => skill._id !== skillsId));
+            });
+    };
+
+    // =============================================================
+    //para education details
+    const [educationTitle, setEducationTitle] = useState();
+    const [educationDescription, setEducationDescription] = useState();
+
+    // Dialog para Experience details
+    const [openDialogEducation, setOpenDialogEducation] = useState(false);
+    const handleClickOpenEducation = () => {
+        setOpenDialogEducation(true);
+    };
+    const handleCloseEducation = () => {
+        setOpenDialogEducation(false);
+    };
+    //sa form para education details ig submit
+    const changeOnClickEducation = async (e) => {
+        e.preventDefault();
+
+        axios
+            .put("http://localhost:8080/api/users/addEducation", {
+                id: userInfo._id,
+                title: educationTitle,
+                location: educationDescription,
+            })
+            .then(() => {
+                setShowSnackbar(true);
+                setTimeout(() => {
+                    setShowSnackbar(false);
+                }, 3000);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+    // para delete sa education
+    const handleDeleteEducation = (educationId) => {
+        axios
+            .put(
+                `http://localhost:8080/api/users/deleteEducation/${educationId}`,
+                {
+                    userId: userId,
+                }
+            )
+            .then((res) => {
+                setEducation(
+                    education.filter((exp) => exp._id !== educationId)
+                );
+            });
+    };
 
     return (
         <div className="resume_builder">
@@ -87,7 +225,7 @@ const ResumeBuilder = ({ user }) => {
                 id={showSnackbar ? "show" : "hide"}
             >
                 <Snackbar
-                    message={"Succesfully Updated"}
+                    message={"Succesfully Added"}
                     type={SnackbarType.success}
                 />
             </div>
@@ -96,174 +234,452 @@ const ResumeBuilder = ({ user }) => {
             </div>
 
             <div className="resume_builder_body">
-                <form
-                    onSubmit={handleSubmit}
-                    encType="multipart/form-data"
-                    method="post"
-                    className="form_resume_container"
+                {/* Work experience details container ======================================= */}
+                <div
+                    className="job_profile_section"
+                    style={{
+                        margin: "0 auto",
+                        "margin-bottom": "10px",
+                        width: "80%",
+                    }}
                 >
-                    <div className="about_me_section">
-                        <h1>About me</h1>
-                        <textarea
-                            placeholder="Tell me about yourself"
-                            defaultValue={userInfo.bio}
-                            onChange={(e) => setAboutMe(e.target.value)}
+                    <div className="jps_header">
+                        <h1>Work Experience</h1>
+                        <AiOutlinePlus
+                            className="icon"
+                            onClick={handleClickOpenExperience}
                         />
                     </div>
-                    <div className="experience_section">
-                        <h1>Work Experience</h1>
 
-                        {workExperience.map((item, index) => (
-                            <div key={index} className="exp_input_holder">
-                                <p>Experience{" " + (index + 1)}</p>
-                                <div className="resume_input_title">
-                                    <h1>Title</h1>
-                                    <input
-                                        type="text"
-                                        value={item.title}
-                                        onChange={(event) => {
-                                            const newArray = [
-                                                ...workExperience,
-                                            ];
-                                            newArray[index] = {
-                                                ...newArray[index],
-                                                title: event.target.value,
-                                            };
-                                            setWorkExperience(newArray);
+                    <div className="job_profile_section_body">
+                        {/* experience details .map */}
+                        {experience &&
+                            experience.map((exp, index) => {
+                                return (
+                                    <div
+                                        key={index}
+                                        className="award_card"
+                                        style={{
+                                            margin: "8px auto",
+                                            "border-bottom":
+                                                "1px solid #F6F3F3",
+                                            padding: "8px 5px",
                                         }}
-                                    />
-                                </div>
-                                {/* work experience description */}
-                                <div className="resume_input_des">
-                                    <h1>Description</h1>
-                                    <textarea
-                                        type="text"
-                                        value={item.description}
-                                        onChange={(event) => {
-                                            const newArray = [
-                                                ...workExperience,
-                                            ];
-                                            newArray[index] = {
-                                                ...newArray[index],
-                                                description: event.target.value,
-                                            };
-                                            setWorkExperience(newArray);
-                                        }}
-                                    />
-                                </div>
-                            </div>
-                        ))}
+                                    >
+                                        <h5 style={{ fontWeight: "600" }}>
+                                            {exp.title}
+                                        </h5>
 
-                        {/* button para add og experience field */}
-                        <button
-                            className="button_resume_holder"
-                            type="button"
-                            onClick={() =>
-                                setWorkExperience([
-                                    ...workExperience,
-                                    { title: "", description: "" },
-                                ])
-                            }
+                                        <p
+                                            style={{
+                                                "margin-bottom": 0,
+                                                "margin-right": "50px",
+                                            }}
+                                        >
+                                            {exp.description}
+                                        </p>
+                                        <button
+                                            onClick={() =>
+                                                handleDeleteExperience(exp._id)
+                                            }
+                                        >
+                                            <BsTrash className="icon" />
+                                            <p>Delete</p>
+                                        </button>
+                                    </div>
+                                );
+                            })}
+                    </div>
+                </div>
+                {/* dialog para add og experience details sa User */}
+                <Dialog
+                    className="job_details_dialog"
+                    open={openDialogExperience}
+                    onClose={handleCloseExperience}
+                >
+                    <motion.div
+                        animate={{
+                            height: openDialogExperience ? "360px" : "0px",
+                            width: "550px",
+                        }}
+                        className="Id_request_dialog_div"
+                    >
+                        <div className="header_job">
+                            <DialogTitle>
+                                <h5>Add Job Details</h5>
+                            </DialogTitle>
+                            <Button
+                                className="btn_close"
+                                onClick={handleCloseExperience}
+                            >
+                                <IoCloseCircleSharp className="close_icon" />
+                            </Button>
+                        </div>
+
+                        {/* form para sa work details */}
+                        <form
+                            encType="multipart/form-data"
+                            method="post"
+                            onSubmit={changeonClickExperience}
+                            style={{ "margin-top": 15 }}
                         >
-                            <AiOutlinePlusCircle className="icon" />{" "}
-                            <p>Experience</p>
-                        </button>
+                            {/* title Name*/}
+                            <div
+                                className="id_input_holder"
+                                style={{
+                                    width: "90%",
+                                    margin: "5px auto",
+                                }}
+                            >
+                                <h5>Title</h5>
+                                <input
+                                    style={{
+                                        border: "1px solid gray",
+                                        height: 35,
+                                        fontSize: 14,
+                                        padding: "1px 5px",
+                                        backgroundColor: "#edf7f8",
+                                    }}
+                                    type="text"
+                                    className="job_title"
+                                    required
+                                    placeholder="Ex. Junior Web Developer"
+                                    name="jobTitle"
+                                    onChange={(e) =>
+                                        setExperienceTitle(e.target.value)
+                                    }
+                                ></input>
+                            </div>
+
+                            {/* Work Description */}
+                            <div
+                                className="id_input_holder"
+                                style={{
+                                    width: "90%",
+                                    margin: "5px auto",
+                                }}
+                            >
+                                <h5>Description</h5>
+                                <textarea
+                                    style={{
+                                        border: "1px solid gray",
+                                        height: "105px",
+                                        width: "100%",
+                                        fontSize: 14,
+                                        padding: "1px 5px",
+                                        backgroundColor: "#edf7f8",
+                                    }}
+                                    type="text"
+                                    className="job_title"
+                                    required
+                                    name="awardDescription"
+                                    onChange={(e) =>
+                                        setExperienceDescription(e.target.value)
+                                    }
+                                    // onChange={(e) => setEmail(e.target.value)}
+                                ></textarea>
+                            </div>
+
+                            <div
+                                className="button_save_id"
+                                style={{
+                                    width: "90%",
+                                    display: "flex",
+                                    justifyContent: "end",
+                                }}
+                            >
+                                <button onClick={handleCloseExperience}>
+                                    Save
+                                </button>
+                            </div>
+                        </form>
+                    </motion.div>
+                </Dialog>
+
+                {/* education details ========================================================*/}
+                <div
+                    className="job_profile_section"
+                    style={{
+                        margin: "0 auto",
+                        "margin-bottom": "10px",
+                        width: "80%",
+                    }}
+                >
+                    <div className="jps_header">
+                        <h1>Education</h1>
+                        <AiOutlinePlus
+                            className="icon"
+                            onClick={handleClickOpenEducation}
+                        />
                     </div>
 
-                    {/* education */}
-                    <div className="education_section">
-                        <h1>Education Details</h1>
-
-                        {education.map((item, index) => (
-                            <div key={index} className="exp_input_holder">
-                                <p>Education{" " + (index + 1)}</p>
-                                <div className="resume_input_title">
-                                    <h1>Title</h1>
-                                    <input
-                                        type="text"
-                                        value={item.title}
-                                        onChange={(event) => {
-                                            const newArray = [...education];
-                                            newArray[index] = {
-                                                ...newArray[index],
-                                                title: event.target.value,
-                                            };
-                                            setEducation(newArray);
+                    <div className="job_profile_section_body">
+                        {/* experience details .map */}
+                        {education &&
+                            education.map((educ, index) => {
+                                return (
+                                    <div
+                                        key={index}
+                                        className="award_card"
+                                        style={{
+                                            height: "50px",
+                                            display: "flex",
+                                            "flex-direction": "column",
+                                            "border-bottom":
+                                                "1px solid #F6F3F3",
+                                            padding: "8px 5px",
+                                            margin: "5px 0",
                                         }}
-                                    />
-                                </div>
-                                <div className="resume_input_des">
-                                    <h1>School</h1>
-                                    <textarea
-                                        type="text"
-                                        value={item.location}
-                                        onChange={(event) => {
-                                            const newArray = [...education];
-                                            newArray[index] = {
-                                                ...newArray[index],
-                                                location: event.target.value,
-                                            };
-                                            setEducation(newArray);
-                                        }}
-                                    />
-                                </div>
-                            </div>
-                        ))}
+                                    >
+                                        <h5 style={{ fontWeight: "600" }}>
+                                            {educ.title}
+                                        </h5>
 
-                        <button
-                            className="button_resume_holder"
-                            type="button"
-                            onClick={() =>
-                                setEducation([
-                                    ...education,
-                                    { title: "", location: "" },
-                                ])
-                            }
-                        >
-                            <AiOutlinePlusCircle className="icon" />{" "}
-                            <p>Education</p>
-                        </button>
+                                        <p style={{ "margin-bottom": 0 }}>
+                                            {educ.location}
+                                        </p>
+                                        <button
+                                            onClick={() =>
+                                                handleDeleteEducation(educ._id)
+                                            }
+                                        >
+                                            <BsTrash className="icon" />
+                                            <p>Delete</p>
+                                        </button>
+                                    </div>
+                                );
+                            })}
                     </div>
-                    <div className="skills_section">
-                        <h1>Skills Details</h1>
-                        {skills.map((item, index) => (
-                            <div key={index} className="skills_input_holder">
-                                <p>Skills{" " + (index + 1)}</p>
-                                <div className="skills_input_title">
-                                    <h1>Skills Title</h1>
-                                    <input
-                                        type="text"
-                                        value={item.title}
-                                        onChange={(event) => {
-                                            const newArray = [...skills];
-                                            newArray[index] = {
-                                                ...newArray[index],
-                                                title: event.target.value,
-                                            };
-                                            setSkills(newArray);
-                                        }}
-                                    />
-                                </div>
-                            </div>
-                        ))}
+                </div>
+                {/* dialog para add og education details sa User */}
+                <Dialog
+                    className="job_details_dialog"
+                    open={openDialogEducation}
+                    onClose={handleCloseEducation}
+                >
+                    <motion.div
+                        animate={{
+                            height: openDialogEducation ? "360px" : "0px",
+                            width: "550px",
+                        }}
+                        className="Id_request_dialog_div"
+                    >
+                        <div className="header_job">
+                            <DialogTitle>
+                                <h5>Add Education Details</h5>
+                            </DialogTitle>
+                            <Button
+                                className="btn_close"
+                                onClick={handleCloseEducation}
+                            >
+                                <IoCloseCircleSharp className="close_icon" />
+                            </Button>
+                        </div>
 
-                        {/* button para add og education field */}
-                        <button
-                            className="button_resume_holder"
-                            type="button"
-                            onClick={() =>
-                                setSkills([...skills, { title: "" }])
-                            }
+                        {/* form para sa work details */}
+                        <form
+                            encType="multipart/form-data"
+                            method="post"
+                            onSubmit={changeOnClickEducation}
+                            style={{ "margin-top": 15 }}
                         >
-                            <AiOutlinePlusCircle className="icon" />{" "}
-                            <p>Skills</p>
-                        </button>
+                            {/* title Name*/}
+                            <div
+                                className="id_input_holder"
+                                style={{
+                                    width: "90%",
+                                    margin: "5px auto",
+                                }}
+                            >
+                                <h5>Title</h5>
+                                <input
+                                    style={{
+                                        border: "1px solid gray",
+                                        height: 35,
+                                        fontSize: 14,
+                                        padding: "1px 5px",
+                                        backgroundColor: "#edf7f8",
+                                    }}
+                                    type="text"
+                                    className="job_title"
+                                    required
+                                    name="jobTitle"
+                                    onChange={(e) =>
+                                        setEducationTitle(e.target.value)
+                                    }
+                                ></input>
+                            </div>
+
+                            {/* Work Description */}
+                            <div
+                                className="id_input_holder"
+                                style={{
+                                    width: "90%",
+                                    margin: "5px auto",
+                                }}
+                            >
+                                <h5>Description</h5>
+                                <textarea
+                                    style={{
+                                        border: "1px solid gray",
+                                        height: "105px",
+                                        width: "100%",
+                                        fontSize: 14,
+                                        padding: "1px 5px",
+                                        backgroundColor: "#edf7f8",
+                                    }}
+                                    type="text"
+                                    className="job_title"
+                                    required
+                                    name="awardDescription"
+                                    onChange={(e) =>
+                                        setEducationDescription(e.target.value)
+                                    }
+                                    // onChange={(e) => setEmail(e.target.value)}
+                                ></textarea>
+                            </div>
+
+                            <div
+                                className="button_save_id"
+                                style={{
+                                    width: "90%",
+                                    display: "flex",
+                                    justifyContent: "end",
+                                }}
+                            >
+                                <button onClick={handleCloseEducation}>
+                                    Save
+                                </button>
+                            </div>
+                        </form>
+                    </motion.div>
+                </Dialog>
+
+                {/* skills details============================================= */}
+                <div
+                    className="job_profile_section"
+                    style={{
+                        margin: "0 auto",
+                        "margin-bottom": "200px",
+                        width: "80%",
+                    }}
+                >
+                    <div className="jps_header">
+                        <h1>Skills</h1>
+                        <AiOutlinePlus
+                            className="icon"
+                            onClick={handleClickOpenSkills}
+                        />
                     </div>
 
-                    <button className="btn_save_pic" type="submit">
-                        Submit
-                    </button>
-                </form>
+                    <div className="job_profile_section_body">
+                        {/* skills details .map */}
+
+                        {skills &&
+                            skills.map((skill, index) => {
+                                return (
+                                    <div
+                                        key={index}
+                                        className="award_card"
+                                        style={{
+                                            height: "28px",
+                                            display: "flex",
+                                            "flex-direction": "column",
+                                            "margin-left": "5px",
+                                        }}
+                                    >
+                                        <h5 style={{ fontWeight: "600" }}>
+                                            {skill.title}
+                                        </h5>
+
+                                        <button
+                                            onClick={() =>
+                                                handleDeleteSkills(skill._id)
+                                            }
+                                        >
+                                            <BsTrash className="icon" />
+                                            <p>Delete</p>
+                                        </button>
+                                    </div>
+                                );
+                            })}
+                    </div>
+                </div>
+                {/* dialog para add og skills details sa User */}
+                <Dialog
+                    className="job_details_dialog"
+                    open={openDialogSkills}
+                    onClose={handleCloseSkills}
+                >
+                    <motion.div
+                        animate={{
+                            height: openDialogSkills ? "360px" : "0px",
+                            width: "550px",
+                        }}
+                        className="Id_request_dialog_div"
+                    >
+                        <div className="header_job">
+                            <DialogTitle>
+                                <h5>Add Skills </h5>
+                            </DialogTitle>
+                            <Button
+                                className="btn_close"
+                                onClick={handleCloseSkills}
+                            >
+                                <IoCloseCircleSharp className="close_icon" />
+                            </Button>
+                        </div>
+
+                        {/* form para sa work details */}
+                        <form
+                            encType="multipart/form-data"
+                            method="post"
+                            onSubmit={changeOnClickSkills}
+                            style={{ "margin-top": 15 }}
+                        >
+                            {/* title Name*/}
+                            <div
+                                className="id_input_holder"
+                                style={{
+                                    width: "90%",
+                                    margin: "5px auto",
+                                }}
+                            >
+                                <h5>Skill</h5>
+                                <input
+                                    style={{
+                                        border: "1px solid gray",
+                                        height: 35,
+                                        fontSize: 14,
+                                        padding: "1px 5px",
+                                        backgroundColor: "#edf7f8",
+                                    }}
+                                    type="text"
+                                    className="job_title"
+                                    required
+                                    name="jobTitle"
+                                    onChange={(e) =>
+                                        setSkillsTitle(e.target.value)
+                                    }
+                                ></input>
+                            </div>
+
+                            <div
+                                className="button_save_id"
+                                style={{
+                                    width: "90%",
+                                    display: "flex",
+                                    justifyContent: "end",
+                                }}
+                            >
+                                <button onClick={handleCloseSkills}>
+                                    Save
+                                </button>
+                            </div>
+                        </form>
+                    </motion.div>
+                </Dialog>
+
                 <h1 style={{ fontSize: "24px", color: "black" }}>
                     Resume in PDf format
                 </h1>
@@ -324,7 +740,7 @@ const ResumeBuilder = ({ user }) => {
                                                 (skill, index) => {
                                                     return (
                                                         <p key={index}>
-                                                            {skill}
+                                                            {skill.title}
                                                         </p>
                                                     );
                                                 }

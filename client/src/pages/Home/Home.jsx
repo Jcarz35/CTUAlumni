@@ -19,6 +19,20 @@ const Home = ({ theme, user }) => {
     const [open, setOpen] = useState(false);
     const [quotes, setQuotes] = useState(false);
 
+    //para kuha sa User info sa usa
+    const [userInfo, setUserInfo] = useState([]);
+    useEffect(() => {
+        axios
+            .get("http://localhost:8080/api/users/user/" + user)
+            .then((res) => {
+                setUserInfo(res.data);
+                // ibutang sa user na variable ang data gikan DB
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, [userInfo]);
+
     //fetch random qoutes online
     useEffect(() => {
         try {
@@ -85,8 +99,7 @@ const Home = ({ theme, user }) => {
                 <div className="first_div_left">
                     <img src={dash} alt="" />
                     <div className="first_div_title">
-                        <h1>Welcome Back !</h1>
-
+                        <h1>Welcome Back {userInfo && userInfo.firstName} !</h1>{" "}
                         <p>{quotes}</p>
                     </div>
                 </div>
@@ -254,32 +267,38 @@ const Home = ({ theme, user }) => {
                 <div className="fourth_div_content">
                     {/* user awards chart */}
                     <h4 style={{ "margin-bottom": "1px" }}>Awards</h4>
-                    {userAwards.map((user) => (
-                        <Link
-                            key={user._id}
-                            to={"/user/" + user._id}
-                            className="fourth_div_link"
-                        >
-                            <img
-                                src={`http://localhost:8080/uploads/${user.profilePic}`}
-                                alt="picture"
-                            />
-                            <div className="header">
-                                <h5>
-                                    {user.firstName} {user.lastName}
-                                </h5>
-                                {/* {user.award.map((awd) => (
+                    {userAwards
+                        .map((user) => (
+                            <Link
+                                key={user._id}
+                                to={"/user/" + user._id}
+                                className="fourth_div_link"
+                            >
+                                <img
+                                    src={`http://localhost:8080/uploads/${user.profilePic}`}
+                                    alt="picture"
+                                />
+                                <div className="header">
+                                    <h5>
+                                        {user.firstName} {user.lastName}
+                                    </h5>
+                                    {/* {user.award.map((awd) => (
                                     <div>
                                         <p style={{ "margin-bottom": "2px" }}>
                                             {awd.awardName}
                                         </p>
                                     </div>
                                 ))} */}
-                                <h4>{user.award.awardName}</h4>
-                            </div>
-                            <button>View</button>
-                        </Link>
-                    ))}
+                                    <h4 style={{ margin: 0 }}>
+                                        {user.award.awardName}
+                                    </h4>
+                                    <p>{user.award.issuer}</p>
+                                </div>
+                                <button>View</button>
+                            </Link>
+                        ))
+                        .sort()
+                        .reverse()}
                 </div>
 
                 {/* address chart */}

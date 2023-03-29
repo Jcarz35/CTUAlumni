@@ -4,6 +4,7 @@ import "./requestlist.css";
 
 import Axios, { AxiosError } from "axios";
 import { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
 
 //para dialog
 import Button from "@mui/material/Button";
@@ -71,6 +72,15 @@ const UserTable = ({ userBuang }) => {
         });
     };
 
+    // para update if claim or dili ang alumni ID
+    const updateClaimId = (id) => {
+        Axios.put(`http://localhost:8080/api/requests/claimId/${id}`, {}).then(
+            (response) => {
+                console.log("nigana na");
+            }
+        );
+    };
+
     // delete Request
     const deleteRequest = (id) => {
         Axios.delete(`http://localhost:8080/api/requests/deleteRequest/${id}`);
@@ -79,15 +89,64 @@ const UserTable = ({ userBuang }) => {
         handleClose();
     };
 
+    // para format sa date nga mahimong january 10 2000 ang porma
+    function formatDate(date) {
+        const options = { year: "numeric", month: "long", day: "numeric" };
+        return new Date(date).toLocaleDateString("en-US", options);
+    }
+
     // para header sa table
     const columns = [
-        { field: "lastName", headerName: "Last Name", width: 175 },
-        { field: "firstName", headerName: "First Name", width: 170 },
-        { field: "email", headerName: "Email", width: 260 },
+        {
+            field: "lastName",
+            headerName: "Last Name",
+            width: 175,
+            renderCell: (params) => {
+                return (
+                    <div>
+                        <Link
+                            to={"/user/" + params.row.ownerId}
+                            className="accept_card_top"
+                        >
+                            <p
+                                style={{
+                                    "margin-top": "18px",
+                                    "font-size": "13.5px",
+                                }}
+                            >
+                                {params.row.lastName}
+                            </p>
+                        </Link>
+                    </div>
+                );
+            },
+        },
+        {
+            field: "firstName",
+            headerName: "First Name",
+            width: 170,
+            renderCell: (params) => {
+                return (
+                    <Link
+                        to={"/user/" + params.row.ownerId}
+                        className="accept_card_top"
+                    >
+                        <p
+                            style={{
+                                "margin-top": "18px",
+                                "font-size": "13.5px",
+                            }}
+                        >
+                            {params.row.firstName}
+                        </p>
+                    </Link>
+                );
+            },
+        },
         {
             field: "requestDate",
             headerName: "Request Date",
-            width: 140,
+            width: 120,
             renderCell: (params) => {
                 return (
                     <>
@@ -105,7 +164,26 @@ const UserTable = ({ userBuang }) => {
             },
         },
 
-        { field: "approvedDate", headerName: "Approved Date", width: 130 },
+        {
+            field: "approvedDate",
+            headerName: "Approved Date",
+            width: 130,
+            renderCell: (params) => {
+                const formattedDate = formatDate(params.row.approvedDate);
+                return (
+                    <div>
+                        <p
+                            style={{
+                                "margin-top": "13px",
+                                "font-size": "13px",
+                            }}
+                        >
+                            {formattedDate}
+                        </p>
+                    </div>
+                );
+            },
+        },
         {
             field: "inputDate",
             headerName: "Input Date",
@@ -153,22 +231,12 @@ const UserTable = ({ userBuang }) => {
         {
             field: "action",
             headerName: "Action",
-            width: 190,
+            width: 120,
             renderCell: (params) => {
                 return (
                     <div className="button_container">
                         {/* para edit ni */}
-                        {/* {userInfo.isAdmin && (
-                            <Link to={"/user/" + params.row.ownerId}>
-                                <button className="userListEdit">
-                                    <BiFileFind
-                                        title="View Profile"
-                                        className="editBi"
-                                    />
-                                    <p>View</p>
-                                </button>
-                            </Link>
-                        )} */}
+
                         {params.row.accept ? (
                             <div>
                                 <p
@@ -179,7 +247,7 @@ const UserTable = ({ userBuang }) => {
                                         color: "green",
                                     }}
                                 >
-                                    accepted
+                                    Accepted
                                 </p>
                             </div>
                         ) : (
@@ -235,6 +303,51 @@ const UserTable = ({ userBuang }) => {
                                 </button>
                             </div>
                         </Dialog>
+                    </div>
+                );
+            },
+        },
+        {
+            field: "claimId",
+            headerName: "Mark as",
+            width: 190,
+            renderCell: (params) => {
+                return (
+                    <div className="button_container">
+                        {/* para edit ni */}
+
+                        {params.row.claimId ? (
+                            <div>
+                                <p
+                                    style={{
+                                        "margin-top": "9px",
+                                        "margin-left": "4px",
+                                        fontSize: "13px",
+                                        color: "green",
+                                    }}
+                                >
+                                    Claimed
+                                </p>
+                            </div>
+                        ) : (
+                            <button
+                                className="update_button"
+                                onClick={() => {
+                                    updateClaimId(params.row._id);
+                                }}
+                            >
+                                <p
+                                    style={{
+                                        "margin-top": "9px",
+                                        "margin-left": "4px",
+                                        fontSize: "13px",
+                                        color: "gray",
+                                    }}
+                                >
+                                    Claim
+                                </p>
+                            </button>
+                        )}
                     </div>
                 );
             },

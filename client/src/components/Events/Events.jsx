@@ -201,11 +201,12 @@ const Events = ({ user }) => {
                             open={openDialog}
                             onClose={handleClose}
                             className="job_dialog"
+                            maxWidth="md"
                         >
                             <motion.div
                                 animate={{
                                     height: openDialog ? "500px" : "0px",
-                                    width: "550px",
+                                    width: "750px",
                                 }}
                                 className="sidebar_dialog"
                             >
@@ -225,18 +226,29 @@ const Events = ({ user }) => {
                                     encType="multipart/form-data"
                                     method="post"
                                 >
-                                    <div className="input_job_div">
-                                        <div className="job_input_holder">
-                                            <h5>Upload Photo</h5>
+                                    <div className="input_event_div">
+                                        {/* title */}
+                                        <div
+                                            className="event_input_holder"
+                                            style={{ width: "100%" }}
+                                        >
+                                            <h5>Title</h5>
                                             <input
-                                                type="file"
-                                                fileName="eventsPic"
-                                                onChange={onChangeFile}
+                                                name="job_title"
+                                                type="text"
+                                                className="job_title"
+                                                required
+                                                onChange={(e) =>
+                                                    setTitle(e.target.value)
+                                                }
                                             ></input>
                                         </div>
 
                                         {/* category */}
-                                        <div className="job_input_holder">
+                                        <div
+                                            className="event_input_holder"
+                                            style={{ width: "325px" }}
+                                        >
                                             <h5>Category</h5>
                                             <select
                                                 name="job_title"
@@ -262,22 +274,23 @@ const Events = ({ user }) => {
                                             </select>
                                         </div>
 
-                                        <div className="job_input_holder">
-                                            <h5>Title</h5>
+                                        {/* event photo */}
+                                        <div
+                                            className="event_input_holder"
+                                            style={{ width: "330px" }}
+                                        >
+                                            <h5>Upload Photo</h5>
                                             <input
-                                                name="job_title"
-                                                type="text"
-                                                className="job_title"
-                                                required
-                                                onChange={(e) =>
-                                                    setTitle(e.target.value)
-                                                }
+                                                type="file"
+                                                fileName="eventsPic"
+                                                onChange={onChangeFile}
+                                                style={{ border: "none" }}
                                             ></input>
                                         </div>
 
                                         {/* course */}
                                         {category === "Reunion" && (
-                                            <div className="job_input_holder">
+                                            <div className="event_input_holder_holder">
                                                 <h5>Course</h5>
                                                 <select
                                                     name="job_title"
@@ -355,7 +368,7 @@ const Events = ({ user }) => {
 
                                         {/* school year */}
                                         {category === "Reunion" && (
-                                            <div className="job_input_holder">
+                                            <div className="event_input_holder_holder">
                                                 <h5>School Year</h5>
                                                 <input
                                                     name="job_title"
@@ -374,7 +387,7 @@ const Events = ({ user }) => {
                                             </div>
                                         )}
 
-                                        <div className="job_input_holder">
+                                        <div className="event_input_holders">
                                             <h5>Description</h5>
                                             <textarea
                                                 name="job_description"
@@ -389,7 +402,13 @@ const Events = ({ user }) => {
                                         </div>
 
                                         {/* input para date */}
-                                        <div className="job_input_holder">
+                                        <div
+                                            className="event_input_holder"
+                                            style={{
+                                                width: "265px",
+                                                "margin-top": "0",
+                                            }}
+                                        >
                                             <h5>Date</h5>
                                             <input
                                                 name="job_description"
@@ -402,7 +421,10 @@ const Events = ({ user }) => {
                                         </div>
 
                                         {/* location sa event */}
-                                        <div className="job_input_holder">
+                                        <div
+                                            className="event_input_holder"
+                                            style={{ width: "390px" }}
+                                        >
                                             <h5>Location</h5>
                                             <input
                                                 name="job_description"
@@ -416,7 +438,7 @@ const Events = ({ user }) => {
                                     </div>
                                 </form>
 
-                                <div className="button_save">
+                                <div className="event_button_save">
                                     <motion.button
                                         onClick={() => {
                                             handleSubmit();
@@ -443,69 +465,77 @@ const Events = ({ user }) => {
                         </div>
                         <div className="events_body_cards_container">
                             <div className="events_body_cards">
-                                {data
-                                    .filter((item) => {
-                                        return (
-                                            item.title
-                                                .toLowerCase()
-                                                .includes(
-                                                    filter.toLowerCase()
-                                                ) ||
-                                            item.description
-                                                .toLowerCase()
-                                                .includes(filter.toLowerCase())
-                                        );
-                                    })
-                                    .map((val, key) => {
-                                        return (
-                                            <NavLink
-                                                key={val._id}
-                                                to={"/event/" + val._id}
-                                                className="event_cards"
-                                                title="Click me"
-                                            >
-                                                <Card
-                                                    sx={{
-                                                        maxWidth: 250,
-                                                        height: 355,
-                                                    }}
-                                                    className="event_c"
+                                {data.length > 0 ? (
+                                    data
+                                        .filter((item) => {
+                                            return (
+                                                item.title
+                                                    .toLowerCase()
+                                                    .includes(
+                                                        filter.toLowerCase()
+                                                    ) ||
+                                                item.description
+                                                    .toLowerCase()
+                                                    .includes(
+                                                        filter.toLowerCase()
+                                                    )
+                                            );
+                                        })
+                                        .map((val, key) => {
+                                            return (
+                                                <NavLink
+                                                    key={val._id}
+                                                    to={"/event/" + val._id}
+                                                    className="event_cards"
+                                                    title="Click me"
                                                 >
-                                                    <CardMedia
-                                                        component="img"
-                                                        alt="green iguana"
-                                                        height="160"
-                                                        image={`http://localhost:8080/eventPic/${val.eventPic}`}
-                                                    />
+                                                    <Card
+                                                        sx={{
+                                                            maxWidth: 250,
+                                                            height: 355,
+                                                        }}
+                                                        className="event_c"
+                                                    >
+                                                        <CardMedia
+                                                            component="img"
+                                                            alt="green iguana"
+                                                            height="160"
+                                                            image={`http://localhost:8080/eventPic/${val.eventPic}`}
+                                                        />
 
-                                                    <CardContent>
-                                                        <p>
-                                                            {
-                                                                val.postDate.split(
-                                                                    "T"
-                                                                )[0]
-                                                            }
-                                                        </p>
-                                                        <h5>{val.title}</h5>
-                                                        <p>
-                                                            {val.description.substring(
-                                                                0,
-                                                                80
-                                                            )}
-                                                            {".."}
-                                                        </p>
-                                                    </CardContent>
-                                                    <CardActions>
-                                                        <button className="button">
-                                                            Read More
-                                                        </button>
-                                                    </CardActions>
-                                                </Card>
-                                            </NavLink>
-                                        );
-                                    })
-                                    .sort()
-                                    .reverse()}
+                                                        <CardContent>
+                                                            <p>
+                                                                {
+                                                                    val.postDate.split(
+                                                                        "T"
+                                                                    )[0]
+                                                                }
+                                                            </p>
+                                                            <h5>{val.title}</h5>
+                                                            <p>
+                                                                {val.description.substring(
+                                                                    0,
+                                                                    80
+                                                                )}
+                                                                {".."}
+                                                            </p>
+                                                        </CardContent>
+                                                        <CardActions>
+                                                            <button className="button">
+                                                                Read More
+                                                            </button>
+                                                        </CardActions>
+                                                    </Card>
+                                                </NavLink>
+                                            );
+                                        })
+                                        .sort()
+                                        .reverse()
+                                ) : (
+                                    <h5 className="noJobs">
+                                        No Events for you
+                                    </h5>
+                                )}
                             </div>
                         </div>
                     </div>

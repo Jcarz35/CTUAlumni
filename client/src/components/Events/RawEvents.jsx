@@ -138,7 +138,7 @@ const RawEvents = ({ user }) => {
             ></div>
             <div className="header_jobs">
                 <div className="header_left">
-                    <h5>Accept Jobs from Users</h5>
+                    <h5>Accept Events from Users</h5>
                 </div>
 
                 {/* para accept og job */}

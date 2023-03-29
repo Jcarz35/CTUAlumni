@@ -316,11 +316,12 @@ const ArticlesPage = ({ user }) => {
                                 open={openDialog}
                                 onClose={handleClose}
                                 className="job_dialog"
+                                maxWidth="md"
                             >
                                 <motion.div
                                     animate={{
-                                        height: openDialog ? "520px" : "0px",
-                                        width: "550px",
+                                        height: openDialog ? "505px" : "0px",
+                                        width: "850px",
                                     }}
                                     // transition={{
                                     //     type: "spring",
@@ -340,63 +341,64 @@ const ArticlesPage = ({ user }) => {
                                         </Button>
                                     </div>
 
-                                    {/* para update sa companyLogo sa job posting */}
-                                    <form
-                                        encType="multipart/form-data"
-                                        method="post"
-                                    >
-                                        <div className="job_input_holders">
-                                            <h5>CompanyLogo</h5>
-                                            <input
-                                                type="file"
-                                                filename="companyLogo"
-                                                onChange={onChangeFile}
-                                                required
-                                            ></input>
-                                        </div>
-                                        {/* save dialog */}
-                                        <Dialog
-                                            open={openSave}
-                                            onClose={handleClose}
-                                            className="dialog_pic"
-                                        >
-                                            <div className="header_update_pic">
-                                                <DialogTitle className="dialog_title">
-                                                    <h5>Upload Company Logo</h5>
-                                                </DialogTitle>
-                                                <Button
-                                                    className="btn_close"
-                                                    onClick={handleClose}
-                                                >
-                                                    x
-                                                </Button>
-                                            </div>
-
-                                            <div className="button_holder_pic">
-                                                <button
-                                                    className="btn_cancel_pic"
-                                                    onClick={handleClose}
-                                                >
-                                                    Cancel
-                                                </button>
-                                                <button
-                                                    type="submit"
-                                                    className="btn_save_pic"
-                                                    onClick={changeOnClick}
-                                                >
-                                                    Save
-                                                </button>
-                                            </div>
-                                        </Dialog>
-                                    </form>
-
                                     {/* title companyName location entryLevel description */}
 
-                                    {/* <form
-                                    encType="multipart/form-data"
-                                    method="post"
-                                > */}
                                     <div className="input_job_div">
+                                        {/* para update sa companyLogo sa job posting */}
+                                        <form
+                                            encType="multipart/form-data"
+                                            method="post"
+                                        >
+                                            <div className="job_input_holder">
+                                                <h5>CompanyLogo</h5>
+                                                <input
+                                                    type="file"
+                                                    filename="companyLogo"
+                                                    onChange={onChangeFile}
+                                                    required
+                                                    style={{
+                                                        border: "none",
+                                                        background: "white",
+                                                    }}
+                                                ></input>
+                                            </div>
+                                            {/* save dialog */}
+                                            <Dialog
+                                                open={openSave}
+                                                onClose={handleClose}
+                                                className="dialog_pic"
+                                            >
+                                                <div className="header_update_pic">
+                                                    <DialogTitle className="dialog_title">
+                                                        <h5>
+                                                            Upload Company Logo
+                                                        </h5>
+                                                    </DialogTitle>
+                                                    <Button
+                                                        className="btn_close"
+                                                        onClick={handleClose}
+                                                    >
+                                                        x
+                                                    </Button>
+                                                </div>
+
+                                                <div className="button_holder_pic">
+                                                    <button
+                                                        className="btn_cancel_pic"
+                                                        onClick={handleClose}
+                                                    >
+                                                        Cancel
+                                                    </button>
+                                                    <button
+                                                        type="submit"
+                                                        className="btn_save_pic"
+                                                        onClick={changeOnClick}
+                                                    >
+                                                        Save
+                                                    </button>
+                                                </div>
+                                            </Dialog>
+                                        </form>
                                         <div className="job_input_holder">
                                             <h5>Job Title</h5>
                                             <input
@@ -445,7 +447,7 @@ const ArticlesPage = ({ user }) => {
                                         </div>
                                         <div className="job_input_holder">
                                             <h5>Qualifications</h5>
-                                            <input
+                                            <textarea
                                                 name="job_entry"
                                                 type="text"
                                                 className="job_entry"
@@ -457,7 +459,7 @@ const ArticlesPage = ({ user }) => {
                                                         e.target.value
                                                     )
                                                 }
-                                            ></input>
+                                            ></textarea>
                                         </div>
 
                                         <div className="job_input_holder">

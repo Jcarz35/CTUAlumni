@@ -8,6 +8,8 @@ const idRequestSchema = new mongoose.Schema({
     requestDate: { type: Date, default: Date.now },
     approvedDate: { type: String },
     accept: { type: Boolean, default: false },
+    claimId: { type: Boolean, default: false },
+    claimDate: { type: Date },
 });
 
 const Request = mongoose.model("request", idRequestSchema);

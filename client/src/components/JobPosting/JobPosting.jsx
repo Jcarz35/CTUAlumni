@@ -22,7 +22,6 @@ import { IoCloseSharp } from "react-icons/io5";
 
 import {} from "react-icons/io5";
 import ScrollToTop from "../ScrollToTop/ScrollToTop";
-import { Pagination } from "@mui/material";
 const JobPosting = ({ children, user }) => {
     const { id } = useParams(); // get the id from the URL
 
@@ -200,11 +199,12 @@ const JobPosting = ({ children, user }) => {
                         open={openDialog}
                         onClose={handleClose}
                         className="job_dialog"
+                        maxWidth="md"
                     >
                         <motion.div
                             animate={{
-                                height: openDialog ? "520px" : "0px",
-                                width: "550px",
+                                height: openDialog ? "505px" : "0px",
+                                width: "850px",
                             }}
                             transition={{ type: "spring", stiffness: 300 }}
                             className="sidebar_dialog"
@@ -224,11 +224,15 @@ const JobPosting = ({ children, user }) => {
                             <form encType="multipart/form-data" method="post">
                                 <div className="input_job_div">
                                     <div className="job_input_holder">
-                                        <h5>Job Title</h5>
+                                        <h5>Job Logo</h5>
                                         <input
                                             type="file"
                                             fileName="companyLogo"
                                             onChange={onChangeFile}
+                                            style={{
+                                                border: "none",
+                                                background: "white",
+                                            }}
                                         ></input>
                                     </div>
 
@@ -267,16 +271,17 @@ const JobPosting = ({ children, user }) => {
                                             }
                                         ></input>
                                     </div>
+
                                     <div className="job_input_holder">
                                         <h5>Qualifications</h5>
-                                        <input
+                                        <textarea
                                             name="job_entry"
                                             type="text"
                                             className="job_entry"
                                             onChange={(e) =>
                                                 setEntryLevel(e.target.value)
                                             }
-                                        ></input>
+                                        ></textarea>
                                     </div>
 
                                     <div className="job_input_holder">

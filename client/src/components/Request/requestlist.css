@@ -101,7 +101,7 @@ p {
     color: white;
 }
 
-.delete_button {
+.userlist_container .delete_button {
     margin-left: 5px;
     display: flex;
     height: 40px;
@@ -110,6 +110,22 @@ p {
     align-items: center;
     cursor: pointer;
     border: none;
+}
+.userlist_container .update_button {
+    margin-left: 5px;
+    display: flex;
+    height: 23px;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border: none;
+    background-color: rgb(236, 231, 231);
+    color: rgb(34, 16, 16);
+    border-radius: 5px;
+    padding: 5px 4px;
+}
+.userlist_container .update_button:hover {
+    border: 1px solid gray;
 }
 
 #dark .delete_button {

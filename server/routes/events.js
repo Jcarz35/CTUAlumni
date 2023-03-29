@@ -17,7 +17,7 @@ const upload = multer({ storage: storage });
 
 //add event
 router.post("/addEvent", upload.single("eventPic"), async (req, res) => {
-    const pic = req.file.originalname;
+    const pic = req.file ? req.file.originalname : "N/A";
 
     try {
         //i save sa events database ang na add na event

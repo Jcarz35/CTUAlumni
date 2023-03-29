@@ -45,29 +45,124 @@ git push
 {/_ Verify alumni Button Menu_/}
 {userInfo.isAdmin && (
 
-<div className="link_holder">
-<div className="link_container">
-<NavLink
-exact={true}
-to={"/verifyuser"}
-key={"VerifyUser"}
-className={({ isActive }) =>
-isActive ? "active" : "link"
-} >
-{isOpen && (
-<div className="link_text">
-{"Verify"}
-</div>
-)}
-
-                                        {/* Arrow Button*/}
-                                    </NavLink>
-                                </div>
-                            </div>
-                        )}
-
 #DBE7F2 = lightblue
 #DBE7F2 = blue
 
 transition: transform 0.3s ease-in-out;
 ::hover scale: 1.02 ease-in;
+
+-   claimed button in request alumni ID
+
+edit work, experience, school
+edit add job modal i pakita tanang input
+<Dialogpro
+open={openDialog}
+onClose={handleClose}
+className="job_dialog"
+style={{ width: "1000px" }} >
+<motion.div
+animate={{
+                                height: openDialog ? "920px" : "0px",
+                            }}
+className="sidebar_dialog" >
+<div className="header_job">
+<DialogTitle>
+<h4>Add Job </h4>
+</DialogTitle>
+<Button
+                                    className="btn_close"
+                                    onClick={handleClose}
+                                >
+<IoCloseSharp className="close_icon" />
+</Button>
+</div>
+{/_ title companyName location entryLevel description _/}
+<form
+                                encType="multipart/form-data"
+                                method="post"
+                                className="form_dialog"
+                            >
+<div className="input_job_div">
+<div className="job_input_holder">
+<h5>Job Logo</h5>
+<input
+                                            type="file"
+                                            fileName="companyLogo"
+                                            onChange={onChangeFile}
+                                        ></input>
+</div>
+
+                                    <div className="job_input_holder">
+                                        <h5>Job Title</h5>
+                                        <input
+                                            name="job_title"
+                                            type="text"
+                                            className="job_title"
+                                            onChange={(e) =>
+                                                setTitle(e.target.value)
+                                            }
+                                        ></input>
+                                    </div>
+
+                                    <div className="job_input_holder">
+                                        <h5>Company Name</h5>
+                                        <input
+                                            name="job_company"
+                                            type="text"
+                                            className="job_company"
+                                            onChange={(e) =>
+                                                setCompanyName(e.target.value)
+                                            }
+                                        ></input>
+                                    </div>
+
+                                    <div className="job_input_holder">
+                                        <h5>Location</h5>
+                                        <input
+                                            name="job_location"
+                                            type="text"
+                                            className="job_location"
+                                            onChange={(e) =>
+                                                setLocation(e.target.value)
+                                            }
+                                        ></input>
+                                    </div>
+                                    <div className="job_input_holder">
+                                        <h5>Qualifications</h5>
+                                        <input
+                                            name="job_entry"
+                                            type="text"
+                                            className="job_entry"
+                                            onChange={(e) =>
+                                                setEntryLevel(e.target.value)
+                                            }
+                                        ></input>
+                                    </div>
+
+                                    <div className="job_input_holder">
+                                        <h5>Job Description</h5>
+                                        <textarea
+                                            name="job_description"
+                                            type="text"
+                                            className="job_description"
+                                            onChange={(e) =>
+                                                setDescription(e.target.value)
+                                            }
+                                        ></textarea>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <div className="button_save">
+                                <motion.button
+                                    onClick={() => {
+                                        handleSubmit();
+                                    }}
+                                    whileHover={{ scale: 1.1 }}
+                                    whileTap={{ scale: 0.9 }}
+                                >
+                                    Post Job
+                                </motion.button>
+                            </div>
+                        </motion.div>
+                    </Dialog>

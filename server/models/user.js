@@ -44,7 +44,7 @@ const userSchema = new mongoose.Schema({
 
     experience: [{ title: String, description: String }],
     education: [{ title: String, location: String }],
-    skills: [String],
+    skills: [{ title: String }],
     postDate: { type: Date, default: Date.now },
 });
 

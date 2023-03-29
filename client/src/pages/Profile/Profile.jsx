@@ -131,6 +131,7 @@ const Profile = ({ user }) => {
             });
     };
 
+    // get all job details
     const [jobDetails, setJobDetails] = useState([]);
     useEffect(() => {
         const fetchJobs = async () => {
@@ -184,6 +185,17 @@ const Profile = ({ user }) => {
                 setTimeout(() => {
                     setShowSnackbar(false);
                 }, 3000);
+            });
+    };
+    // para delete sa Job
+    const handleDeleteJob = (jobId) => {
+        axios
+            .delete(
+                `http://localhost:8080/api/jobDetails/deleteJob/${jobId}`,
+                {}
+            )
+            .then((res) => {
+                setJobDetails(jobDetails.filter((job) => job._id !== jobId));
             });
     };
 
@@ -261,7 +273,7 @@ const Profile = ({ user }) => {
 
             <div className="container">
                 {/**Left */}
-                <div className="left">
+                <div className="profile_left">
                     <div className="profile_pic">
                         <a
                             href={`http://localhost:8080/uploads/${userInfo.profilePic}`}
@@ -293,6 +305,7 @@ const Profile = ({ user }) => {
                                 open={open}
                                 onClose={handleClose}
                                 className="dialog_pic"
+                                style={{ height: "100px" }}
                             >
                                 <div className="header_update_pic">
                                     <DialogTitle className="dialog_title">
@@ -348,7 +361,7 @@ const Profile = ({ user }) => {
                         </div>
                     </div>
 
-                    <div className="about_info">
+                    <div className="profile_about_info">
                         <h1>About Me :</h1>
                         <p>{userInfo.bio}</p>
                         <div className="fullname">
@@ -387,6 +400,15 @@ const Profile = ({ user }) => {
                             <p>{userInfo.empStat}</p>
                         </div>
                     </div>
+
+                    {/* skills details */}
+                    {/* <div className="skills_header">
+                        <h1 style={{ "font-size": "18px" }}>Skills Details</h1>
+                        <AiOutlinePlus
+                            className="icon"
+                            onClick={handleClickOpenSkills}
+                        />
+                    </div> */}
                 </div>
 
                 {/**Right */}
@@ -440,6 +462,16 @@ const Profile = ({ user }) => {
                                 />
                             </div>
 
+                            {/* about me */}
+                            <div className="bio">
+                                <p>About Me</p>
+                                <textarea
+                                    type="text"
+                                    className="bio_area"
+                                    defaultValue={userInfo.bio}
+                                    onChange={(e) => setBio(e.target.value)}
+                                />
+                            </div>
                             {/* address */}
                             <div className="phone_holder">
                                 <p>Address</p>
@@ -623,58 +655,18 @@ const Profile = ({ user }) => {
                                             Company Id
                                         </a>
                                     )}
+                                    <button
+                                        onClick={() =>
+                                            handleDeleteJob(jobDetail._id)
+                                        }
+                                    >
+                                        <BsTrash className="icon" />
+                                        <p>Delete</p>
+                                    </button>
                                 </div>
                             ))}
                         </div>
                     </div>
-
-                    {/* Award details container */}
-                    <div className="job_profile_section">
-                        <div className="jps_header">
-                            <h1>Honor & Awards</h1>
-                            <AiOutlinePlus
-                                className="icon"
-                                onClick={handleClickOpenAward}
-                            />
-                        </div>
-
-                        <div className="job_profile_section_body">
-                            {/* Awards details .map */}
-                            {awards &&
-                                awards.map((award, index) => {
-                                    const formattedDate = formatDate(
-                                        award.dateIssued
-                                    );
-                                    return (
-                                        <div key={index} className="award_card">
-                                            <h5 style={{ fontWeight: "600" }}>
-                                                {award.awardName} -{" "}
-                                                {award.issuer}
-                                            </h5>
-                                            <p
-                                                style={{
-                                                    "margin-bottom": 0,
-                                                }}
-                                            >
-                                                {formattedDate}
-                                            </p>
-                                            <p style={{ "margin-bottom": 0 }}>
-                                                {award.description}
-                                            </p>
-                                            <button
-                                                onClick={() =>
-                                                    handleDeleteAward(award._id)
-                                                }
-                                            >
-                                                <BsTrash className="icon" />
-                                                <p>Delete</p>
-                                            </button>
-                                        </div>
-                                    );
-                                })}
-                        </div>
-                    </div>
-
                     {/* dialog para add og job details sa User */}
                     <Dialog
                         className="job_details_dialog"
@@ -838,6 +830,52 @@ const Profile = ({ user }) => {
                         </motion.div>
                     </Dialog>
 
+                    {/* Award details container */}
+                    <div className="job_profile_section">
+                        <div className="jps_header">
+                            <h1>Honor & Awards</h1>
+                            <AiOutlinePlus
+                                className="icon"
+                                onClick={handleClickOpenAward}
+                            />
+                        </div>
+
+                        <div className="job_profile_section_body">
+                            {/* Awards details .map */}
+                            {awards &&
+                                awards.map((award, index) => {
+                                    const formattedDate = formatDate(
+                                        award.dateIssued
+                                    );
+                                    return (
+                                        <div key={index} className="award_card">
+                                            <h5 style={{ fontWeight: "600" }}>
+                                                {award.awardName} -{" "}
+                                                {award.issuer}
+                                            </h5>
+                                            <p
+                                                style={{
+                                                    "margin-bottom": 0,
+                                                }}
+                                            >
+                                                {formattedDate}
+                                            </p>
+                                            <p style={{ "margin-bottom": 0 }}>
+                                                {award.description}
+                                            </p>
+                                            <button
+                                                onClick={() =>
+                                                    handleDeleteAward(award._id)
+                                                }
+                                            >
+                                                <BsTrash className="icon" />
+                                                <p>Delete</p>
+                                            </button>
+                                        </div>
+                                    );
+                                })}
+                        </div>
+                    </div>
                     {/* dialog para add og Honor and Awards details sa User */}
                     <Dialog
                         className="job_details_dialog"

@@ -32,15 +32,15 @@
     height: auto;
     transition: background-color 0.7s ease-in;
 }
-.left {
+.profile_left {
     position: relative;
     z-index: 1;
     flex: 1;
     display: flex;
     flex-direction: column;
     height: auto;
-    background-color: white;
-    margin-top: 10px;
+    background-color: rgb(255, 255, 255);
+    border: 2px solid rgba(255, 255, 255, 0.3);
     margin-left: 8px;
     margin-right: 8px;
     margin-bottom: 20px;
@@ -50,7 +50,7 @@
     backdrop-filter: blur(2px);
     transition: background-color 0.7s ease-in;
 }
-#dark .left {
+#dark .profile_left {
     box-shadow: 1px 13px 26px 1px rgba(68, 64, 64, 0.75);
     -webkit-box-shadow: 1px 13px 26px 1px rgba(31, 26, 26, 0.75);
     -moz-box-shadow: 1px 13px 26px 1px rgba(82, 77, 77, 0.75);
@@ -141,32 +141,31 @@
     color: var(--light-gray-h1);
 }
 
-.profile_container .about_info {
-    flex: 1;
+.container .profile_about_info {
     align-items: flex-start;
     margin-top: 32px;
     margin-left: 20px;
     margin-right: 20px;
-    height: 100%;
     margin-bottom: 10px;
+    height: auto;
 }
-.about_info h1,
-.about_info p {
+.profile_about_info h1,
+.profile_about_info p {
     font-size: 13px;
     letter-spacing: 0.8px;
     margin-bottom: 10px;
     color: black;
 }
 
-#dark .about_info p {
+#dark .profile_about_info p {
     color: var(--white);
 }
 
-#dark .about_info h1 {
+#dark .profile_about_info h1 {
     font-weight: 500;
     color: var(white);
 }
-.about_info p {
+.profile_about_info p {
     font-weight: 400;
     margin-bottom: 10px;
 }
@@ -179,7 +178,7 @@ p {
     margin-right: 5px;
     font-size: 13px;
 }
-#dark .about_info h1 {
+#dark .profile_about_info h1 {
     font-weight: 600;
     color: var(--light-violet);
 }
@@ -366,6 +365,17 @@ textarea:focus {
 		0px 3px 4px 0px rgb(0 0 0 / 14%), 0px 1px 8px 0px rgb(0 0 0 / 12%);
 	backdrop-filter: blur(2px);
 */
+.skills_header {
+    background-color: red;
+    display: flex;
+    justify-content: space-between;
+    margin: 0 20px;
+}
+.skills_header .icon {
+    font-size: 20px;
+    margin-top: 3px;
+    margin-left: 2px;
+}
 /* para dialog sa job details */
 .jps_header {
     margin-bottom: 0;
@@ -386,7 +396,8 @@ textarea:focus {
 }
 .job_profile_section_body h5 {
     font-size: 15px;
-    color: black;
+    color: rgb(81, 54, 124);
+    letter-spacing: 0.5px;
 }
 #dark .job_profile_section {
     background-color: var(--dark-background);
@@ -413,33 +424,80 @@ textarea:focus {
 .id_input_holder h5,
 .id_input_holder input {
     font-weight: normal;
+    letter-spacing: 0.5px;
 }
 .job_profile_section_body a {
     font-size: 13px;
     text-decoration: none;
     background-color: rgb(247, 240, 230);
     padding: 1px 4px;
+    border-radius: 2px;
+}
+.jobDetails_card a:hover {
+    background-color: #dfdff1;
+    border: 1px solid rgb(148, 148, 148);
 }
 .jobDetails_card {
     margin: 10px 4px;
     padding: 5px 2px;
 }
-
-/* AWard details */
-.award_card button {
+.jobDetails_card {
+    position: relative;
+}
+.jobDetails_card button {
+    position: absolute;
+    top: 0;
+    right: 0;
     display: flex;
-    width: 90px;
+    width: 80px;
     border: none;
     padding: 5px;
     height: 30px;
     gap: 5px;
     border-radius: 4px;
     cursor: pointer;
-    background-color: white;
+    background-color: rgb(250, 249, 249);
+    margin-bottom: 15px;
+}
+.jobDetails_card button:hover {
+    background-color: #dfdff1;
+    border: 1px solid rgb(148, 148, 148);
+}
+
+#dark .jobDetails_card button {
+    background-color: #191d33;
+    border: 1px solid black;
+}
+.jobDetails_card .icon {
+    font-size: 15px;
+    margin-top: 2px;
+    margin-left: 2px;
+}
+#dark .jobDetails_card .icon {
+    color: white;
+}
+/* AWard details */
+.award_card {
+    position: relative;
+}
+.award_card button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    width: 80px;
+    border: none;
+    padding: 5px;
+    height: 30px;
+    gap: 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: rgb(250, 249, 249);
     margin-bottom: 15px;
 }
 .award_card button:hover {
     background-color: #dfdff1;
+    border: 1px solid rgb(148, 148, 148);
 }
 
 #dark .award_card button {

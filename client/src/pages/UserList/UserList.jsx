@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import "./userlist.css";
 import UserTable from "./UserTable";
 
@@ -7,6 +8,7 @@ import UserTable from "./UserTable";
 const UserList = ({ user }) => {
     return (
         <div className="userlist_container">
+            <ScrollToTop />
             <div className="userlist_header">
                 <div className="header_content">
                     <h5 className="userlist_title">List of Active Alumni</h5>

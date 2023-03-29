@@ -326,6 +326,7 @@
     transition: background-color 0.7s ease-in;
 }
 .navbar_container {
+    position: relative;
     flex: 1;
     display: flex;
     position: fixed;
@@ -822,7 +823,7 @@ p {
     padding-top: 3.5px;
 }
 #dark .requestId {
-    background-color: #212744;
+    background-color: var(--dark-background);
 }
 .requestId:hover {
     background-color: #e7e6e6;

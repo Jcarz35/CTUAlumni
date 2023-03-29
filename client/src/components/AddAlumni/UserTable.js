@@ -76,7 +76,11 @@ const UserTable = ({ userBuang }) => {
 
     // para header sa table
     const columns = [
-        { field: "lastName", headerName: "Last Name", width: 180 },
+        {
+            field: "lastName",
+            headerName: "Last Name",
+            width: 180,
+        },
         { field: "firstName", headerName: "First Name", width: 180 },
         { field: "userId", headerName: "Student Id", width: 200 },
         // { field: "birthday", headerName: "Birthday", width: 150 },

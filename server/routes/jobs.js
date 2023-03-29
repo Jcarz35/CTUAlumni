@@ -72,7 +72,7 @@ router.get("/job/:id", async (req, res) => {
 
 // add job post
 router.post("/add", upload.single("companyLogo"), async (req, res, next) => {
-    const companyLogo = req.file.originalname;
+    const companyLogo = req.file ? req.file.originalname : "N/A";
 
     const objectId = ObjectId(req.body.ownerId);
     const owner = await User.findOne({ _id: objectId });

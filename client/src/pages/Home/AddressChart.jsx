@@ -81,7 +81,7 @@ const AddressChart = () => {
                     return null;
                 }}
             />
-            <Bar dataKey="count" fill="#6FC2B6" />
+            <Bar dataKey="count" fill="#44AF69" />
         </BarChart>
     );
 };

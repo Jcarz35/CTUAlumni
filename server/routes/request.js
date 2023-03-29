@@ -93,6 +93,29 @@ router.put("/updateDate/:id", async (req, res) => {
     }
 });
 
+//para update og claim or unclaimed
+router.put("/claimId/:id", async (req, res) => {
+    try {
+        const currentDate = new Date();
+        // para update sa date nga na apporved
+        await Request.updateOne(
+            { _id: req.params.id },
+
+            {
+                $set: { claimDate: currentDate, claimId: true },
+            }
+        ).then(() => {
+            console.log("success");
+        });
+
+        ownerId = await Request.findById({ _id: req.params.id });
+        console.log("ownerId: " + ownerId._id);
+        await User.updateOne({ _id: ownerId._id }, { $set: { claimId: true } });
+    } catch (err) {
+        console.log("errors");
+    }
+});
+
 // get all data request
 router.get("/all", async (req, res) => {
     Request.find()
