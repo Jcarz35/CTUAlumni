@@ -187,7 +187,7 @@ const Profile = ({ user }) => {
                 }, 3000);
             });
     };
-    // para delete sa Job
+    // delete single Job
     const handleDeleteJob = (jobId) => {
         axios
             .delete(
@@ -200,7 +200,7 @@ const Profile = ({ user }) => {
     };
 
     // =============================================================
-    //para Honor and Award details sa user
+    // Honor and Award details sa user
     const [awardName, setAwardName] = useState();
     const [issuer, setIssuer] = useState();
     const [dateIssued, setDateIssued] = useState();
@@ -304,8 +304,8 @@ const Profile = ({ user }) => {
                             <Dialog
                                 open={open}
                                 onClose={handleClose}
-                                className="dialog_pic"
-                                style={{ height: "100px" }}
+                                className="dialog_pics"
+                                style={{ height: "280px" }}
                             >
                                 <div className="header_update_pic">
                                     <DialogTitle className="dialog_title">

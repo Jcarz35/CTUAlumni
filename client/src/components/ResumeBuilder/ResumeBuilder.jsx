@@ -613,7 +613,7 @@ const ResumeBuilder = ({ user }) => {
                 >
                     <motion.div
                         animate={{
-                            height: openDialogSkills ? "360px" : "0px",
+                            height: openDialogSkills ? "200px" : "0px",
                             width: "550px",
                         }}
                         className="Id_request_dialog_div"

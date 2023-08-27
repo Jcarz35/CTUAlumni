@@ -229,36 +229,43 @@ const Home = ({ theme, user }) => {
                             <h1>{jobCount}</h1>
                         </div>
                     </NavLink>
-                    <NavLink
-                        exact={true}
-                        to={"/events"}
-                        key={"Events"}
-                        className="total_events"
-                    >
-                        <div className="logo_container">
-                            <MdEmojiEvents className="icon" />
-                        </div>
-                        <div className="contents">
-                            <h5 style={{ margin: "0" }}>Number of Events </h5>
-                            <h1>{eventCount}</h1>
-                        </div>
-                    </NavLink>
-                    <NavLink
-                        exact={true}
-                        to={"/requestId"}
-                        key={"RequestId"}
-                        className="total_idRequest"
-                    >
-                        <div className="logo_container">
-                            <FaUserCircle className="icon" />
-                        </div>
-                        <div className="contents">
-                            <h5 style={{ "margin-bottom": "2px" }}>
-                                Number of Id Request
-                            </h5>
-                            <h1>{idRequestCount}</h1>
-                        </div>
-                    </NavLink>
+                    {userInfo && userInfo.isAdmin && (
+                        <NavLink
+                            exact={true}
+                            to={"/events"}
+                            key={"Events"}
+                            className="total_events"
+                        >
+                            <div className="logo_container">
+                                <MdEmojiEvents className="icon" />
+                            </div>
+                            <div className="contents">
+                                <h5 style={{ margin: "0" }}>
+                                    Number of Events{" "}
+                                </h5>
+                                <h1>{eventCount}</h1>
+                            </div>
+                        </NavLink>
+                    )}
+
+                    {userInfo && userInfo.isAdmin && (
+                        <NavLink
+                            exact={true}
+                            to={"/requestId"}
+                            key={"RequestId"}
+                            className="total_idRequest"
+                        >
+                            <div className="logo_container">
+                                <FaUserCircle className="icon" />
+                            </div>
+                            <div className="contents">
+                                <h5 style={{ "margin-bottom": "2px" }}>
+                                    Number of Id Request
+                                </h5>
+                                <h1>{idRequestCount}</h1>
+                            </div>
+                        </NavLink>
+                    )}
                 </div>
             </div>
 

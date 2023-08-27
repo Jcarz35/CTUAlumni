@@ -137,6 +137,9 @@
         0px 3px 4px 0px rgb(0 0 0 / 14%), 0px 1px 8px 0px rgb(0 0 0 / 12%);
     backdrop-filter: blur(2px);
 }
+#dark .verify_body .AddUser_table {
+    background-color: var(--dark-main-background);
+}
 
 .verify_body .form_container .form_excell {
     display: flex;

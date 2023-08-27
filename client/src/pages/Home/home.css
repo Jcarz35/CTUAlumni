@@ -418,8 +418,9 @@
 .total_job,
 .total_events,
 .total_idRequest {
+    height: 30%;
     width: 100%;
-    flex: 1;
+    /* flex: 1; */
     background-color: white;
     display: flex;
     border-radius: 5px;

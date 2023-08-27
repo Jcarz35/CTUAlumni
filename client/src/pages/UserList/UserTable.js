@@ -14,7 +14,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 // icons
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { BiEdit } from "react-icons/bi";
-import { GrFormClose } from "react-icons/gr";
+import { GrView } from "react-icons/gr";
 
 //loading spinner
 import FadeLoader from "react-spinners/FadeLoader";
@@ -52,7 +52,7 @@ const UserTable = ({ userBuang }) => {
     // fetch all Alumni
     useEffect(() => {
         Axios.get("http://localhost:8080/api/users/all").then((response) => {
-            setUser(response.data);
+            setUser(response.data.reverse());
             setLoading(false);
         });
     }, [user]);
@@ -84,13 +84,25 @@ const UserTable = ({ userBuang }) => {
             renderCell: (params) => {
                 return (
                     <>
-                        {userInfo.isAdmin && (
-                            <Link to={"/user/" + params.row._id}>
-                                <button className="userListEdit">
-                                    <BiEdit title="Edit" className="editBi" />
-                                </button>
-                            </Link>
-                        )}
+                        <Link
+                            style={{ "text-decoration": "none" }}
+                            to={"/user/" + params.row._id}
+                        >
+                            <button className="userListEdits">
+                                <GrView
+                                    title="View Profile"
+                                    className="editBis"
+                                />
+                                <h4
+                                    style={{
+                                        "font-color": "gray",
+                                        "font-weight": "normal",
+                                    }}
+                                >
+                                    View
+                                </h4>
+                            </button>
+                        </Link>
 
                         {/* {userInfo.isAdmin && (
                             <button

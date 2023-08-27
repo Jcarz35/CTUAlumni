@@ -54,7 +54,7 @@ const UserTable = ({ userBuang }) => {
     // fetch all Id Request
     useEffect(() => {
         Axios.get("http://localhost:8080/api/requests/all").then((response) => {
-            setUser(response.data);
+            setUser(response.data.reverse());
             setLoading(false);
         });
     }, [user]);

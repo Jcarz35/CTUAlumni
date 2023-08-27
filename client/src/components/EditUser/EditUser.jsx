@@ -279,14 +279,14 @@ const EditUser = () => {
                         {/* form  */}
 
                         <div className="update_img">
-                            <label htmlFor="files">
+                            {/* <label htmlFor="files">
                                 <div className="camera_holder">
                                     <BsFillCameraFill
                                         className="camera"
                                         onClick={handleClickOpen}
                                     />
                                 </div>
-                            </label>
+                            </label> */}
 
                             <Dialog
                                 open={open}
@@ -594,7 +594,7 @@ const EditUser = () => {
                             </div>
                         </div>
                         {/* save  button */}
-                        <div className="button_holder">
+                        {/* <div className="button_holder">
                             <button
                                 className="button"
                                 onClick={() => {
@@ -604,7 +604,7 @@ const EditUser = () => {
                                 <FaSave className="icon" />
                                 <p>Save</p>
                             </button>
-                        </div>
+                        </div> */}
                     </div>
 
                     {/* job details container*/}

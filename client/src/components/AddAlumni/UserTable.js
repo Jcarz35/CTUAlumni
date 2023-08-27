@@ -42,7 +42,7 @@ const UserTable = ({ userBuang }) => {
     useEffect(() => {
         Axios.get("http://localhost:8080/api/users/allNotActive").then(
             (response) => {
-                setUser(response.data);
+                setUser(response.data.reverse());
                 setLoading(false);
             }
         );

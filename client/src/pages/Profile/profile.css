@@ -77,16 +77,18 @@
 }
 
 /* save dialog  */
-.dialog_pic {
+
+.dialog_pics {
     width: 500px;
+    height: 200px;
     margin: auto;
-    overflow: hidden;
+    overflow-y: hidden;
 }
 .header_update_pic {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin-bottom: 50px;
+    margin-bottom: 2px;
 }
 .dialog_title {
     flex: 1;
@@ -104,7 +106,7 @@
 .button_holder_pic {
     display: flex;
     justify-content: end;
-    margin: 15px 15px;
+    margin-right: 25px;
     gap: 9px;
 }
 .btn_cancel_pic {
