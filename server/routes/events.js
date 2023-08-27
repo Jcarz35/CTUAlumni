@@ -183,7 +183,6 @@ router.get("/event/:id", async (req, res) => {
     // }
 });
 
-//delete eventh
 router.delete("/deleteEvent/:id", async (req, res) => {
     const id = req.params.id;
     await Events.findByIdAndRemove(id).exec();
